@@ -4,7 +4,7 @@
 	require_once ROOT . "/lib/baskets.php";
 	$baskets = new baskets;
 	$baskets->seyHello();
-
+	$baskets->log();
 /*
 <!DOCTYPE html>
 <html>
