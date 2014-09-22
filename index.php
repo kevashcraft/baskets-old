@@ -1,13 +1,11 @@
 <?php
+
+	define('ROOT',dirname(__FILE__));
+	require_once ROOT . "/lib/baskets.php";
+	$baskets = new baskets;
+	$baskets->seyHello();
+
 /*
-	The starting point - index.php
-
-
-
-
-*/
-
-?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -21,3 +19,5 @@
 		</form>
 	</body>
 </html>
+
+ */
