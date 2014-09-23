@@ -21,9 +21,10 @@ class baskets{
 */
 	public function __construct( $debug = false ){
 
+		session_start();
 		$this->db_connect();  // Connect to DB
 		$this->log_visit();	// Log the visit
-
+		$this->login_page(); // Show login page
 
 	}
 
@@ -48,6 +49,33 @@ class baskets{
 		$stm = $this->db->prepare("INSERT INTO visits (dt,ua,ip) VALUES(NOW(),?,?)");
 		$stm->execute(array($_SERVER['HTTP_USER_AGENT'],ip2long($_SERVER['REMOTE_ADDR'])));
 	}
+
+
+
+/*
+************************************************************
+		PAGES
+************************************************************
+*/
+
+	private function login_page(){ ?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel='stylesheet' type='text/css' href='reset.css' />
+		<link rel='stylesheet' type='text/css' href='style.css' />
+		<title>Login | Baskets</title>
+	</head>
+	<body>
+		<div class='login_box'>
+			<form id='login' method='post'>
+				<label for='usremail'>Email:</label><input type='email' name='usremail' id='usremail'><br />
+				<label for='usrpass'>Password:</label><input type='password' name='usrpass' id='usrpass'><br />
+			</form>
+		</div>
+	</body>
+</html>
+	<?php }
 
 
 
