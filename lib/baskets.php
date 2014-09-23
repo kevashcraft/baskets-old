@@ -19,13 +19,21 @@ class baskets{
 	}
 
 	public function log_visit(){
-		$stm = $this->db->prepare("INSERT INTO visits (ua,ip) VALUES(?,?)");
-		$stm->execute($_SERVER['HTTP_USER_AGENT'],ip2long($_SERVER['REMOTE_ADDR']));
+		$stm = $this->db->prepare("INSERT INTO visits (dt,ua,ip) VALUES(NOW(),?,?)");
+		$stm->execute(array($_SERVER['HTTP_USER_AGENT'],ip2long($_SERVER['REMOTE_ADDR'])));
+		echo "rows " . $stm->rowCount() . "<br>";
 	}
 
 	public function seyHello(){
 		$location = geoip_record_by_name($_SERVER['REMOTE_ADDR']);
-			echo "hello world, the initial class has been created.";
-			echo "<br>you are connecting from ".$_SERVER['REMOTE_ADDR']." in ".$location['city']."with a user agent of ".$_SERVER['HTTP_USER_AGENT'];
+			echo "hello world, the initial class has been created.<br>";
+			echo "you are connecting from ".$_SERVER['REMOTE_ADDR']." in ".$location['city']."<br>";
+	}
+
+	public function show_visits(){
+		foreach($this->db->query("SELECT * FROM visits") as $visit){
+				  echo $visit['id'] . " - " . $visit['dt'] . " - " . $visit['ip'] . "<br>";
+		}
+
 	}
 }
