@@ -1,14 +1,40 @@
 <?php
 class baskets{
+
+	// STRING SETTINGS
+
+
+
+	// DB SETTINGS
 	private $db;
 	private $dbuser = 'baskets';
 	private $dbpass = 'baskets';
 	private $dbname = 'baskets';
 	private $dbhost = 'localhost';
 
+
+
+/*
+************************************************************
+		CONSTRUCT
+************************************************************
+*/
 	public function __construct( $debug = false ){
-		$this->db_connect(); 
+
+		$this->db_connect();  // Connect to DB
+		$this->log_visit();	// Log the visit
+
+
 	}
+
+
+
+/*
+************************************************************
+		PRIMARY FUNCTIONS
+************************************************************
+*/
+
 
 	private function db_connect(){
 		try {
@@ -21,10 +47,20 @@ class baskets{
 	public function log_visit(){
 		$stm = $this->db->prepare("INSERT INTO visits (dt,ua,ip) VALUES(NOW(),?,?)");
 		$stm->execute(array($_SERVER['HTTP_USER_AGENT'],ip2long($_SERVER['REMOTE_ADDR'])));
-		echo "rows " . $stm->rowCount() . "<br>";
 	}
 
-	public function seyHello(){
+
+
+
+/*
+************************************************************
+		MISC FUNCTIONS
+************************************************************
+*/
+
+
+
+	public function say_hello(){
 		$location = geoip_record_by_name($_SERVER['REMOTE_ADDR']);
 			echo "hello world, the initial class has been created.<br>";
 			echo "you are connecting from ".$_SERVER['REMOTE_ADDR']." in ".$location['city']."<br>";

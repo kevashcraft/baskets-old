@@ -3,8 +3,6 @@
 	define('ROOT',dirname(__FILE__));
 	require_once ROOT . "/lib/baskets.php";
 	$baskets = new baskets;
-	$baskets->seyHello();
-	$baskets->log_visit();
 	$baskets->show_visits();
 /*
 <!DOCTYPE html>
