@@ -10,6 +10,8 @@ class Defaults
 	<head>
 	<link rel='stylesheet' type='text/css' href='reset.css' />
 	<link rel='stylesheet' type='text/css' href='style.css' />
+	<script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 <?php
 	 }
 

@@ -1,2 +1,35 @@
 body{
 }
+
+.login-box {
+	position: relative;
+	padding-top: 15%;
+	display: block;
+	margin: 0 auto;
+	width: 175px;
+	text-align: center;
+	color: gray;
+}
+
+.login-box input {
+	position: relative;
+	border: none;
+	border-bottom: 1px solid grey;
+	margin-bottom: 15px;
+	width: 100%;
+	text-align: center;
+}
+.login-box input:focus {
+	outline: none;
+}
+.login-box input[type='submit'] {
+	margin-top: 25px;
+	border: 1px outset #707070;
+	padding: 7px 20px;
+	width: auto;
+	border-radius: 2px;
+	background: #C0C0C0;
+}
+.login-box input[type='submit']:active {
+	border: 1px inset gray;
+}
