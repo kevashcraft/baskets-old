@@ -1,5 +1,6 @@
 <?php
-class baskets{
+namespace Baskets;
+class test{
 
 	// STRING SETTINGS
 
@@ -13,6 +14,16 @@ class baskets{
 	private $dbhost = 'localhost';
 
 
+/*
+************************************************************
+		TRAITS
+************************************************************
+*/
+	// INCLUDES
+
+
+
+
 
 /*
 ************************************************************
@@ -20,12 +31,14 @@ class baskets{
 ************************************************************
 */
 	public function __construct( $debug = false ){
-
+/*
+		require_once("lib/traits/databaseConnectorTrait.php");
 		session_start();
-		$this->db_connect();  // Connect to DB
+		$this->db = db_connect($this->dbhost,$this->dbname,$this->dbuser,$this->dbpass);
+//		$this->db_connect();  // Connect to DB
 		$this->log_visit();	// Log the visit
-		$this->login_page(); // Show login page
-
+//		$this->login_page(); // Show login page
+*/		$this->say_hello();
 	}
 
 
@@ -36,7 +49,7 @@ class baskets{
 ************************************************************
 */
 
-
+/*
 	private function db_connect(){
 		try {
 			$this->db = new PDO("mysql:host=$this->dbhost;dbname=$this->dbname", $this->dbuser, $this->dbpass);
@@ -44,7 +57,7 @@ class baskets{
 			echo $e->getMessage();
 		}
 	}
-
+*/
 	public function log_visit(){
 		$stm = $this->db->prepare("INSERT INTO visits (dt,ua,ip) VALUES(NOW(),?,?)");
 		$stm->execute(array($_SERVER['HTTP_USER_AGENT'],ip2long($_SERVER['REMOTE_ADDR'])));
