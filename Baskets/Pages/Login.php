@@ -10,15 +10,25 @@ class Login
 	</head>
 	<body>
 		<div class='login-box'>
-			<form method='post'>
+			<?php if(isset($_COOKIE['hello'])) echo $_COOKIE['hello'] ?>
+			<form method='post' id='login-form'>
 				<input type='email' name='usremail' id='usremail' placeholder='Email Address'><br />
 				<input type='password' name='usrpass' id='usrpass' placeholder='Password'><br />
+				<input type='hidden' name='annyong' value='hello' >
 				<input type='submit' value='login'>
 			</form>
 		</div>
 		<script>
 			$(document).ready(function(){
 				$('#usremail').focus();
+				window.history.pushState("", "", '/');
+				$('#login-form').submit(function (event) {
+					event.preventDefault();
+					var posting = $.post( '<?php echo MY_URL ?>', $(this).serialize() );
+					posting.done(function(data){
+						alert(data);
+					});
+				});
 			});
 		</script>
 	</body>

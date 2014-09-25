@@ -16,3 +16,4 @@ function autoload($className)
 	require $fileName;
 }
 
+define('MY_URL','http://baskets.kevashcraft.com');
