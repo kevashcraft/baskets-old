@@ -15,6 +15,7 @@ class Login
 				<input type='email' name='usremail' id='usremail' placeholder='Email Address'><br />
 				<input type='password' name='usrpass' id='usrpass' placeholder='Password'><br />
 				<input type='hidden' name='annyong' value='hello' >
+				<input type='hidden' name='purpose' value='login' >
 				<input type='submit' value='login'>
 			</form>
 		</div>

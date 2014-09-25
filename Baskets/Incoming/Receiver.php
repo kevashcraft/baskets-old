@@ -2,9 +2,18 @@
 namespace Baskets\Incoming;
 class Receiver
 {
+
 	function __construct()
 	{
-		setcookie('hello','wassupdoc',time()+3600);
-		echo "hello" . session_id() . $_COOKIE['hello'];
+		$purpose = (isset($_POST['purpose']) ? $_POST['purpose'] : 'none');
+		switch ($purpose)
+		{
+			case 'login': 	
+				$login = new Login;;
+				break;
+			default:
+				echo 'You have no purpose :(';
+				break;
+		}
 	}
 }

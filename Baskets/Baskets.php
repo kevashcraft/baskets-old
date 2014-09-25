@@ -5,8 +5,8 @@ class Baskets
 	{
 		session_start();
 		$db = new Baskets\Tools\Database;
+		$default = new Baskets\Tools\SetDefaults;
 
-		if(isset($_GET['setme'])) setcookie('hello','ellwo',time()+3600);
 		if(isset($_POST['annyong']))
 		{
 			$receiver = new Baskets\Incoming\Receiver;
