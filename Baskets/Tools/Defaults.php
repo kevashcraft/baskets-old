@@ -1,8 +1,8 @@
 <?php
 namespace Baskets\Tools;
-class SetDefaults
+class Defaults
 {
-	function __construct()
+	public static function set()
 	{
 		$db = Database::getConnection();
 		$stm = $db->prepare("SELECT username FROM users WHERE username=?");

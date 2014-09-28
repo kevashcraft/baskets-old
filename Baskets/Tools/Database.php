@@ -3,26 +3,22 @@ namespace Baskets\Tools;
 class Database
 {
 	private static $db;
-	private $dbuser = 'baskets';
-	private $dbpass = 'baskets';
-	private $dbname = 'baskets';
-	private $dbhost = 'localhost';
+	private static $dbuser = 'baskets';
+	private static $dbpass = 'baskets';
+	private static $dbname = 'baskets';
+	private static $dbhost = 'localhost';
 
-	function __construct() {
+	public static function connect() {
 		try {
-			self::$db = new \PDO("mysql:host=$this->dbhost;dbname=$this->dbname", $this->dbuser, $this->dbpass);
+			self::$db = new \PDO("mysql:host=".self::$dbhost.";dbname=".self::$dbname, self::$dbuser, self::$dbpass);
 		} catch(PDOException $e) {
 			echo $e->getMessage();
 		}
 	}
 
-	function __destruct() {
-		self::$db = null;
-	}
-
 	public static function getConnection() {
 		if (self::$db == null) {
-			self::$db = new Database();
+			self::connect();
 		}
 		return self::$db;
 	}

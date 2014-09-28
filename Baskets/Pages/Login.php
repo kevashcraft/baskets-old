@@ -2,7 +2,7 @@
 namespace Baskets\Pages;
 class Login
 {
-	function __construct()
+	public static function display()
 	{
 		Defaults::Header();
 ?>
@@ -22,12 +22,18 @@ class Login
 		<script>
 			$(document).ready(function(){
 				$('#usremail').focus();
-				window.history.pushState("", "", '/');
 				$('#login-form').submit(function (event) {
 					event.preventDefault();
 					var posting = $.post( '<?php echo MY_URL ?>', $(this).serialize() );
 					posting.done(function(data){
-						alert(data);
+						info = JSON.parse(data);
+						if (info[0] == 0)
+						{
+							alert(info[1]);
+						}
+						else {
+							window.location = '<?php echo MY_URL?>';
+						}
 					});
 				});
 			});

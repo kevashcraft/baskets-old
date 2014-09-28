@@ -19,7 +19,15 @@ class Defaults
 
 	public static function Footer()
 	{
-?>
+		if(\Baskets\Tools\Tracker::$uri[0] != \Baskets\Tools\Tracker::$page)
+		{ ?>
+<script>
+	$(document).ready(function(){
+		window.history.pushState("", "", '/<?php echo \Baskets\Tools\Tracker::$page ?>')		
+	});
+</script>
+		<?php } ?>
+
 </html>
 <?php
 	}
