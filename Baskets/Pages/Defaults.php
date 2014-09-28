@@ -19,7 +19,7 @@ class Defaults
 
 	public static function Footer()
 	{
-		if(\Baskets\Tools\Tracker::$uri[0] != \Baskets\Tools\Tracker::$page)
+		if(\Baskets\Tools\Tracker::$uri[1] != \Baskets\Tools\Tracker::$page)
 		{ ?>
 <script>
 	$(document).ready(function(){

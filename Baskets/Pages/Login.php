@@ -12,8 +12,8 @@ class Login
 		<div class='login-box'>
 			<?php if(isset($_COOKIE['hello'])) echo $_COOKIE['hello'] ?>
 			<form method='post' id='login-form'>
-				<input type='email' name='usremail' id='usremail' placeholder='Email Address'><br />
-				<input type='password' name='usrpass' id='usrpass' placeholder='Password'><br />
+				<input type='email' name='email' id='email' placeholder='Email Address' autocomplete='on'><br />
+				<input type='password' name='password' id='password' placeholder='Password'><br />
 				<input type='hidden' name='annyong' value='hello' >
 				<input type='hidden' name='purpose' value='login' >
 				<input type='submit' value='login'>
@@ -21,7 +21,7 @@ class Login
 		</div>
 		<script>
 			$(document).ready(function(){
-				$('#usremail').focus();
+				$('#email').focus();
 				$('#login-form').submit(function (event) {
 					event.preventDefault();
 					var posting = $.post( '<?php echo MY_URL ?>', $(this).serialize() );

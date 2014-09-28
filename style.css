@@ -1,6 +1,13 @@
 body{
 }
 
+tr{
+	display: block;
+}
+td{
+	padding: 5px;
+}
+
 .login-box {
 	position: relative;
 	padding-top: 15%;

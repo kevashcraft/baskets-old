@@ -54,6 +54,8 @@ CREATE TABLE contractors(
 	valid BOOLEAN,
 	PRIMARY KEY (id)
 ) ENGINE InnoDB;
+INSERT INTO contractors(dt,dtu,contractor,address,phone,valid)
+			VALUES(NOW(),NOW(),'jessie james','11101 fleet street','863-333-5555',true);
 
 CREATE TABLE images(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,

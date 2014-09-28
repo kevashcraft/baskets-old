@@ -6,7 +6,7 @@ class Login
 	{
 		$db = \Baskets\Tools\Database::getConnection();
 		$stm = $db->prepare("SELECT * FROM users WHERE username=? AND password=? AND valid=true");
-		$stm->execute(array(strtolower($_POST['usremail']),hash('sha256',$_POST['usrpass'].PHASH)));
+		$stm->execute(array(strtolower($_POST['email']),hash('sha256',$_POST['password'].PHASH)));
 		$res = $stm->fetch();
 		if(isset($res['username'])) {
 			$ins = $db->prepare("INSERT INTO sessions(dt,userid,cookid,useragent,valid) VALUES(NOW(),?,?,?,true)");

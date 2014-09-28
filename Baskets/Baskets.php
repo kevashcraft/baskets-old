@@ -20,6 +20,9 @@ class Baskets
 			case 'dashboard':
 				Baskets\Pages\Dashboard::display();
 				break;
+			case 'contractors':
+				Baskets\Pages\Contractors::display();
+				break;
 			default:
 				Baskets\Pages\Login::display();
 
