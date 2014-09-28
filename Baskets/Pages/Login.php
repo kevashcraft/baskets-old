@@ -9,6 +9,7 @@ class Login
 		<title>Baskets - Login</title>
 	</head>
 	<body>
+		<?php Defaults::PageHeader() ?>
 		<div class='login-box'>
 			<?php if(isset($_COOKIE['hello'])) echo $_COOKIE['hello'] ?>
 			<form method='post' id='login-form'>

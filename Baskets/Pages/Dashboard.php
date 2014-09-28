@@ -9,6 +9,7 @@ class Dashboard
 		<title>Baskets - Dashboard</title>
 	</head>
 	<body>
+		<?php Defaults::PageHeader() ?>
 		<div>click <a href='<?php echo MY_URL ?>?annyong=hello&purpose=logout'>here</a> to logout</div>	
 		<nav>
 			<li><a href='<?php echo MY_URL ?>/contractors'>Contractors</a></li>
@@ -18,6 +19,7 @@ class Dashboard
 			<li><a href='<?php echo MY_URL ?>/bids'>Bids</a></li>
 			<li><a href='<?php echo MY_URL ?>/inventory'>Inventory</a></li>
 			<li><a href='<?php echo MY_URL ?>/workers'>Workers</a></li>
+		</nav>
 	</body>
 <?php
 		Defaults::footer();

@@ -13,6 +13,7 @@ class Contractors
 		<title>Baskets - Contractors</title>
 	</head>
 	<body>
+	<?php Defaults::PageHeader() ?>
 	<table style="width:100%">
 	<?php
 		$first = true;

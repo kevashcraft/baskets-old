@@ -16,6 +16,20 @@ class Defaults
 	 }
 
 
+	public static function PageHeader()
+	{
+?>
+	<div class='page-header'>
+		<img src='<?php echo MY_URL?>/img/logo.png'>
+		<img src='<?php echo MY_URL?>/img/text.png'>
+	</div>
+<?php
+
+
+	}
+
+
+
 
 	public static function Footer()
 	{
