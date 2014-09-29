@@ -105,12 +105,12 @@ class Defaults
 		// Hide nav menu after login
 		<?php if(!isset($_COOKIE['vetNavSlide'])) {?>
 			setTimeout(function(){
-				$('.page-nav-container').css('transition','left 1s ease').css('left','-250px');
+				$('.page-nav-container').css('transition','left 1s ease').css('left','-260px');
 			},1500);
 			setTimeout(function(){
 				$('.page-nav-container').css('transition','left .5s ease');
 			},2000);
-		<?php setCookie('vetNavSlide','annyong',time()+36000000); } else { ?>
+		<?php setCookie('vetNavSlide','annyong',time()+60); } else { ?>
 			$('.page-nav-container').css('left','-260px');
 			setTimeout(function(){
 				$('.page-nav-container').css('transition','left .5s ease');
