@@ -17,66 +17,121 @@ class Defaults
 	 }
 
 
-	public static function PageHeader()
-	{
-?>
+	public static function pageHeader(){?>
 	<div class='page-header'>
 		<img src='<?php echo MY_URL?>/img/logo.png'>
 		<img src='<?php echo MY_URL?>/img/text.png'>
 	</div>
-	<div class='page-nav-container'>
-		<div class='nav-img'><img src='<?php echo MY_URL?>/img/nav-basket.jpg'></div>
-		<nav>
+<?php } 
+
+	public static function pageNavigation(){?>
+<div class='page-nav-container'>
+	<div class='nav-img'><img src='<?php echo MY_URL?>/img/nav-basket.jpg'></div>
+	<nav class='nav-main'>
+		<ul>
 			<li>Parts
-				<li><a href='<?php echo MY_URL?>/parts/list'>List</a></li>
-				<li><a href='<?php echo MY_URL?>/parts/suppliers'>Suppliers</a></li>
-				<li><a href='<?php echo MY_URL?>/parts/bids'>Bids</a></li>
+				<ul>
+					<li><a href='<?php echo MY_URL?>/parts/list'>List</a></li>
+					<li><a href='<?php echo MY_URL?>/parts/suppliers'>Suppliers</a></li>
+					<li><a href='<?php echo MY_URL?>/parts/bids'>Bids</a></li>
+				</ul>
 			</li>
 			<li>Estimates
-				<li><a href='<?php echo MY_URL?>/estimates/new'>New</a></li>
-				<li><a href='<?php echo MY_URL?>/estimates/active'>Active</a></li>
-				<li><a href='<?php echo MY_URL?>/estimates/all'>All</a></li>
+				<ul>
+					<li><a href='<?php echo MY_URL?>/estimates/new'>New</a></li>
+					<li><a href='<?php echo MY_URL?>/estimates/active'>Active</a></li>
+					<li><a href='<?php echo MY_URL?>/estimates/all'>All</a></li>
+				</ul>
 			</li>
 			<li>Warehouse
-				<li><a href='<?php echo MY_URL?>/warehouse/check-in'>Check-in</a></li>
-				<li><a href='<?php echo MY_URL?>/warehouse/orders'>Orders</a></li>
-				<li><a href='<?php echo MY_URL?>/warehouse/report'>Report</a></li>
+				<ul>
+					<li><a href='<?php echo MY_URL?>/warehouse/check-in'>Check-in</a></li>
+					<li><a href='<?php echo MY_URL?>/warehouse/orders'>Orders</a></li>
+					<li><a href='<?php echo MY_URL?>/warehouse/report'>Report</a></li>
+				</ul>
 			</li>
 			<li>Scheduling
-				<li><a href='<?php echo MY_URL?>/scheduling/today'>Today</a></li>
-				<li><a href='<?php echo MY_URL?>/scheduling/tomorrow'>Tomorrow</a></li>
-				<li><a href='<?php echo MY_URL?>/scheduling/pending'>Pending</a></li>
+				<ul>
+					<li><a href='<?php echo MY_URL?>/scheduling/today'>Today</a></li>
+					<li><a href='<?php echo MY_URL?>/scheduling/tomorrow'>Tomorrow</a></li>
+					<li><a href='<?php echo MY_URL?>/scheduling/pending'>Pending</a></li>
+				</ul>
 			</li>
 			<li>Jobs
-				<li><a href='<?php echo MY_URL?>/jobs/new'>New</a></li>
-				<li><a href='<?php echo MY_URL?>/jobs/current'>Current</a></li>
-				<li><a href='<?php echo MY_URL?>/jobs/all'>All</a></li>
+				<ul>
+					<li><a href='<?php echo MY_URL?>/jobs/new'>New</a></li>
+					<li><a href='<?php echo MY_URL?>/jobs/current'>Current</a></li>
+					<li><a href='<?php echo MY_URL?>/jobs/all'>All</a></li>
+				</ul>
 			</li>
 			<li>Parts
-				<li><a href='<?php echo MY_URL?>/workers/hire'>Hire</a></li>
-				<li><a href='<?php echo MY_URL?>/workers/all'>All</a></li>
-				<li><a href='<?php echo MY_URL?>/workers/search'>Search</a></li>
+				<ul>
+					<li><a href='<?php echo MY_URL?>/workers/hire'>Hire</a></li>
+					<li><a href='<?php echo MY_URL?>/workers/all'>All</a></li>
+					<li><a href='<?php echo MY_URL?>/workers/search'>Search</a></li>
+				</ul>
 			</li>
-		</nav>
-	</div>
-<?php
-
-
-	}
+		</ul>
+	</nav>
+</div>
+<?php }
 
 
 
 
-	public static function Footer()
-	{
-		if(\Baskets\Tools\Tracker::$uri[1] != \Baskets\Tools\Tracker::$page)
-		{ ?>
+	public static function Footer(){?>
 <script>
 	$(document).ready(function(){
-		window.history.pushState("", "", '/<?php echo \Baskets\Tools\Tracker::$page ?>')		
+		
+		// Update url to current page if different than originally requested page
+		<?php if(\Baskets\Tools\Tracker::$uri[1] != \Baskets\Tools\Tracker::$page) {?>
+					window.history.pushState("", "", '/<?php echo \Baskets\Tools\Tracker::$page ?>');
+		<?php }?>
+
+	});
+</script>
+
+		<?php	include MY_ROOT . "/lib/Mobile-Detect/Mobile_Detect.php";
+		$detect = new \Mobile_Detect;
+		if($detect->isMobile()){ ?>
+		<script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"></script>
+<script>
+		//
+		// Mobile Devices
+		//
+	$(document).ready(function(){
+		if(window.innerWidth < 800){
+
+		// Hide nav menu after login
+		<?php if(!isset($_COOKIE['vetNavSlide'])) {?>
+			setTimeout(function(){
+				$('.page-nav-container').css('transition','left 1s ease').css('left','-250px');
+			},1500);
+			setTimeout(function(){
+				$('.page-nav-container').css('transition','left .5s ease');
+			},2000);
+		<?php setCookie('vetNavSlide','annyong',time()+36000000); } else { ?>
+			$('.page-nav-container').css('left','-250px');
+			setTimeout(function(){
+				$('.page-nav-container').css('transition','left .5s ease');
+			},100);
+		<?php } ?>
+
+
+
+			$(document).on("swipeleft swiperight",function(e){
+				if(e.type === 'swipeleft'){
+					$('.page-nav-container').css('left','-250px');
+				} else if (e.type === 'swiperight'){
+					$('.page-nav-container').css('left','0');
+				}
+			});
+		}
 	});
 </script>
 		<?php } ?>
+
+
 
 </html>
 <?php

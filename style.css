@@ -17,11 +17,66 @@ td{
 	background: -ms-linear-gradient(top, #000000 0%,#45484d 100%); /* IE10+ */
 	background: linear-gradient(to bottom, #000000 0%,#45484d 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#45484d',GradientType=0 ); /* IE6-9 */
+	height: 50px;
 }
 
 .page-header img{
 	height: 25px;
 	padding: 10px 0 10px 10px;
+}
+
+.page-nav-container{
+	position: fixed;
+	top: 50px;
+	left: 0;
+	bottom: 0;
+	width: 250px;
+	background: purple;
+	overflow-y: auto;
+}
+
+
+.nav-img{
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 50px;
+}
+.nav-img img{
+	width: 200px;
+}
+.nav-main{
+	text-align: center;
+	margin-top: 25px;
+}
+.nav-main li{
+	list-style: none;
+}
+.nav-main > ul li{
+	padding: 8px 0;
+}
+.nav-main li ul li{
+	display: inline-block;	
+}
+.nav-main li a{
+	color: black;
+}
+
+
+@media (max-width: 800px){
+	.page-header{
+		height: 30px
+	}
+	.page-header img{
+		height: 15px;
+		padding: 5px 0 5px 5px;
+	}
+	.page-nav-container{
+		top: 29px;
+	}
+	.nav-img{
+		display: none;
+		margin: 0;
+	}
 }
 
 
