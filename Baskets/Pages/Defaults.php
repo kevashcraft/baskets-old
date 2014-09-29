@@ -8,25 +8,28 @@ class Defaults
 <!DOCTYPE html>
 <html>
 	<head>
+	<script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
 	<link rel='stylesheet' type='text/css' href='<?php echo MY_URL ?>/reset.css' />
 	<link rel='stylesheet' type='text/css' href='<?php echo MY_URL ?>/style.css' />
 	<link rel='icon' type='image/png' href='<?php echo MY_URL ?>/favicon.png'>
-	<script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
 	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<script src='<?php echo MY_URL ?>/js/hammer.min.js'></script>
+	<script src='<?php echo MY_URL ?>/js/jquery.hammer.js'></script>
 <?php
 	 }
 
 
 	public static function pageHeader(){?>
 	<div class='page-header'>
-		<img src='<?php echo MY_URL?>/img/logo.png'>
-		<img src='<?php echo MY_URL?>/img/text.png'>
+		<a href='<?php echo MY_URL ?>'>
+			<img src='<?php echo MY_URL?>/img/logo.png'><img src='<?php echo MY_URL?>/img/text.png'>
+		</a>
 	</div>
 <?php } 
 
 	public static function pageNavigation(){?>
 <div class='page-nav-container'>
-	<div class='nav-img'><img src='<?php echo MY_URL?>/img/nav-basket.jpg'></div>
+	<div class='nav-img'><a href='http://bordeauplumbing.com/' target='_blank'><img src='<?php echo MY_URL?>/img/business-logo.png'></a></div>
 	<nav class='nav-main'>
 		<ul>
 			<li>Parts
@@ -64,7 +67,7 @@ class Defaults
 					<li><a href='<?php echo MY_URL?>/jobs/all'>All</a></li>
 				</ul>
 			</li>
-			<li>Parts
+			<li>Workers
 				<ul>
 					<li><a href='<?php echo MY_URL?>/workers/hire'>Hire</a></li>
 					<li><a href='<?php echo MY_URL?>/workers/all'>All</a></li>
@@ -91,10 +94,7 @@ class Defaults
 	});
 </script>
 
-		<?php	include MY_ROOT . "/lib/Mobile-Detect/Mobile_Detect.php";
-		$detect = new \Mobile_Detect;
-		if($detect->isMobile()){ ?>
-		<script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"></script>
+		<?php	if(\Baskets\Tools\Tracker::$mobile){ ?>
 <script>
 		//
 		// Mobile Devices
@@ -111,21 +111,21 @@ class Defaults
 				$('.page-nav-container').css('transition','left .5s ease');
 			},2000);
 		<?php setCookie('vetNavSlide','annyong',time()+36000000); } else { ?>
-			$('.page-nav-container').css('left','-250px');
+			$('.page-nav-container').css('left','-260px');
 			setTimeout(function(){
 				$('.page-nav-container').css('transition','left .5s ease');
 			},100);
 		<?php } ?>
 
 
+		$(document.body).hammer().on("swiperight",function(e){
+			$('.page-nav-container').css('left','0');
+		});
+		$(document.body).hammer().on("swipeleft",function(e){
+			$('.page-nav-container').css('left','-260px');
+		});
 
-			$(document).on("swipeleft swiperight",function(e){
-				if(e.type === 'swipeleft'){
-					$('.page-nav-container').css('left','-250px');
-				} else if (e.type === 'swiperight'){
-					$('.page-nav-container').css('left','0');
-				}
-			});
+
 		}
 	});
 </script>

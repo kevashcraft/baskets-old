@@ -14,6 +14,7 @@ class Database
 		} catch(PDOException $e) {
 			echo $e->getMessage();
 		}
+		return self::$db;
 	}
 
 	public static function getConnection() {

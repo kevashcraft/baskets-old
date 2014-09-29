@@ -17,7 +17,7 @@ class Login
 				<input type='password' name='password' id='password' placeholder='Password'><br />
 				<input type='hidden' name='annyong' value='hello' >
 				<input type='hidden' name='purpose' value='login' >
-				<input type='submit' value='login'>
+				<input type='submit' data-enhanced="true" value='login'>
 			</form>
 		</div>
 		<script>

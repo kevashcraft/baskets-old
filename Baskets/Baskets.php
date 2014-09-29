@@ -1,10 +1,13 @@
 <?php
 class Baskets
 {
+	public static $db;
+	public static $mobile;
+
 	function __construct()
 	{
 		session_start();
-		Baskets\Tools\Database::connect();
+		self::$db = Baskets\Tools\Database::connect();
 		Baskets\Tools\Defaults::set(); // adds initial users
 		if(isset($_POST['annyong']) || isset($_GET['annyong'])) // process incoming data
 		{
