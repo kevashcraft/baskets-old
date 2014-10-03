@@ -95,6 +95,22 @@ class Defaults
 
 	public static function Footer(){?>
 <script>
+	function sender(why,what)
+	{
+		$.ajax({
+			url: "<?php echo MY_URL ?>",
+			type: 'post',
+			data: { annyong: 'hello',
+						purpose: why,
+						what: what
+					}
+		}).done(function( data ) {
+			alert(data);
+		});
+
+	}
+
+
 	$(document).ready(function(){
 		// Update url to current page if different than originally requested page
 		<?php if(\Baskets\Tools\Tracker::$uri[1] != \Baskets\Tools\Tracker::$page) {?>

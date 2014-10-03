@@ -9,6 +9,9 @@ class Receiver
 		if($purpose == 'none') $purpose = (isset($_GET['purpose']) ? $_GET['purpose'] : 'none');
 		switch ($purpose)
 		{
+			case 'newpass':
+				User::setpass();
+				break;
 			case 'login': 	
 				$login = new Login;;
 				break;
