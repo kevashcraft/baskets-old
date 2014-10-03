@@ -23,11 +23,14 @@ class Baskets
 			case 'dashboard':
 				Baskets\Pages\Dashboard::display();
 				break;
+			case 'mysettings':
+				Baskets\Pages\MySettings::display();
 			case 'contractors':
 				Baskets\Pages\Contractors::display();
 				break;
 			default:
-				Baskets\Pages\Login::display();
+				if($auth) Baskets\Pages\Dashboard::display();
+				else Baskets\Pages\Login::display();
 
 		}
 	}

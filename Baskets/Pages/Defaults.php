@@ -15,6 +15,7 @@ class Defaults
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<script src='<?php echo MY_URL ?>/js/hammer.min.js'></script>
 	<script src='<?php echo MY_URL ?>/js/jquery.hammer.js'></script>
+	<link rel='stylesheet' type='text/css' href='<?php echo MY_URL?>/lib/Font-Awesome/css/font-awesome.min.css'>
 <?php
 	 }
 
@@ -24,6 +25,16 @@ class Defaults
 		<a href='<?php echo MY_URL ?>'>
 			<img src='<?php echo MY_URL?>/img/logo.png'><img src='<?php echo MY_URL?>/img/text.png'>
 		</a>
+		<?php if(isset($_SESSION['userid'])) { ?> 
+		<div class='user-box'>
+			<span class='user-email'><?php echo $_SESSION['useremail'] ?> <i class="fa fa-sort-desc"></i></span>
+			<div class='user-dropdown'>
+				<a href='<?php echo MY_URL ?>/mysettings'>Settings</a>
+				<a href='<?php echo MY_URL ?>/?annyong=hello&purpose=logout'>LogOut</a>
+			</div>			
+		</div>
+
+		<?php } ?>
 	</div>
 <?php } 
 
@@ -85,7 +96,6 @@ class Defaults
 	public static function Footer(){?>
 <script>
 	$(document).ready(function(){
-		
 		// Update url to current page if different than originally requested page
 		<?php if(\Baskets\Tools\Tracker::$uri[1] != \Baskets\Tools\Tracker::$page) {?>
 					window.history.pushState("", "", '/<?php echo \Baskets\Tools\Tracker::$page ?>');
@@ -110,7 +120,7 @@ class Defaults
 			setTimeout(function(){
 				$('.page-nav-container').css('transition','left .5s ease');
 			},2000);
-		<?php setCookie('vetNavSlide','annyong',time()+60); } else { ?>
+		<?php } else { ?>
 			$('.page-nav-container').css('left','-260px');
 			setTimeout(function(){
 				$('.page-nav-container').css('transition','left .5s ease');

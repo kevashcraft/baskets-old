@@ -14,6 +14,7 @@ class Authenticator
 			if(isset($test['id']))
 			{
 				self::$level =  1;//$test['authlevel'];
+				if(!isset($_SESSION['userid'])) self::setsession();
 			} else {
 				self::$level = 0;
 			}
@@ -21,5 +22,15 @@ class Authenticator
 		return self::$level;
 	}
 
+	public static function setsession()
+	{
+		$userid = $_COOKIE['userid'];
+		$db = Database::getConnection();
+		$sel = $db->prepare("SELECT * FROM users WHERE id=? AND valid=true");
+		$sel->execute(array($userid));
+		$user = $sel->fetch();
+		$_SESSION['useremail'] = $user['username'];
+		$_SESSION['userid'] = $user['id'];
+	}
 
 }

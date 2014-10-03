@@ -17,8 +17,7 @@ class Tracker
 
 		include MY_ROOT . "/lib/Mobile-Detect/Mobile_Detect.php";
 		$detect = new \Mobile_Detect;
-		self::$mobile = $detect->isMobile();
-
+		self::$mobile = true;//$detect->isMobile();
 		if(Authenticator::$level < 1) $page = 'login';
 		if($page == '') $page = 'dashboard';
 		self::$page = $page;
