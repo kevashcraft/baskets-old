@@ -27,6 +27,7 @@ td{
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#45484d',GradientType=0 ); /* IE6-9 */
 	height: 45px;
 	z-index: 20;
+	box-shadow: 0 0 5px 1px black;
 }
 
 .page-header img{
@@ -144,7 +145,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', e
 	margin: 15px;
 	padding: 25px;
 	border-radius: 4px;
-	box-shadow: 0 0 5px 2px black;
+	box-shadow: 0 0 8px 3px black;
 background: rgb(183,222,237); /* Old browsers */
 background: -moz-linear-gradient(-45deg, rgba(183,222,237,1) 0%, rgba(113,206,239,1) 50%, rgba(33,180,226,1) 51%, rgba(183,222,237,1) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(183,222,237,1)), color-stop(50%,rgba(113,206,239,1)), color-stop(51%,rgba(33,180,226,1)), color-stop(100%,rgba(183,222,237,1))); /* Chrome,Safari4+ */
@@ -154,6 +155,30 @@ background: -ms-linear-gradient(-45deg, rgba(183,222,237,1) 0%,rgba(113,206,239,
 background: linear-gradient(135deg, rgba(183,222,237,1) 0%,rgba(113,206,239,1) 50%,rgba(33,180,226,1) 51%,rgba(183,222,237,1) 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7deed', endColorstr='#b7deed',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
+
+.dash-box-header{
+	display:block;
+}
+.dash-box-header h1{
+	display: inline-block;
+}
+.add-button{
+	float: right;
+	background: blue;
+	padding: 5px;
+	border: 1px outset gray;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	border-radius: 4px;
+}
+.add-button:hover{
+	box-shadow: 0 0 5px 1px gray;
+}
+.add-button:active{
+	border: 1px inset gray;
+}
+
 
 .db-construction-information{
 background: rgb(254,204,177); /* Old browsers */
@@ -196,8 +221,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feccb1', end
 	}
 	.page-nav-container{
 		top: 26px;
+		left: -260px;
+		transition: all .3s ease;		
 	}
 	.nav-img{
+		display: none;
 		margin: 0 auto;
 	}
 	.nav-main > ul > li:first-of-type{

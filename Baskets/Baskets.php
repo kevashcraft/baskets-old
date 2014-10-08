@@ -3,19 +3,28 @@ class Baskets
 {
 	public static $db;
 	public static $mobile;
+	public static $authlevel;
+
 
 	function __construct()
 	{
+
 		session_start();
+
 		self::$db = Baskets\Tools\Database::connect();
+
 		Baskets\Tools\Defaults::set(); // adds initial users
+
+
+		self::$authlevel = Baskets\Tools\Authenticator::authenticate(); 
+
 		if(isset($_POST['annyong']) || isset($_GET['annyong'])) // process incoming data
 		{
 			Baskets\Incoming\Receiver::receive();
 			exit();
 		}
 		
-		$auth = Baskets\Tools\Authenticator::authenticate(); 
+
 		$page = Baskets\Tools\Tracker::track(); // track page visit
 
 		switch($page)
@@ -25,11 +34,14 @@ class Baskets
 				break;
 			case 'mysettings':
 				Baskets\Pages\MySettings::display();
+			case 'parts':
+				Baskets\Pages\Parts::display();
+				break;
 			case 'contractors':
 				Baskets\Pages\Contractors::display();
 				break;
 			default:
-				if($auth) Baskets\Pages\Dashboard::display();
+				if(self::$authlevel) Baskets\Pages\Dashboard::display();
 				else Baskets\Pages\Login::display();
 
 		}

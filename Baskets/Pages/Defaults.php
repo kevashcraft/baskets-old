@@ -2,6 +2,9 @@
 namespace Baskets\Pages;
 class Defaults
 {
+
+	public static $update_url;
+
 	public static function Header()
 	{
 ?>
@@ -11,7 +14,7 @@ class Defaults
 	<script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
 	<link rel='stylesheet' type='text/css' href='<?php echo MY_URL ?>/reset.css' />
 	<link rel='stylesheet' type='text/css' href='<?php echo MY_URL ?>/style.css' />
-	<link rel='icon' type='image/png' href='<?php echo MY_URL ?>/favicon.png'>
+	
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<script src='<?php echo MY_URL ?>/js/hammer.min.js'></script>
 	<script src='<?php echo MY_URL ?>/js/jquery.hammer.js'></script>
@@ -111,6 +114,28 @@ class Defaults
 	}
 
 
+
+
+$.fn.serializeObject = function()
+{
+	var o = {};
+	var a = this.serializeArray();
+	$.each(a, function() {
+		if (o[this.name] !== undefined) {
+			if (!o[this.name].push) {
+				o[this.name] = [o[this.name]];
+			}
+			o[this.name].push(this.value || '');
+		} else {
+			o[this.name] = this.value || '';
+		}
+	});
+	return o;
+};
+//
+// Moved to Baskets\Tools\JavaScript
+//
+/*
 	$(document).ready(function(){
 		// Update url to current page if different than originally requested page
 		<?php if(\Baskets\Tools\Tracker::$uri[1] != \Baskets\Tools\Tracker::$page) {?>
@@ -118,6 +143,9 @@ class Defaults
 		<?php }?>
 
 	});
+
+*/
+
 </script>
 
 		<?php	if(\Baskets\Tools\Tracker::$mobile){ ?>
@@ -127,6 +155,9 @@ class Defaults
 		//
 	$(document).ready(function(){
 		if(window.innerWidth < 800){
+
+/*		-- Previously used to temporarly show the nav menu after login on mobile devices
+
 
 		// Hide nav menu after login
 		<?php if(!isset($_COOKIE['vetNavSlide'])) {?>
@@ -142,7 +173,7 @@ class Defaults
 				$('.page-nav-container').css('transition','left .5s ease');
 			},100);
 		<?php } ?>
-
+*/
 
 		$(document.body).hammer().on("swiperight",function(e){
 			$('.page-nav-container').css('left','0');

