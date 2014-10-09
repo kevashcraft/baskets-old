@@ -149,6 +149,8 @@ CREATE TABLE suppliers(
 	dtu DATETIME,
 	supplier VARCHAR(64),
 	address VARCHAR(256),
+	email VARCHAR(128),
+	fax VARCHAR(32),
 	phone VARCHAR(32),
 	valid BOOLEAN,
 	PRIMARY KEY (id)

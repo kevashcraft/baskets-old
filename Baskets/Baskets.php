@@ -37,6 +37,12 @@ class Baskets
 			case 'parts':
 				Baskets\Pages\Parts::display();
 				break;
+			case 'suppliers':
+				Baskets\Pages\Suppliers::display();
+				break;
+			case 'bids':
+				Baskets\Pages\Bids::display();
+				break;
 			case 'contractors':
 				Baskets\Pages\Contractors::display();
 				break;

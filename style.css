@@ -211,6 +211,96 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feccb1', end
 	color: whitesmoke;
 }
 
+
+/***** Lists */
+
+.column-title{
+	font-weight: bold;
+	text-align: center;
+}
+
+.list-item{
+	text-align: center;
+	cursor: pointer;
+}
+.list-item:hover{
+	background: rgba(0,0,0,0.4);
+}
+
+
+
+
+/***** Forms */
+
+.formula-one{
+	display: block;
+}
+.formula-one .line{
+	display: block;
+}
+.formula-one .group{
+	margin: 15px;
+}
+
+.formula-one .line label{
+	float: left;
+	font-size: 24px;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.formula-one .line span{
+	display: block;
+	overflow: hidden;
+	padding: 0 4px 0 6px;
+}
+.formula-one .line input{
+	width: 100%;
+}
+.formula-one .line textarea{
+	display: block;
+	width: 100%;
+	margin: 15px;
+	height: 250px;
+}
+.formula-one .small{
+	display: inline-block;
+	width: 20%;
+}
+
+.formula-one .large{
+	display: inline-block;
+	width: 70%;
+}
+
+.formula-one input,.formula-one textarea{
+	background: rgba(0,0,0,0.3);
+	border: none;
+	color: white;
+	padding: 5px;
+	font-size: 20px;
+}
+.formula-one input[type=text]:focus,.formula-one textarea:focus{
+	outline: none;
+}
+
+.formula-one input[type=submit]{
+	display: block;
+	border: 1px outset gray;
+	margin: 0 auto;
+	padding: 15px;
+	background: orange;
+	cursor: pointer;
+	text-shadow: 1px 1px 3px black;
+}
+
+.formula-one input[type=submit]:hover{
+	box-shadow: 0 0 3px 1px gray;
+}
+.formula-one input[type=submit]:active{
+	border: 1px inset gray;
+}
+
 @media (max-width: 800px){
 	.page-header{
 		height: 26px
@@ -239,6 +329,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feccb1', end
 	.user-box{
 		margin: 3px;
 		padding: 3px;
+	}
+	.formula-one .small,.formula-one .large{
+		display: block;
+		width: 100%;
 	}
 }
 

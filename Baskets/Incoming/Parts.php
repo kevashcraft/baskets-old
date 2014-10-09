@@ -14,6 +14,9 @@ class Parts
 			case 'add_part':
 				self::add_part();
 				break;
+			case 'update_part':
+				self::update_part();
+				break;
 			default:
 				echo 'you had NO job';
 				break;
@@ -24,8 +27,21 @@ class Parts
 	public static function add_part()
 	{
 		$stm = \Baskets::$db->prepare("INSERT INTO parts(partid,partname,partdesc) VALUES(?,?,?)");
-		$ins = $stm->execute(array(self::$info['partid'],self::$info['partname'],self::$info['partdesc']));
+		$ins = $stm->execute(array(self::$info['part-id'],self::$info['part-name'],self::$info['part-desc']));
 		if($ins) echo 'part has been added';
 		else echo 'could not add part :(';
 	}
+
+	public static function update_part()
+	{
+		$stm = \Baskets::$db->prepare("UPDATE parts SET partid=?, partname=?, partdesc=? WHERE id=?");
+		$up = $stm->execute(array(self::$info['part-id'],
+									self::$info['part-name'],
+									self::$info['part-desc'],
+									self::$info['entry-id']));
+		if($up) echo 'part has been updated';
+		else echo 'there where an error..';
+	}
+
+
 }

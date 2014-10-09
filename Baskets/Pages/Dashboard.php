@@ -4,13 +4,8 @@ class Dashboard
 {
 	public static function display()
 	{
-		Defaults::header();	
-?>
-		<title>Baskets - Dashboard</title>
-	</head>
-	<body>
-		<?php Defaults::pageHeader() ?>
-		<?php Defaults::pageNavigation() ?>
+		Framework::page_header('Dashboard | Baskets');
+	?>
 		<div class='main-viewer' id='main-viewer'>
 			<div class='dash-box'>
 				<h1><i class="fa fa-leaf"></i> Welcome</h1>
@@ -23,8 +18,7 @@ class Dashboard
 				</p>
 			</div>
 		</div>
-	</body>
 <?php
-		Defaults::footer();
+		Framework::page_footer();
 	}
 }

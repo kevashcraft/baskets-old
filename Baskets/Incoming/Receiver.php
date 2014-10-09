@@ -12,6 +12,9 @@ class Receiver
 			case 'parts':
 				if(\Baskets::$authlevel > 0) Parts::engine();
 				break;
+			case 'suppliers':
+				if(\Baskets::$authlevel > 0) Suppliers::engine();
+				break;
 			case 'newpass':
 				User::setpass();
 				break;

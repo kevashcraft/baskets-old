@@ -83,6 +83,7 @@ $.fn.serializeObject = function()
 	});
 	return o;
 };
+</script>
 	<? }
 
 
@@ -92,6 +93,7 @@ $.fn.serializeObject = function()
 //
 	public static function mobile_menu()
 	{ ?>
+<script>
    $(function(){
       $(document.body).hammer().on("swiperight",function(e){
          $('.page-nav-container').css('left','0');
@@ -100,6 +102,7 @@ $.fn.serializeObject = function()
          $('.page-nav-container').css('left','-260px');
       });
 	});
+</script>
 	<? }
 
 //
@@ -137,8 +140,8 @@ $.fn.serializeObject = function()
 		 <li>Parts
 			<ul>
 				<li><a href='<?php echo MY_URL?>/parts/list'>List</a></li>
-				<li><a href='<?php echo MY_URL?>/parts/suppliers'>Suppliers</a></li>
-				<li><a href='<?php echo MY_URL?>/parts/bids'>Bids</a></li>
+				<li><a href='<?php echo MY_URL?>/suppliers/list'>Suppliers</a></li>
+				<li><a href='<?php echo MY_URL?>/bids/list'>Bids</a></li>
 			</ul>
 		 </li>
 		 <li>Estimates
@@ -192,9 +195,9 @@ $.fn.serializeObject = function()
 
 	public static function page_footer()
 	{ 
-	echo '</body>';
 	self::genjs();
 	if(\Baskets\Tools\Tracker::$mobile) self::mobile_menu();
+	echo '</body>';
 	echo '</html>';
 	}
 }
