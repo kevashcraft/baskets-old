@@ -19,6 +19,9 @@ class Suppliers
 			case 'add':
 				self::add();
 				break;
+			case 'supplier':
+				self::supplier();
+				break;
 			case 'old':
 				self::old();
 				break;
@@ -61,16 +64,16 @@ class Suppliers
 			}
 			echo '</tr>';
 
-			// Connect to DB and print parts
+			// Connect to DB and print suppliers
 			$db = \Baskets\Tools\Database::getConnection();
 			$stm = $db->prepare("SELECT * FROM suppliers");
 			$stm->execute();
-			while($parts = $stm->fetch())
+			while($suppliers = $stm->fetch())
 			{
-				echo '<tr>';
+				echo "<tr class='list-item' onclick=\"document.location = '".MY_URL."/suppliers/supplier/".$suppliers['id']."'\">";
 				foreach($cols as $col)
 				{
-					echo '<td>' . $parts[$col] . '</td>';
+					echo '<td>' . $suppliers[$col] . '</td>';
 				}
 				echo '</tr>';
 			}
@@ -102,7 +105,10 @@ class Suppliers
 	?>
 		<div class='main-viewer' id='main-viewer'>
 			<div class='dash-box'>
-				<h1><i class="fa fa-leaf"></i> Add Supplier</h1>
+				<div class='dash-box-header'>
+					<h1><i class="fa fa-leaf"></i> Add Supplier</h1>
+					<a href='<?=MY_URL?>/suppliers/list' class='add-button'>List Suppliers</a>
+				</div>
 				<p>
 					<form class='formula-one'>
 						<div class='line'>
@@ -125,13 +131,13 @@ class Suppliers
 						</div>	
 						<div class='line'>
 							<div class='group'>
-								<label for='part-desc'>Phone</label>
+								<label for='supplier-desc'>Phone</label>
 								<span><input type='tel' name='phone' id='phone'></span>
 							</div>
 						</div>
 						<div class='line'>
 							<div class='group'>
-								<label for='part-desc'>Fax</label>
+								<label for='supplier-desc'>Fax</label>
 								<span><input type='tel' name='fax' id='fax'></span>
 							</div>
 						</div>
@@ -153,6 +159,80 @@ class Suppliers
 	<?	Framework::page_footer();
 	}
 
+
+
+
+
+///////////////////////////////////////
+
+//////////     DISPLAY SUPPLIER    ///////////
+
+///////////////////////////////////////
+
+	public static function supplier()
+	{
+		$id = \Baskets\Tools\Tracker::$uri[3];
+		$stm = \Baskets::$db->prepare('SELECT * FROM suppliers WHERE id=?');
+		$stm->execute(array($id));
+		$supplier = $stm->fetch();
+		Framework::page_header($supplier['supplier'] . ' | Baskets');
+	?>
+		<div class='main-viewer' id='main-viewer'>
+			<div class='dash-box'>
+				<div class='dash-box-header'>
+					<h1><i class="fa fa-leaf"></i> Update a Supplier</h1>
+					<a href='<?=MY_URL?>/suppliers/list' class='add-button'>List Suppliers</a>
+				</div>
+				<p>
+					<form class='formula-one'>
+						<div class='line'>
+							<div class='group'>
+								<label for='supplier'>Supplier</label>
+								<span><input type='text' name='supplier' id='supplier' value='<?=$supplier['supplier']?>'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='address'>Address</label>
+								<span><input type='text' name='address' id='address' value='<?=$supplier['address']?>'></span>
+							</div>
+						</div>	
+						<div class='line'>
+							<div class='group'>
+								<label for='address'>Email</label>
+								<span><input type='email' name='email' id='email' value='<?=$supplier['email']?>'></span>
+							</div>
+						</div>	
+						<div class='line'>
+							<div class='group'>
+								<label for='supplier-desc'>Phone</label>
+								<span><input type='tel' name='phone' id='phone' value='<?=$supplier['phone']?>'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='supplier-desc'>Fax</label>
+								<span><input type='tel' name='fax' id='fax' value='<?=$supplier['fax']?>'></span>
+							</div>
+						</div>
+						<div class='input-wrap'>
+							<input type='hidden' name='job' value='update_supplier'>
+							<input type='hidden' name='entry-id' value='<?=$supplier['id']?>'>
+							<input type='submit' value='Update'>
+						</div>
+					</form>
+					<script>
+						$( 'form' ).submit( function( event ) {
+							event.preventDefault();
+							var formdata = JSON.stringify($( this ).serializeObject());
+							sender('suppliers',formdata);
+						});
+					</script>
+				</p>
+			</div>
+		</div>
+	<?	Framework::page_footer();
+	}
 
 
 
