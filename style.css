@@ -249,7 +249,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feccb1', end
 	padding: 5px;
 }
 
-.formula-one .line span{
+.formula-one .line > span{
 	display: block;
 	overflow: hidden;
 	padding: 0 4px 0 6px;

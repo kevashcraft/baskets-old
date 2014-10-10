@@ -34,6 +34,7 @@ class Baskets
 				break;
 			case 'mysettings':
 				Baskets\Pages\MySettings::display();
+				break;
 			case 'parts':
 				Baskets\Pages\Parts::display();
 				break;

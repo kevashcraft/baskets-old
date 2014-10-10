@@ -22,7 +22,7 @@ class Framework
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<script src='<?=MY_URL?>/js/hammer.min.js'></script>
 		<script src='<?=MY_URL?>/js/jquery.hammer.js'></script>
-		<script src='<?=MY_URL?>/js/complete.ly.1.0.1.min.js'></script>
+		<script src='<?=MY_URL?>/js/typeahead.jquery.js'></script>
 		<link rel='stylesheet' type='text/css' href='<?=MY_URL?>/lib/Font-Awesome/css/font-awesome.min.css'>
 		<title><?=$title?></title>
 		<? if(isset(self::$newurl)) self::updateURL() ?>
