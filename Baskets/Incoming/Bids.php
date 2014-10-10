@@ -14,8 +14,8 @@ class Bids
 			case 'add_bid':
 				self::add_bid();
 				break;
-			case 'update_supplier':
-				self::update_supplier();
+			case 'update_bid':
+				self::update_bid();
 				break;
 			default:
 				echo 'you had NO job';
@@ -38,9 +38,6 @@ class Bids
 					$ins = $stm->execute(array(	$lastid,
 														self::$info["price$pp"],
 														"%".self::$info["part$pp"]."%"));
-					print_r(array(   $lastid,
-                                          self::$info["price$pp"],
-                                          "%".self::$info["part$pp"]."%"));
 					if($ins) $compl = true;
 				}
 			}
@@ -51,16 +48,22 @@ class Bids
 	}
 
 
-	public static function update_supplier()
+	public static function update_bid()
 	{
-		$stm = \Baskets::$db->prepare("UPDATE suppliers SET dtu=NOW(),supplier=?,address=?,email=?,fax=?,phone=? WHERE id=?");
-		$up = $stm->execute(array(self::$info['supplier'],
-									self::$info['address'],
-									self::$info['email'],
-									self::$info['fax'],
-									self::$info['phone'],
-									self::$info['entry-id']));
-		if($up) echo 'supplier has been updated';
+		$stm = \Baskets::$db->prepare("DELETE FROM bidparts WHERE bidid=?");
+		$stm->execute(array(self::$info['bidid']));
+		$stm = \Baskets::$db->prepare("INSERT INTO bidparts SELECT ?,id,? FROM parts WHERE partid LIKE ?");
+		$compl = false;
+		for($pp=1;$pp<=self::$info['pp'];$pp++){
+			if(self::$info["part$pp"] != '' && self::$info["price$pp"] != ''){
+				$ins = $stm->execute(array(self::$info['bidid'],
+													self::$info["price$pp"],
+													"%".self::$info["part$pp"]."%"));
+				if($ins) $compl = true;
+			}
+		}
+		
+		if($compl) echo 'supplier has been updated';
 		else echo 'there where an error..';
 	}
 }

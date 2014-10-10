@@ -52,7 +52,7 @@ class Suppliers
 					<a href='<?=MY_URL?>/suppliers/add' class='add-button'>Add Supplier</a>
 				</div>
 				<p>
-					<table style='width:100%'>
+					<table class='table-one'>
 
 		<?
 			// Print column titles

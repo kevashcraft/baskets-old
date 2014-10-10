@@ -52,7 +52,7 @@ class Parts
 					<a href='<?=MY_URL?>/parts/add' class='add-button'>Add Parts</a>
 				</div>
 				<p>
-					<table style='width:100%'>
+					<table class='table-one'>
 
 		<?
 			// Print column titles
@@ -62,11 +62,13 @@ class Parts
 			{
 				echo "<td>$col</td>";				
 			}
+			echo "<td>Price</td>";
 			echo '</tr>';
 
 			// Connect to DB and print parts
 			$db = \Baskets\Tools\Database::getConnection();
 			$stm = $db->prepare("SELECT * FROM parts");
+			$stmp = $db->prepare("SELECT price FROM bidparts WHERE partid=? ORDER BY price ASC");
 			$stm->execute();
 			while($parts = $stm->fetch())
 			{
@@ -75,6 +77,12 @@ class Parts
 				{
 					echo '<td>' . $parts[$col] . '</td>';
 				}
+				$stmp->execute(array($parts['id']));
+				echo '<td><select>';
+				while($price = $stmp->fetch()){
+					echo '<option>'.$price['price'].'</option>';
+				}
+				echo '</select></td>';
 				echo '</tr></a>';
 			}
 		?>

@@ -52,7 +52,7 @@ class Bids
 					<a href='<?=MY_URL?>/bids/add' class='add-button'>Add Bid</a>
 				</div>
 				<p>
-					<table style='width:100%'>
+					<table class='table-one'>
 
 		<?
 			// Print column titles
@@ -342,11 +342,15 @@ function tahead(docid){
 								<div class='bid-name'><?=$part['partname']?></div>
 								<div class='bid-price'><input value='<?=$bp['price']?>' type='number' step="0.01" name='price<?=$pp?>' id='price<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
 							</div>
+							<script>
+								$(function(){ tahead('part<?=$pp?>'); });
+							</script>
 							<? } ?>
 						</div>
 
 						<div class='input-wrap'>
 							<input type='hidden' name='job' value='update_bid'>
+							<input type='hidden' name='bidid' value='<?=$bid['id']?>'>
 							<input type='hidden' name='pp' id='pp' value='<?=$pp?>'>
 							<input type='submit' value='Update'>
 						</div>
