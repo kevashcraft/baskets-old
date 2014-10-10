@@ -56,7 +56,7 @@ class Bids
 
 		<?
 			// Print column titles
-			$cols = array('id','bid','address','phone');
+			$cols = array('id','bid');
 			echo '<tr>';
 			foreach($cols as $col)
 			{
@@ -123,20 +123,22 @@ class Bids
 								<span><input type='text' name='bid' id='bid'></span>
 							</div>
 						</div>
-						<div class='line'>
-							
-							<div class='group large'>
-								<label for='part'>Part</label>
-								<span><input type='text' name='part' id='part'></span>
+						<div class='bid-pp-cont' id='bid-pp-cont'>
+							<div class='bid-pp-line'>
+								<div class='bid-part'>Part ID</div>
+								<div class='bid-name'>Name</div>
+								<div class='bid-price'>Price</div>
 							</div>
-							<div class='group small'>
-								<label for='price'>Price</label>
-								<span><input type='number' name='price' id='price'></span>
+							<div class='bid-pp-line' id='pp0' style='display:none'>
+								<div class='bid-part'><input type='text' name='part0' id='part0' data-pn='0' onfocus="checkpp(this)"></div>
+								<div class='bid-name'>item name here</div>
+								<div class='bid-price'><input type='number' step="0.01" name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
 							</div>
 						</div>
 
 						<div class='input-wrap'>
 							<input type='hidden' name='job' value='add_bid'>
+							<input type='hidden' name='pp' id='pp' value='1'>
 							<input type='submit'>
 						</div>
 					</form>
@@ -146,6 +148,41 @@ class Bids
 							var formdata = JSON.stringify($( this ).serializeObject());
 							sender('bids',formdata);
 						});
+
+var numparts = 0;
+
+function checkpp(elem){
+	var mynum = elem.getAttribute('data-pn');
+	if (mynum == numparts) addpp();
+}
+
+function addpp(){
+	var pp = document.getElementById('pp0').cloneNode(true);
+	numparts++;
+	pp.id = 'pp' + numparts;
+	pp.style.display = 'block';
+	pp.childNodes[1].firstChild.id = 'part' + numparts;
+	pp.childNodes[1].firstChild.name = 'part' + numparts;
+	pp.childNodes[1].firstChild.setAttribute('data-pn', numparts);
+	console.log( pp.childNodes[1].firstChild);
+	pp.childNodes[5].firstChild.id = 'price' + numparts;
+	pp.childNodes[5].firstChild.name = 'price' + numparts;
+	pp.childNodes[5].firstChild.setAttribute('data-pn', numparts);
+	document.getElementById('bid-pp-cont').appendChild(pp);
+	document.getElementById('pp').value = numparts;
+	tahead('part'+numparts);
+}
+
+$(function(){
+	addpp();
+	console.log('oneo');
+});
+
+
+
+
+
+
 
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
@@ -190,18 +227,18 @@ $('#supplier').typeahead({
 
 
 var parts = [<? self::print_parts() ?>];
-
-$('#part').typeahead({
-	hint: true,
-	highlight: true,
-	minLength:1
-},
-{
-	name: 'part',
-	displayKey: 'value',
-	source: substringMatcher(parts)
-});
-
+function tahead(docid){
+	$('#'+docid).typeahead({
+		hint: true,
+		highlight: true,
+		minLength:1
+	},
+	{
+		name: 'part',
+		displayKey: 'value',
+		source: substringMatcher(parts)
+	});
+}
 
 
 
@@ -239,6 +276,177 @@ $('#part').typeahead({
 	}
 
 
+
+///////////////////////////////////////
+
+//////////     Update Bid    ///////////
+
+///////////////////////////////////////
+
+	public static function bid()
+	{
+		$stm = \Baskets::$db->prepare("SELECT * FROM bids WHERE id=?");
+		$stm->execute(array(\Baskets\Tools\Tracker::$uri[3]));
+		$bid = $stm->fetch();
+
+		$stm = \Baskets::$db->prepare("SELECT supplier FROM suppliers WHERE id=?");
+		$stm->execute(array($bid['supplierid']));
+		$res = $stm->fetch();
+		$supplier = $res['supplier'];
+
+		Framework::page_header('Update Bid ' . $bid['bid'] . ' | Baskets');
+	?>
+		<div class='main-viewer' id='main-viewer'>
+			<div class='dash-box'>
+				<div class='dash-box-header'>
+					<h1><i class="fa fa-leaf"></i> Update Bid</h1>
+					<a href='<?=MY_URL?>/bids/list' class='add-button'>List Bids</a>
+				</div>
+				<p>
+					<form class='formula-one'>
+						<div class='line'>
+							<div class='group'>
+								<label for='supplier'>Supplier</label>
+								<input type='text' name='supplier' id='supplier' value='<?=$supplier?>'>
+							</div>
+						</div>	
+						<div class='line'>
+							<div class='group'>
+								<label for='bid'>Bid</label>
+								<span><input type='text' name='bid' id='bid' value='<?=$bid['bid']?>'></span>
+							</div>
+						</div>
+						<div class='bid-pp-cont' id='bid-pp-cont'>
+							<div class='bid-pp-line'>
+								<div class='bid-part'>Part ID</div>
+								<div class='bid-name'>Name</div>
+								<div class='bid-price'>Price</div>
+							</div>
+							<div class='bid-pp-line' id='pp0' style='display:none'>
+								<div class='bid-part'><input type='text' name='part0' id='part0' data-pn='0' onfocus="checkpp(this)"></div>
+								<div class='bid-name'>item name here</div>
+								<div class='bid-price'><input type='number' name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
+							</div>
+						<?
+							$astm = \Baskets::$db->prepare("SELECT * FROM parts WHERE id=?");
+							$stm = \Baskets::$db->prepare("SELECT * FROM bidparts WHERE bidid=?");
+							$stm->execute(array($bid['id']));
+							$pp=0;
+							while($bp = $stm->fetch()) {
+								$pp++;
+								$astm->execute(array($bp['partid']));
+								$part = $astm->fetch();
+								?>
+							<div class='bid-pp-line' id='pp<?=$pp?>'>
+								<div class='bid-part'><input value='<?=$part['partid']?>' type='text' name='part<?=$pp?>' id='part<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
+								<div class='bid-name'><?=$part['partname']?></div>
+								<div class='bid-price'><input value='<?=$bp['price']?>' type='number' step="0.01" name='price<?=$pp?>' id='price<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
+							</div>
+							<? } ?>
+						</div>
+
+						<div class='input-wrap'>
+							<input type='hidden' name='job' value='update_bid'>
+							<input type='hidden' name='pp' id='pp' value='<?=$pp?>'>
+							<input type='submit' value='Update'>
+						</div>
+					</form>
+					<script>
+						$( 'form' ).submit( function( event ) {
+							event.preventDefault();
+							var formdata = JSON.stringify($( this ).serializeObject());
+							sender('bids',formdata);
+						});
+
+var numparts = <?=$pp?>;
+
+function checkpp(elem){
+	var mynum = elem.getAttribute('data-pn');
+	if (mynum == numparts) addpp();
+}
+
+function addpp(){
+	var pp = document.getElementById('pp0').cloneNode(true);
+	numparts++;
+	pp.id = 'pp' + numparts;
+	pp.style.display = 'block';
+	pp.childNodes[1].firstChild.id = 'part' + numparts;
+	pp.childNodes[1].firstChild.name = 'part' + numparts;
+	pp.childNodes[1].firstChild.setAttribute('data-pn', numparts);
+	console.log( pp.childNodes[1].firstChild);
+	pp.childNodes[5].firstChild.id = 'price' + numparts;
+	pp.childNodes[5].firstChild.name = 'price' + numparts;
+	pp.childNodes[5].firstChild.setAttribute('data-pn', numparts);
+	document.getElementById('bid-pp-cont').appendChild(pp);
+	document.getElementById('pp').value = numparts;
+	tahead('part'+numparts);
+}
+
+
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substrRegex;
+ 
+    // an array that will be populated with substring matches
+    matches = [];
+ 
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+ 
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        // the typeahead jQuery plugin expects suggestions to a
+        // JavaScript object, refer to typeahead docs for more info
+        matches.push({ value: str });
+      }
+    });
+ 
+    cb(matches);
+  };
+};
+
+
+
+
+
+var suppliers = [<? self::print_suppliers() ?>];
+
+$('#supplier').typeahead({
+	hint: true,
+	highlight: true,
+	minLength:0
+},
+{
+	name: 'suppliers',
+	displayKey: 'value',
+	source: substringMatcher(suppliers)
+});
+
+
+var parts = [<? self::print_parts() ?>];
+function tahead(docid){
+	$('#'+docid).typeahead({
+		hint: true,
+		highlight: true,
+		minLength:1
+	},
+	{
+		name: 'part',
+		displayKey: 'value',
+		source: substringMatcher(parts)
+	});
+}
+
+
+					</script>
+				</p>
+			</div>
+		</div>
+	<?	Framework::page_footer();
+	}
+
 	public static function print_suppliers(){
 		$stm = \Baskets::$db->prepare("SELECT supplier FROM suppliers WHERE valid=true");
 		$stm->execute();
@@ -267,82 +475,6 @@ $('#part').typeahead({
 			echo "$comma\"".addslashes($res['partid'])."\"";
 		}
 	}
-
-
-
-///////////////////////////////////////
-
-//////////     DISPLAY BID    ///////////
-
-///////////////////////////////////////
-
-	public static function bid()
-	{
-		$id = \Baskets\Tools\Tracker::$uri[3];
-		$stm = \Baskets::$db->prepare('SELECT * FROM bids WHERE id=?');
-		$stm->execute(array($id));
-		$bid = $stm->fetch();
-		Framework::page_header($bid['bid'] . ' | Baskets');
-	?>
-		<div class='main-viewer' id='main-viewer'>
-			<div class='dash-box'>
-				<div class='dash-box-header'>
-					<h1><i class="fa fa-leaf"></i> Update a Bid</h1>
-					<a href='<?=MY_URL?>/bids/list' class='add-button'>List Bids</a>
-				</div>
-				<p>
-					<form class='formula-one'>
-						<div class='line'>
-							<div class='group'>
-								<label for='bid'>Bid</label>
-								<span><input type='text' name='bid' id='bid' value='<?=$bid['bid']?>'></span>
-							</div>
-						</div>
-						<div class='line'>
-							<div class='group'>
-								<label for='address'>Address</label>
-								<span><input type='text' name='address' id='address' value='<?=$bid['address']?>'></span>
-							</div>
-						</div>	
-						<div class='line'>
-							<div class='group'>
-								<label for='address'>Email</label>
-								<span><input type='email' name='email' id='email' value='<?=$bid['email']?>'></span>
-							</div>
-						</div>	
-						<div class='line'>
-							<div class='group'>
-								<label for='bid-desc'>Phone</label>
-								<span><input type='tel' name='phone' id='phone' value='<?=$bid['phone']?>'></span>
-							</div>
-						</div>
-						<div class='line'>
-							<div class='group'>
-								<label for='bid-desc'>Fax</label>
-								<span><input type='tel' name='fax' id='fax' value='<?=$bid['fax']?>'></span>
-							</div>
-						</div>
-						<div class='input-wrap'>
-							<input type='hidden' name='job' value='update_bid'>
-							<input type='hidden' name='entry-id' value='<?=$bid['id']?>'>
-							<input type='submit' value='Update'>
-						</div>
-					</form>
-					<script>
-						$( 'form' ).submit( function( event ) {
-							event.preventDefault();
-							var formdata = JSON.stringify($( this ).serializeObject());
-							sender('bids',formdata);
-						});
-					</script>
-				</p>
-			</div>
-		</div>
-	<?	Framework::page_footer();
-	}
-
-
-
 
 
 }

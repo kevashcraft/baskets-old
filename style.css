@@ -301,6 +301,45 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feccb1', end
 	border: 1px inset gray;
 }
 
+
+/*			BID FORM	*/
+
+.bid-pp-cont{
+	display: block;
+	border: 1px solid black;
+	border-radius: 4px;
+}
+.bid-pp-line{
+	display: block;
+	border: 1px solid blue;
+	border-radius: 2px;
+	text-align: center;
+	padding: 5px 0;
+}
+.bid-pp-line div{
+	display: inline-block;
+	text-align: center;
+	margin: 0;
+	vertical-align: middle;
+}
+.bid-pp-line input{
+	display: inline-block;
+	width: 90%;
+	margin: 0 auto;
+	padding: 0;
+}
+.bid-part{
+	width: 29%;	
+}
+.bid-name{
+	width: 39%;	
+}
+.bid-price{
+	width: 29%;	
+}
+
+
+
 @media (max-width: 800px){
 	.page-header{
 		height: 26px

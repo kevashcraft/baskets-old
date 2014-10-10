@@ -1,6 +1,6 @@
 <?
 namespace Baskets\Incoming;
-class Suppliers
+class Bids
 {
 	public static $info;
 
@@ -11,8 +11,8 @@ class Suppliers
 		print_r(self::$info);
 		switch(self::$info['job'])
 		{
-			case 'add_supplier':
-				self::add_supplier();
+			case 'add_bid':
+				self::add_bid();
 				break;
 			case 'update_supplier':
 				self::update_supplier();
@@ -24,16 +24,30 @@ class Suppliers
 	}
 
 
-	public static function add_supplier()
+	public static function add_bid()
 	{
-		$stm = \Baskets::$db->prepare("INSERT INTO suppliers(dt,dtu,valid,supplier,address,email,fax,phone) VALUES(NOW(),NOW(),true,?,?,?,?,?)");
-		$ins = $stm->execute(array(	self::$info['supplier'],
-												self::$info['address'],
-												self::$info['email'],
-												self::$info['fax'],
-												self::$info['phone']));
-		if($ins) echo 'supplier has been added';
-		else echo 'could not add part :(';
+		$stm = \Baskets::$db->prepare("INSERT INTO bids(dt,expiration,bid,supplierid,valid) SELECT NOW(),NOW(),?,id,true FROM suppliers WHERE supplier LIKE ?");
+		$ins = $stm->execute(array(	self::$info['bid'],
+												"%".self::$info['supplier']."%"));
+		if($ins){
+			$compl = false;
+			$lastid = \Baskets::$db->lastInsertId();
+			$stm = \Baskets::$db->prepare("INSERT INTO bidparts SELECT ?,id,? FROM parts WHERE partid LIKE ?");
+			for($pp=1;$pp<=self::$info['pp'];$pp++){
+				if(self::$info["part$pp"] != '' && self::$info["price$pp"] != ''){
+					$ins = $stm->execute(array(	$lastid,
+														self::$info["price$pp"],
+														"%".self::$info["part$pp"]."%"));
+					print_r(array(   $lastid,
+                                          self::$info["price$pp"],
+                                          "%".self::$info["part$pp"]."%"));
+					if($ins) $compl = true;
+				}
+			}
+			if($compl) echo "bid has been added";
+			else echo "could not add bid :(";
+		}
+		else echo 'could not add bid :(';
 	}
 
 

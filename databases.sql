@@ -123,9 +123,9 @@ CREATE TABLE bids(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	dt DATETIME,
 	expiration DATE,
-	bidid VARCHAR(64),
-	bidname VARCHAR(128),
+	bid VARCHAR(64),
 	supplierid INT UNSIGNED,
+	valid BOOLEAN,
 	PRIMARY KEY (id)
 ) ENGINE InnoDB;
 
