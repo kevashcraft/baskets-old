@@ -52,6 +52,9 @@ class Baskets
 			case 'contractors':
 				Baskets\Pages\Contractors::display();
 				break;
+			case 'estimates':
+				Baskets\Pages\Estimates::display();
+				break;
 			default:
 				if(self::$authlevel) Baskets\Pages\Dashboard::display();
 				else Baskets\Pages\Login::display();
