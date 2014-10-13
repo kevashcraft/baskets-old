@@ -130,7 +130,7 @@ class Bids
 								<div class='bid-price'>Price</div>
 							</div>
 							<div class='bid-pp-line' id='pp0' style='display:none'>
-								<div class='bid-part'><input type='text' name='part0' id='part0' data-pn='0' onfocus="checkpp(this)"></div>
+								<div class='bid-part'><input type='text' name='part0' id='part0' onblur="part_name(this)" data-pn='0' onfocus="checkpp(this)"></div>
 								<div class='bid-name'>item name here</div>
 								<div class='bid-price'><input type='number' step="0.01" name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
 							</div>
@@ -148,6 +148,20 @@ class Bids
 							var formdata = JSON.stringify($( this ).serializeObject());
 							sender('bids',formdata);
 						});
+function part_name(that){
+	console.log('here');
+	var np = that.getAttribute('data-pn');
+	$.ajax({
+		url: '<?=MY_URL?>',
+		data: { tiny: 'part_name',
+					tp: that.value
+				}
+	}).done(function(data){
+		var nn = 'partname' + np;
+		console.log(nn);
+		document.getElementById(nn).innerHTML = data;
+	});
+}
 
 var numparts = 0;
 
@@ -164,6 +178,7 @@ function addpp(){
 	pp.childNodes[1].firstChild.id = 'part' + numparts;
 	pp.childNodes[1].firstChild.name = 'part' + numparts;
 	pp.childNodes[1].firstChild.setAttribute('data-pn', numparts);
+	pp.childNodes[3].id = 'partname' + numparts;
 	console.log( pp.childNodes[1].firstChild);
 	pp.childNodes[5].firstChild.id = 'price' + numparts;
 	pp.childNodes[5].firstChild.name = 'price' + numparts;
@@ -369,6 +384,7 @@ function checkpp(elem){
 	if (mynum == numparts) addpp();
 }
 
+/*	Add another part-price line	*/	
 function addpp(){
 	var pp = document.getElementById('pp0').cloneNode(true);
 	numparts++;

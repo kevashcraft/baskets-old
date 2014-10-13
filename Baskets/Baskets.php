@@ -12,6 +12,11 @@ class Baskets
 		session_start();
 
 		self::$db = Baskets\Tools\Database::connect();
+		if(isset($_GET['tiny'])){
+			Baskets\Incoming\Tiny::tim();
+			exit();
+		}
+
 
 		Baskets\Tools\Defaults::set(); // adds initial users
 
