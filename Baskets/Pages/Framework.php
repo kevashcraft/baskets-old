@@ -145,11 +145,11 @@ $.fn.serializeObject = function()
 				<li><a href='<?php echo MY_URL?>/bids/list'>Bids</a></li>
 			</ul>
 		 </li>
-		 <li>Estimates
+		 <li>Proposals
 			<ul>
-				<li><a href='<?php echo MY_URL?>/estimates/new'>New</a></li>
-				<li><a href='<?php echo MY_URL?>/estimates/list'>List</a></li>
-				<li><a href='<?php echo MY_URL?>/estimates/all'>All</a></li>
+				<li><a href='<?php echo MY_URL?>/proposals/new'>New</a></li>
+				<li><a href='<?php echo MY_URL?>/proposals/list'>List</a></li>
+				<li><a href='<?php echo MY_URL?>/proposals/all'>All</a></li>
 			</ul>
 		 </li>
 		 <li>Warehouse

@@ -1,6 +1,6 @@
 <?php
 namespace Baskets\Pages;
-class Estimates
+class Proposals
 {
 
 ///////////////////////////////////////////////
@@ -16,17 +16,17 @@ class Estimates
 			case 'list':
 				self::lister();
 				break;
-			case 'add':
-				self::add();
+			case 'new':
+				self::newer();
 				break;
-			case 'estimate':
-				self::estimate();
+			case 'proposal':
+				self::proposal();
 				break;
 			case 'old':
 				self::old();
 				break;
 			default:
-				Framework::$newurl = 'estimates/list';
+				Framework::$newurl = 'proposals/list';
 				self::lister();
 				break;
 		}
@@ -43,20 +43,20 @@ class Estimates
 
 	public static function lister()
 	{
-		Framework::page_header('Estimates | Baskets');
+		Framework::page_header('Proposals | Baskets');
 	?>
 		<div class='main-viewer' id='main-viewer'>
 			<div class='dash-box'>
 				<div class='dash-box-header'>
-					<h1><i class="fa fa-leaf"></i> All Estimates</h1>
-					<a href='<?=MY_URL?>/estimates/add' class='add-button'>Add Estimate</a>
+					<h1><i class="fa fa-leaf"></i> All Proposals</h1>
+					<a href='<?=MY_URL?>/proposals/add' class='add-button'>Add Proposal</a>
 				</div>
 				<p>
 					<table class='table-one'>
 
 		<?
 			// Print column titles
-			$cols = array('id','estimate');
+			$cols = array('id','proposal');
 			echo '<tr>';
 			foreach($cols as $col)
 			{
@@ -64,16 +64,16 @@ class Estimates
 			}
 			echo '</tr>';
 
-			// Connect to DB and print estimates
+			// Connect to DB and print proposals
 			$db = \Baskets\Tools\Database::getConnection();
-			$stm = $db->prepare("SELECT * FROM estimates");
+			$stm = $db->prepare("SELECT * FROM proposals");
 			$stm->execute();
-			while($estimates = $stm->fetch())
+			while($proposals = $stm->fetch())
 			{
-				echo "<tr class='list-item' onclick=\"document.location = '".MY_URL."/estimates/bid/".$bids['id']."'\">";
+				echo "<tr class='list-item' onclick=\"document.location = '".MY_URL."/proposals/bid/".$bids['id']."'\">";
 				foreach($cols as $col)
 				{
-					echo '<td>' . $estimates[$col] . '</td>';
+					echo '<td>' . $proposals[$col] . '</td>';
 				}
 				echo '</tr>';
 			}
@@ -95,49 +95,49 @@ class Estimates
 
 ///////////////////////////////////////
 
-//////////     ADD Estimate    ///////////
+//////////     ADD Proposal    ///////////
 
 ///////////////////////////////////////
 
-	public static function add()
+	public static function newer()
 	{
-		Framework::page_header('Add Estimate | Baskets');
+		Framework::page_header('Add Proposal | Baskets');
 	?>
 		<div class='main-viewer' id='main-viewer'>
 			<div class='dash-box'>
 				<div class='dash-box-header'>
-					<h1><i class="fa fa-leaf"></i> Add Estimate</h1>
-					<a href='<?=MY_URL?>/estimates/list' class='add-button'>List Estimates</a>
+					<h1><i class="fa fa-leaf"></i> Add Proposal</h1>
+					<a href='<?=MY_URL?>/proposals/list' class='add-button'>List Proposals</a>
 				</div>
 				<p>
 					<form class='formula-one'>
 						<div class='line'>
 							<div class='group'>
-								<label for='supplier'>Supplier</label>
-								<input type='text' name='supplier' id='supplier'>
+								<label for='contractor'>Contractor</label>
+								<input type='text' name='contractor' id='contractor'>
 							</div>
 						</div>	
 						<div class='line'>
 							<div class='group'>
-								<label for='estimate'>Estimate</label>
-								<span><input type='text' name='estimate' id='bid'></span>
+								<label for='model'>Model</label>
+								<span><input type='text' name='model' id='bid'></span>
 							</div>
 						</div>
-						<div class='estimate-pp-cont' id='bid-pp-cont'>
-							<div class='estimate-pp-line'>
-								<div class='estimate-part'>Part ID</div>
-								<div class='estimate-name'>Name</div>
-								<div class='estimate-price'>Price</div>
+						<div class='proposal-pp-cont' id='bid-pp-cont'>
+							<div class='proposal-pp-line'>
+								<div class='proposal-part'>Part ID</div>
+								<div class='proposal-name'>Name</div>
+								<div class='proposal-price'>Price</div>
 							</div>
-							<div class='estimate-pp-line' id='pp0' style='display:none'>
-								<div class='estimate-part'><input type='text' name='part0' id='part0' onblur="part_name(this)" data-pn='0' onfocus="checkpp(this)"></div>
-								<div class='estimate-name'>item name here</div>
-								<div class='estimate-price'><input type='number' step="0.01" name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
+							<div class='proposal-pp-line' id='pp0' style='display:none'>
+								<div class='proposal-part'><input type='text' name='part0' id='part0' onblur="part_name(this)" data-pn='0' onfocus="checkpp(this)"></div>
+								<div class='proposal-name'>item name here</div>
+								<div class='proposal-price'><input type='number' step="0.01" name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
 							</div>
 						</div>
 
 						<div class='input-wrap'>
-							<input type='hidden' name='job' value='add_estimate'>
+							<input type='hidden' name='job' value='add_proposal'>
 							<input type='hidden' name='pp' id='pp' value='1'>
 							<input type='submit'>
 						</div>
@@ -146,7 +146,7 @@ class Estimates
 						$( 'form' ).submit( function( event ) {
 							event.preventDefault();
 							var formdata = JSON.stringify($( this ).serializeObject());
-							sender('estimates',formdata);
+							sender('proposals',formdata);
 						});
 function part_name(that){
 	console.log('here');
@@ -183,7 +183,7 @@ function addpp(){
 	pp.childNodes[5].firstChild.id = 'price' + numparts;
 	pp.childNodes[5].firstChild.name = 'price' + numparts;
 	pp.childNodes[5].firstChild.setAttribute('data-pn', numparts);
-	document.getElementById('estimate-pp-cont').appendChild(pp);
+	document.getElementById('proposal-pp-cont').appendChild(pp);
 	document.getElementById('pp').value = numparts;
 	tahead('part'+numparts);
 }
@@ -294,28 +294,28 @@ function tahead(docid){
 
 ///////////////////////////////////////
 
-//////////     Update Estimate    ///////////
+//////////     Update Proposal    ///////////
 
 ///////////////////////////////////////
 
-	public static function estimate()
+	public static function proposal()
 	{
-		$stm = \Baskets::$db->prepare("SELECT * FROM estimates WHERE id=?");
+		$stm = \Baskets::$db->prepare("SELECT * FROM proposals WHERE id=?");
 		$stm->execute(array(\Baskets\Tools\Tracker::$uri[3]));
-		$estimate = $stm->fetch();
+		$proposal = $stm->fetch();
 
 		$stm = \Baskets::$db->prepare("SELECT supplier FROM suppliers WHERE id=?");
-		$stm->execute(array($estimate['supplierid']));
+		$stm->execute(array($proposal['supplierid']));
 		$res = $stm->fetch();
 		$supplier = $res['supplier'];
 
-		Framework::page_header('Update Estimate ' . $estimate['bid'] . ' | Baskets');
+		Framework::page_header('Update Proposal ' . $proposal['bid'] . ' | Baskets');
 	?>
 		<div class='main-viewer' id='main-viewer'>
 			<div class='dash-box'>
 				<div class='dash-box-header'>
-					<h1><i class="fa fa-leaf"></i> Update Estimate</h1>
-					<a href='<?=MY_URL?>/estimates/list' class='add-button'>List Estimates</a>
+					<h1><i class="fa fa-leaf"></i> Update Proposal</h1>
+					<a href='<?=MY_URL?>/proposals/list' class='add-button'>List Proposals</a>
 				</div>
 				<p>
 					<form class='formula-one'>
@@ -327,35 +327,35 @@ function tahead(docid){
 						</div>	
 						<div class='line'>
 							<div class='group'>
-								<label for='estimate'>Estimate</label>
-								<span><input type='text' name='estimate' id='bid' value='<?=$bid['bid']?>'></span>
+								<label for='proposal'>Proposal</label>
+								<span><input type='text' name='proposal' id='bid' value='<?=$bid['bid']?>'></span>
 							</div>
 						</div>
-						<div class='estimate-pp-cont' id='bid-pp-cont'>
-							<div class='estimate-pp-line'>
-								<div class='estimate-part'>Part ID</div>
-								<div class='estimate-name'>Name</div>
-								<div class='estimate-price'>Price</div>
+						<div class='proposal-pp-cont' id='bid-pp-cont'>
+							<div class='proposal-pp-line'>
+								<div class='proposal-part'>Part ID</div>
+								<div class='proposal-name'>Name</div>
+								<div class='proposal-price'>Price</div>
 							</div>
-							<div class='estimate-pp-line' id='pp0' style='display:none'>
-								<div class='estimate-part'><input type='text' name='part0' id='part0' data-pn='0' onfocus="checkpp(this)"></div>
-								<div class='estimate-name'>item name here</div>
-								<div class='estimate-price'><input type='number' name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
+							<div class='proposal-pp-line' id='pp0' style='display:none'>
+								<div class='proposal-part'><input type='text' name='part0' id='part0' data-pn='0' onfocus="checkpp(this)"></div>
+								<div class='proposal-name'>item name here</div>
+								<div class='proposal-price'><input type='number' name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
 							</div>
 						<?
 							$astm = \Baskets::$db->prepare("SELECT * FROM parts WHERE id=?");
-							$stm = \Baskets::$db->prepare("SELECT * FROM estimateparts WHERE bidid=?");
-							$stm->execute(array($estimate['id']));
+							$stm = \Baskets::$db->prepare("SELECT * FROM proposalparts WHERE bidid=?");
+							$stm->execute(array($proposal['id']));
 							$pp=0;
 							while($bp = $stm->fetch()) {
 								$pp++;
 								$astm->execute(array($bp['partid']));
 								$part = $astm->fetch();
 								?>
-							<div class='estimate-pp-line' id='pp<?=$pp?>'>
-								<div class='estimate-part'><input value='<?=$part['partid']?>' type='text' name='part<?=$pp?>' id='part<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
-								<div class='estimate-name'><?=$part['partname']?></div>
-								<div class='estimate-price'><input value='<?=$bp['price']?>' type='number' step="0.01" name='price<?=$pp?>' id='price<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
+							<div class='proposal-pp-line' id='pp<?=$pp?>'>
+								<div class='proposal-part'><input value='<?=$part['partid']?>' type='text' name='part<?=$pp?>' id='part<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
+								<div class='proposal-name'><?=$part['partname']?></div>
+								<div class='proposal-price'><input value='<?=$bp['price']?>' type='number' step="0.01" name='price<?=$pp?>' id='price<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
 							</div>
 							<script>
 								$(function(){ tahead('part<?=$pp?>'); });
@@ -364,8 +364,8 @@ function tahead(docid){
 						</div>
 
 						<div class='input-wrap'>
-							<input type='hidden' name='job' value='update_estimate'>
-							<input type='hidden' name='estimateid' value='<?=$bid['id']?>'>
+							<input type='hidden' name='job' value='update_proposal'>
+							<input type='hidden' name='proposalid' value='<?=$bid['id']?>'>
 							<input type='hidden' name='pp' id='pp' value='<?=$pp?>'>
 							<input type='submit' value='Update'>
 						</div>
@@ -374,7 +374,7 @@ function tahead(docid){
 						$( 'form' ).submit( function( event ) {
 							event.preventDefault();
 							var formdata = JSON.stringify($( this ).serializeObject());
-							sender('estimates',formdata);
+							sender('proposals',formdata);
 						});
 
 var numparts = <?=$pp?>;
@@ -397,7 +397,7 @@ function addpp(){
 	pp.childNodes[5].firstChild.id = 'price' + numparts;
 	pp.childNodes[5].firstChild.name = 'price' + numparts;
 	pp.childNodes[5].firstChild.setAttribute('data-pn', numparts);
-	document.getElementById('estimate-pp-cont').appendChild(pp);
+	document.getElementById('proposal-pp-cont').appendChild(pp);
 	document.getElementById('pp').value = numparts;
 	tahead('part'+numparts);
 }
