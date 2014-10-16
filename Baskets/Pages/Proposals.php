@@ -113,29 +113,36 @@ class Proposals
 					<form class='formula-one'>
 						<div class='line'>
 							<div class='group'>
-								<label for='contractor'>Contractor</label>
-								<input type='text' name='contractor' id='contractor'>
+								<input type='text' name='contractor' id='contractor' placeholder='Contactor'>
 							</div>
 						</div>	
 						<div class='line'>
 							<div class='group'>
 								<label for='model'>Model</label>
-								<span><input type='text' name='model' id='bid'></span>
+								<span><input type='text' name='model' id='model'></span>
 							</div>
 						</div>
-						<div class='proposal-pp-cont' id='bid-pp-cont'>
-							<div class='proposal-pp-line'>
-								<div class='proposal-part'>Part ID</div>
-								<div class='proposal-name'>Name</div>
-								<div class='proposal-price'>Price</div>
-							</div>
-							<div class='proposal-pp-line' id='pp0' style='display:none'>
-								<div class='proposal-part'><input type='text' name='part0' id='part0' onblur="part_name(this)" data-pn='0' onfocus="checkpp(this)"></div>
-								<div class='proposal-name'>item name here</div>
-								<div class='proposal-price'><input type='number' step="0.01" name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
+						<div class='line'>
+							<div class='group'>
+								<label for='option'>Option</label>
+								<span><input type='text' name='option' id='option'></span>
 							</div>
 						</div>
-
+						<div id='rooms'>
+							<div id='room0' style='display:none'>
+								<input type='text' name='name-of-room0' placeholder='Room' onfocus='addRoomInput(0)'>
+								<div id='room0-parts'>
+									<div id='room0-part0'>
+										<input type='text' name='room0-part0-id' placehold='Part ID' onfocus='addPartInput(0,0)'>
+										<span id='room0-part0-name'></span>
+										<select>
+											<option val='custom'>$</option>
+										</select>
+										<input type='number' class='room-part-price' step='0.01' min='0.01' name='room0-part0-price' placeholder='0.01'>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class='input-wrap'>
 							<input type='hidden' name='job' value='add_proposal'>
 							<input type='hidden' name='pp' id='pp' value='1'>
@@ -148,20 +155,51 @@ class Proposals
 							var formdata = JSON.stringify($( this ).serializeObject());
 							sender('proposals',formdata);
 						});
-function part_name(that){
-	console.log('here');
-	var np = that.getAttribute('data-pn');
-	$.ajax({
-		url: '<?=MY_URL?>',
-		data: { tiny: 'part_name',
-					tp: that.value
-				}
-	}).done(function(data){
-		var nn = 'partname' + np;
-		console.log(nn);
-		document.getElementById(nn).innerHTML = data;
-	});
-}
+
+						// PROPOSED ROOM INPUT ROW ADDITION
+						$(function() { addRoomInput(0) } );
+
+						function addRoomInput(rn) {
+							nrn = rn + 1;
+							next_room = document.getElementById('name-of-room' + nrn);
+
+							if ( typeof(next_room) == 'undefined' || next_room == null) {
+								var newRoom = document.getElementById('room0').cloneNode(true);
+								newRoom.id = 'room' + nrn;
+								newRoom.style.display = 'block';
+								newRoom.childNodes[1].name = 'name-of-room' + nrn;
+								console.log(newRoom.childNodes[3].childNodes[1]);
+								newRoom.childNodes[3].childNodes[1].childNodes[1].name = 'room' + nrn + '-part0';
+								newRoom.childNodes[3].childNodes[1].childNodes[3].id = 'room' + nrn + '-part0-name';
+								newRoom.childNodes[3].childNodes[1].childNodes[3].name = 'room' + nrn + '-part0-price';
+								document.getElementById('rooms').appendChild(newRoom);
+							}
+
+						}
+
+
+						function addPartInput(rn,pn) {
+							npn = pn + 1;
+							next_part = document.getElementById('room' + rn + '-part' + npn);
+							if ( typeof(next_part) == 'undefined' || next_part == null) {
+								var newPart = document.getElementById('room0-part0').cloneNode(true);
+								newPart.childNodes[1].name = 'room' + rn + '-part' + npn + '-id';
+								console.log(newPart.childNodes[7]);
+								newPart.childNodes[3].id = 'room' + rn + '-part' + npn + '-name';
+								newPart.childNodes[7].name = 'room' + rn + '-part' + npn + '-price';
+								document.getElementById('room' + rn + '-parts').appendChild(newPart);
+							}
+						}
+
+						
+
+
+
+
+
+
+
+
 
 var numparts = 0;
 
@@ -188,14 +226,23 @@ function addpp(){
 	tahead('part'+numparts);
 }
 
-$(function(){
-	addpp();
-	console.log('oneo');
-});
 
 
 
-
+function part_name(that){
+	console.log('here');
+	var np = that.getAttribute('data-pn');
+	$.ajax({
+		url: '<?=MY_URL?>',
+		data: { tiny: 'part_name',
+					tp: that.value
+				}
+	}).done(function(data){
+		var nn = 'partname' + np;
+		console.log(nn);
+		document.getElementById(nn).innerHTML = data;
+	});
+}
 
 
 
