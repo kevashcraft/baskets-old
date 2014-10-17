@@ -122,25 +122,44 @@ class Proposals
 								<span><input type='text' name='model' id='model'></span>
 							</div>
 						</div>
-						<div class='line'>
-							<div class='group'>
-								<label for='option'>Option</label>
-								<span><input type='text' name='option' id='option'></span>
-							</div>
-						</div>
 						<div id='rooms'>
 							<div id='room0' style='display:none'>
 								<input type='text' name='name-of-room0' placeholder='Room' >
-								<div id='room0-parts'>
+								<div id='room0-parts' >
 									<div id='room0-part0'>
 										<input type='text' name='room0-part0-id' placehold='Part ID' >
 										<span id='room0-part0-name'></span>
-										<select>
+										<select onchange='selcus(this)'>
+											<option val='def'></option>
 											<option val='custom'>$</option>
 										</select>
-										<input type='number' class='room-part-price' step='0.01' min='0.01' name='room0-part0-price' placeholder='0.01'>
+										<input type='number' style='display:none' class='room-part-price' step='0.01' min='0.01' name='room0-part0-price' placeholder='0.01'>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='parts-total'>Parts</label>
+								<span><input type='number' step='0.01' min='0.01' name='parts-total' id='parts-total'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='labor-total'>Labor</label>
+								<span><input type='number' step='0.01' min='0.01' name='labor-total' id='labor-total'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='profit-margin'>Profit Margin</label>
+								<span><input type='number' step='0.01' min='0.01' name='profit-margin' id='profit-margin'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='total-dollar'>Total</label>
+								<span><input type='number' step='0.01' min='0.01' name='total-dollar' id='total-dollar'></span>
 							</div>
 						</div>
 						<div class='input-wrap'>
@@ -157,6 +176,16 @@ class Proposals
 						});
 
 						// PROPOSED ROOM INPUT ROW ADDITION
+
+
+						function selcus(that) {
+							console.log(that.selectedIndex);
+							console.log(that.nextSibling.nextSibling);
+							if(that.selectedIndex == 1) that.nextSibling.nextSibling.style.display = 'block';
+							else that.nextSibling.nextSibling.style.display = 'none';
+
+						}
+
 						$(function() { addRoomInput(0) } );
 
 						var rooms = 0;
