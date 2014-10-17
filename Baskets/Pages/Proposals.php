@@ -158,6 +158,12 @@ class Proposals
 						</div>
 						<div class='line'>
 							<div class='group'>
+								<label for='adjustment'>Adjust +/-</label>
+								<span><input type='number' step='0.01' min='0.01' name='adjustment' id='adjustment'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
 								<label for='total-dollar'>Total</label>
 								<span><input type='number' step='0.01' min='0.01' name='total-dollar' id='total-dollar'></span>
 							</div>
@@ -202,11 +208,13 @@ class Proposals
 								newRoom.childNodes[1].onfocus = function () { addRoomInput(nrn); };
 								newRoom.childNodes[3].id = 'room' + nrn + '-parts';
 								newRoom.childNodes[3].childNodes[1].id = 'room' + nrn + '-part0';
-								newRoom.childNodes[3].childNodes[1].childNodes[1].name = 'room' + nrn + '-part0';
+								newRoom.childNodes[3].childNodes[1].childNodes[1].name = 'room' + nrn + '-part0-id';
+								newRoom.childNodes[3].childNodes[1].childNodes[1].id = 'room' + nrn + '-part0-id';
 								newRoom.childNodes[3].childNodes[1].childNodes[1].onfocus = function () { addPartInput(nrn,0); };
 								newRoom.childNodes[3].childNodes[1].childNodes[3].id = 'room' + nrn + '-part0-name';
 								newRoom.childNodes[3].childNodes[1].childNodes[7].name = 'room' + nrn + '-part0-price';
 								document.getElementById('rooms').appendChild(newRoom);
+								partta('room' + nrn + '-part0-id');
 							}
 
 						}
@@ -219,50 +227,14 @@ class Proposals
 								var newPart = document.getElementById('room0-part0').cloneNode(true);
 								newPart.id = 'room' + rn + '-part' + npn;
 								newPart.childNodes[1].name = 'room' + rn + '-part' + npn + '-id';
+								newPart.childNodes[1].id = 'room' + rn + '-part' + npn + '-id';
 								newPart.childNodes[1].onfocus = function () { addPartInput(rn,npn); };
 								newPart.childNodes[3].id = 'room' + rn + '-part' + npn + '-name';
 								newPart.childNodes[7].name = 'room' + rn + '-part' + npn + '-price';
 								document.getElementById('room' + rn + '-parts').appendChild(newPart);
+								partta('room' + rn + '-part' + npn + '-id' );
 							}
 						}
-
-						
-
-
-
-
-
-
-
-
-
-var numparts = 0;
-
-function checkpp(elem){
-	var mynum = elem.getAttribute('data-pn');
-	if (mynum == numparts) addpp();
-}
-
-function addpp(){
-	var pp = document.getElementById('pp0').cloneNode(true);
-	numparts++;
-	pp.id = 'pp' + numparts;
-	pp.style.display = 'block';
-	pp.childNodes[1].firstChild.id = 'part' + numparts;
-	pp.childNodes[1].firstChild.name = 'part' + numparts;
-	pp.childNodes[1].firstChild.setAttribute('data-pn', numparts);
-	pp.childNodes[3].id = 'partname' + numparts;
-	console.log( pp.childNodes[1].firstChild);
-	pp.childNodes[5].firstChild.id = 'price' + numparts;
-	pp.childNodes[5].firstChild.name = 'price' + numparts;
-	pp.childNodes[5].firstChild.setAttribute('data-pn', numparts);
-	document.getElementById('proposal-pp-cont').appendChild(pp);
-	document.getElementById('pp').value = numparts;
-	tahead('part'+numparts);
-}
-
-
-
 
 function part_name(that){
 	console.log('here');
@@ -279,92 +251,38 @@ function part_name(that){
 	});
 }
 
-
-
-var substringMatcher = function(strs) {
-  return function findMatches(q, cb) {
-    var matches, substrRegex;
- 
-    // an array that will be populated with substring matches
-    matches = [];
- 
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
- 
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-      if (substrRegex.test(str)) {
-        // the typeahead jQuery plugin expects suggestions to a
-        // JavaScript object, refer to typeahead docs for more info
-        matches.push({ value: str });
-      }
-    });
- 
-    cb(matches);
-  };
-};
-
-
-
-
-
-var suppliers = [<? self::print_suppliers() ?>];
-
-$('#supplier').typeahead({
-	hint: true,
-	highlight: true,
-	minLength:0
-},
-{
-	name: 'suppliers',
-	displayKey: 'value',
-	source: substringMatcher(suppliers)
-});
-
-
-var parts = [<? self::print_parts() ?>];
-function tahead(docid){
-	$('#'+docid).typeahead({
+function partta(pnn) {
+	console.log(pnn);
+	$('#'+pnn).typeahead({
 		hint: true,
 		highlight: true,
-		minLength:1
+		minLength:0
 	},
 	{
-		name: 'part',
+		name: pnn,
 		displayKey: 'value',
 		source: substringMatcher(parts)
 	});
 }
 
 
+$(function() {
+	$('#contractor').typeahead({
+		hint: true,
+		highlight: true,
+		minLength:0
+	},
+	{
+		name: 'contractor',
+		displayKey: 'value',
+		source: substringMatcher(contractors)
+	});
+});
+
+var contractors = [<? self::print_contractors() ?>];
+var parts = [<? self::print_parts() ?>];
 
 
-/*
-					// Autocomplete Supplier Name
-						var acs = completely(document.getElementById('supplier'),{
-								fontSize: '24px',
-								fontFamily: 'Arial',
-								color: '#000',
-							});
-						acs.options = [<? self::print_suppliers() ?>];
-						acs.input.onfocus= function() { 
-							acs.repaint();
-						}
-
-					// Autocomplete Part
-
-						var acp = completely(document.getElementById('part'),{
-								fontSize: '24px',
-								fontFamily: 'Arial',
-								color: '#000',
-							});
-						acp.options = [<? self::print_parts() ?>];
-						acp.input.onfocus= function() { 
-							acp.repaint();
-						}
-
-*/
 					</script>
 				</p>
 			</div>
@@ -485,30 +403,6 @@ function addpp(){
 }
 
 
-var substringMatcher = function(strs) {
-  return function findMatches(q, cb) {
-    var matches, substrRegex;
- 
-    // an array that will be populated with substring matches
-    matches = [];
- 
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
- 
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-      if (substrRegex.test(str)) {
-        // the typeahead jQuery plugin expects suggestions to a
-        // JavaScript object, refer to typeahead docs for more info
-        matches.push({ value: str });
-      }
-    });
- 
-    cb(matches);
-  };
-};
-
 
 
 
@@ -549,8 +443,8 @@ function tahead(docid){
 	<?	Framework::page_footer();
 	}
 
-	public static function print_suppliers(){
-		$stm = \Baskets::$db->prepare("SELECT supplier FROM suppliers WHERE valid=true");
+	public static function print_contractors(){
+		$stm = \Baskets::$db->prepare("SELECT contractor FROM contractors WHERE valid=true");
 		$stm->execute();
 		$first = true;
 		while($res = $stm->fetch()){
@@ -559,8 +453,11 @@ function tahead(docid){
 				$comma = '';
 				$first = false;
 			}
-			echo "$comma\"".addslashes($res['supplier'])."\"";
+			echo "$comma\"".addslashes($res['contractor'])."\"";
 		}
+
+
+
 	}
 
 
