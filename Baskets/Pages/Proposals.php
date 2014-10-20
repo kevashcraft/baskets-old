@@ -120,17 +120,16 @@ class Proposals
 							</div>
 						</div>
 						<div id='rooms'>
-							<div id='room0' style='display:none'>
-								<input type='text' name='name-of-room0' placeholder='Room' >
-								<div id='room0-parts' >
-									<div id='room0-part0'>
-										<input type='text' name='room0-part0-id' placehold='Part ID' >
-										<span id='room0-part0-name'></span>
-										<select onchange='selcus(this)'>
-											<option val='def'></option>
-											<option val='custom'>$</option>
+							<div data-rn='0' style='display:none'>
+								<input type='text' name='room' placeholder='Room' >
+								<div class='parts'>
+									<div class='part' data-pn='0'>
+										<input type='text' class='partid' name='partid' placehold='Part ID' >
+										<span class='partname'></span>
+										<select class='partprices'>
+											<option>Custom</option>
 										</select>
-										<input type='number' style='display:none' class='room-part-price' step='0.01' min='0.01' name='room0-part0-price' placeholder='0.01'>
+										<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
 									</div>
 								</div>
 							</div>
@@ -182,36 +181,41 @@ class Proposals
 
 
 						function selcus(that) {
-							console.log(that.selectedIndex);
-							console.log(that.nextSibling.nextSibling);
-							if(that.selectedIndex == 1) that.nextSibling.nextSibling.style.display = 'block';
-							else that.nextSibling.nextSibling.style.display = 'none';
-
+							console.log(that.parentNode.getElementsByClassName('room-part-price')[0].value);
+							that.parentNode.getElementsByClassName('room-part-price')[0].value = that.options[that.selectedIndex].value;
 						}
 
 						$(function() { addRoomInput(0) } );
 
 						var rooms = 0;
-
+/*						<div id='rooms'>
+							<div data-rn='0' style='display:none'>
+								<input type='text' name='room' placeholder='Room' >
+								<div class='parts'>
+									<div class='part' data-pn='0'>
+										<input type='text' class='partid' name='partid' placehold='Part ID' >
+										<span class='partname'></span>
+										<select class='partprices'>
+											<option>Custom</option>
+										</select>
+										<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
+									</div>
+								</div>
+							</div>
+						</div>
+*/
 						function addRoomInput(rn) {
+							console.log(rn);
 							var nrn = rn + 1;
-							next_room = document.getElementById('room' + nrn);
-							console.log('room' + nrn);
-							if ( typeof(next_room) == 'undefined' || next_room == null) {
-								var newRoom = document.getElementById('room0').cloneNode(true);
-								newRoom.id = 'room' + nrn;
+							if ( typeof(document.querySelectorAll('[data-rn]')[nrn]) == 'undefined' ) {
+								var newRoom = document.querySelectorAll('[data-rn]')[0].cloneNode(true);
+								newRoom.setAttribute('data-rn',nrn);
 								newRoom.style.display = 'block';
-								newRoom.childNodes[1].name = 'name-of-room' + nrn;
-								newRoom.childNodes[1].onfocus = function () { addRoomInput(nrn); };
-								newRoom.childNodes[3].id = 'room' + nrn + '-parts';
-								newRoom.childNodes[3].childNodes[1].id = 'room' + nrn + '-part0';
-								newRoom.childNodes[3].childNodes[1].childNodes[1].name = 'room' + nrn + '-part0-id';
-								newRoom.childNodes[3].childNodes[1].childNodes[1].id = 'room' + nrn + '-part0-id';
-								newRoom.childNodes[3].childNodes[1].childNodes[1].onfocus = function () { addPartInput(nrn,0); };
-								newRoom.childNodes[3].childNodes[1].childNodes[3].id = 'room' + nrn + '-part0-name';
-								newRoom.childNodes[3].childNodes[1].childNodes[7].name = 'room' + nrn + '-part0-price';
+								newRoom.getElementsByTagName('input')[0].onfocus = function() { addRoomInput(nrn); };
+								newRoom.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(nrn,0); };
+								console.log(newRoom.getElementsByTagName('input')[0].onfocus);
 								document.getElementById('rooms').appendChild(newRoom);
-								partta('room' + nrn + '-part0-id');
+								//partta('room' + nrn + '-part0-id');
 							}
 
 						}
@@ -219,17 +223,12 @@ class Proposals
 
 						function addPartInput(rn,pn) {
 							var npn = pn + 1;
-							next_part = document.getElementById('room' + rn + '-part' + npn);
-							if ( typeof(next_part) == 'undefined' || next_part == null) {
-								var newPart = document.getElementById('room0-part0').cloneNode(true);
-								newPart.id = 'room' + rn + '-part' + npn;
-								newPart.childNodes[1].name = 'room' + rn + '-part' + npn + '-id';
-								newPart.childNodes[1].id = 'room' + rn + '-part' + npn + '-id';
-								newPart.childNodes[1].onfocus = function () { addPartInput(rn,npn); };
-								newPart.childNodes[3].id = 'room' + rn + '-part' + npn + '-name';
-								newPart.childNodes[7].name = 'room' + rn + '-part' + npn + '-price';
-								document.getElementById('room' + rn + '-parts').appendChild(newPart);
-								partta('room' + rn + '-part' + npn + '-id' );
+							if ( typeof(document.querySelectorAll('[data-rn]')[rn].querySelectorAll('[data-pn]')[npn]) == 'undefined') {
+								var newPart = document.querySelectorAll('[data-rn]')[0].querySelectorAll('[data-pn]')[0].cloneNode(true);
+								newPart.setAttribute('data-pn',npn);
+								newPart.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(rn,npn); };
+								document.querySelectorAll('[data-rn]')[rn].getElementsByClassName('parts')[0].appendChild(newPart);
+//								partta('room' + rn + '-part' + npn + '-id' );
 							}
 						}
 
