@@ -187,23 +187,6 @@ class Proposals
 
 						$(function() { addRoomInput(0) } );
 
-						var rooms = 0;
-/*						<div id='rooms'>
-							<div data-rn='0' style='display:none'>
-								<input type='text' name='room' placeholder='Room' >
-								<div class='parts'>
-									<div class='part' data-pn='0'>
-										<input type='text' class='partid' name='partid' placehold='Part ID' >
-										<span class='partname'></span>
-										<select class='partprices'>
-											<option>Custom</option>
-										</select>
-										<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
-									</div>
-								</div>
-							</div>
-						</div>
-*/
 						function addRoomInput(rn) {
 							console.log(rn);
 							var nrn = rn + 1;
