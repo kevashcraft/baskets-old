@@ -27,23 +27,6 @@ CREATE DATABASE baskets;
 GRANT ALL ON baskets.* TO baskets@localhost IDENTIFIED BY 'baskets';
 USE baskets;
 
-CREATE TABLE baskets(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	dt DATETIME,
-	dtu DATETIME,
-	basket VARCHAR(16),
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
-
-CREATE TABLE basketitems(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	dt DATETIME,
-	dtu DATETIME,
-	basketid INT UNSIGNED,
-	jobid INT UNSIGNED,
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
-
 CREATE TABLE contractors(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	dt DATETIME,
@@ -57,29 +40,29 @@ CREATE TABLE contractors(
 	PRIMARY KEY (id)
 ) ENGINE InnoDB;
 
-CREATE TABLE images(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	dt DATETIME,
-	filename VARCHAR(32),
-	partid INT UNSIGNED,
-	workerid INT UNSIGNED,
-	helperid INT UNSIGNED,
-	userid INT UNSIGNED,
-	jobid INT UNSIGNED,
-	valid BOOLEAN,
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
 
-CREATE TABLE estimates(
+CREATE TABLE proposals(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	dt DATETIME,
 	dtu DATETIME,
 	contractorid INT UNSIGNED,
 	model VARCHAR(128),
+	option VARCHAR(128),
 	hours SMALLINT,
-	margin TINYINT,
+	labor DECIMAL(8,2),
+	amount DECIMAL(8,2),
+	adjust DECIMAL(8,2),
 	PRIMARY KEY (id)
 ) ENGINE InnoDB;
+
+CREATE TABLE proposalparts(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	room VARCHAR(64),
+	partid INT UNSIGNED,
+	price DECIMAL(8,2),
+	PRIMARY KEY (id)
+)	ENGINE InnoDB;
+
 
 CREATE TABLE estimateparts(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -91,38 +74,6 @@ CREATE TABLE estimateparts(
 ) ENGINE InnoDB;
 
 
-
-CREATE TABLE jobs(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	dt DATETIME,
-	dtu DATETIME,
-	job VARCHAR(128),
-	contractor INT UNSIGNED,
-	model INT UNSIGNED,
-	worker INT UNSIGNED,
-	helper INT UNSIGNED,
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
-
-CREATE TABLE jobparts(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	jobid INT UNSIGNED,
-	partid INT UNSIGNED,
-	room VARCHAR(32),
-	status SMALLINT,
-	comment TEXT,
-	imageid INT UNSIGNED,
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
-
-CREATE TABLE models(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	dt DATETIME,
-	dtu DATETIME,
-	model VARCHAR(128),
-	contractorid INT UNSIGNED,
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
 
 
 CREATE TABLE sessions(
@@ -203,18 +154,4 @@ CREATE TABLE visits(
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE workers(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	dt DATETIME,
-	dtu DATETIME,
-	department VARCHAR(16),
-	name VARCHAR(128),
-	email VARCHAR(128),
-	phone VARCHAR(32),
-	address VARCHAR(256),
-	firstday DATE,
-	lastday DATE,
-	employed BOOLEAN,
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
 
