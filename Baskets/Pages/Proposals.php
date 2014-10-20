@@ -22,9 +22,6 @@ class Proposals
 			case 'proposal':
 				self::proposal();
 				break;
-			case 'old':
-				self::old();
-				break;
 			default:
 				Framework::$newurl = 'proposals/list';
 				self::lister();
@@ -37,7 +34,7 @@ class Proposals
 
 ///////////////////////////////////////
 
-//////////     BIDS LIST    //////////
+//////////     LIST PROPOSAL   //////////
 
 ///////////////////////////////////////
 
@@ -237,7 +234,6 @@ class Proposals
 						}
 
 function part_name(that){
-	console.log('here');
 	var np = that.getAttribute('data-pn');
 	$.ajax({
 		url: '<?=MY_URL?>',
@@ -252,7 +248,6 @@ function part_name(that){
 }
 
 function partta(pnn) {
-	console.log(pnn);
 	$('#'+pnn).typeahead({
 		hint: true,
 		highlight: true,
@@ -377,33 +372,6 @@ var parts = [<? self::print_parts() ?>];
 							sender('proposals',formdata);
 						});
 
-var numparts = <?=$pp?>;
-
-function checkpp(elem){
-	var mynum = elem.getAttribute('data-pn');
-	if (mynum == numparts) addpp();
-}
-
-/*	Add another part-price line	*/	
-function addpp(){
-	var pp = document.getElementById('pp0').cloneNode(true);
-	numparts++;
-	pp.id = 'pp' + numparts;
-	pp.style.display = 'block';
-	pp.childNodes[1].firstChild.id = 'part' + numparts;
-	pp.childNodes[1].firstChild.name = 'part' + numparts;
-	pp.childNodes[1].firstChild.setAttribute('data-pn', numparts);
-	console.log( pp.childNodes[1].firstChild);
-	pp.childNodes[5].firstChild.id = 'price' + numparts;
-	pp.childNodes[5].firstChild.name = 'price' + numparts;
-	pp.childNodes[5].firstChild.setAttribute('data-pn', numparts);
-	document.getElementById('proposal-pp-cont').appendChild(pp);
-	document.getElementById('pp').value = numparts;
-	tahead('part'+numparts);
-}
-
-
-
 
 
 
@@ -443,6 +411,8 @@ function tahead(docid){
 	<?	Framework::page_footer();
 	}
 
+
+	// PRINTS CONTRACTORS
 	public static function print_contractors(){
 		$stm = \Baskets::$db->prepare("SELECT contractor FROM contractors WHERE valid=true");
 		$stm->execute();
@@ -461,6 +431,7 @@ function tahead(docid){
 	}
 
 
+	// PRINTS PARTS
 	public static function print_parts(){
 		$stm = \Baskets::$db->prepare("SELECT partid FROM parts");
 		$stm->execute();

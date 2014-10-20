@@ -16,8 +16,4 @@ define('MY_ROOT',dirname(__FILE__));
 // Incude some fundamental functions
 include "lib/bootstrap.php";
 
-// Include the main Baskets class
-include "Baskets/Baskets.php";
-
-// Start a new Baskets object
-$baskets = new Baskets();
+$baskets = new Baskets\Baskets();
