@@ -111,10 +111,18 @@ CREATE TABLE bidparts(
 CREATE TABLE parts(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	partid VARCHAR(64),
-	partname VARCHAR(128),
 	partdesc VARCHAR(512),
+	upc INT UNSIGNED,
+	listprice DECIMAL(8,2),
+	smallpic VARCHAR(512),
+	largepic VARCHAR(512),
+	techmanual VARCHAR(512),
 	PRIMARY KEY (id)
 ) ENGINE InnoDB;
+
+
+
+
 
 CREATE TABLE suppliers(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,

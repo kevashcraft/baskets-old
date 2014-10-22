@@ -64,7 +64,7 @@ class Baskets
 				Baskets\Pages\MySettings::display();
 				break;
 			case 'parts':
-				Baskets\Pages\Parts::display();
+				Baskets\Pages\Parts\Handler::begin();
 				break;
 			case 'suppliers':
 				Baskets\Pages\Suppliers::display();
