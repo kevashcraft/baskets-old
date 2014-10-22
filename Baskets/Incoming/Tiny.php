@@ -9,6 +9,9 @@ class Tiny{
 			case 'part_id':
 				self::part_id();
 				break;
+			case 'part_prices':
+				self::part_prices();
+				break;
 			default:
 				break;
 		}	
@@ -27,7 +30,11 @@ class Tiny{
 		echo json_encode($stm->fetchAll(\PDO::FETCH_COLUMN));
 	}
 
-
+	public static function part_prices() {
+		$stm = \Baskets::$db->prepare("SELECT price FROM bidparts WHERE partid IN (SELECT id FROM parts WHERE partid=?)");
+		$stm->execute(array($_GET['tp']));
+		echo json_encode($stm->fetchAll(\PDO::FETCH_COLUMN));
+	}
 
 
 }

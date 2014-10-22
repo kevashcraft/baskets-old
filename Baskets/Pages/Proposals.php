@@ -127,7 +127,7 @@ class Proposals
 										<input type='text' class='partid' name='partid' placehold='Part ID' >
 										<span class='partname'></span>
 										<select class='partprices'>
-											<option>Custom</option>
+											<option value='custom'>Custom</option>
 										</select>
 										<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
 									</div>
@@ -195,6 +195,8 @@ class Proposals
 								newRoom.setAttribute('data-rn',nrn);
 								newRoom.style.display = 'block';
 								newRoom.getElementsByTagName('input')[0].onfocus = function() { addRoomInput(nrn); };
+								newRoom.getElementsByClassName('partprice')[0].onchange = function() { $(this).siblings('select').val('custom'); };
+								newRoom.getElementsByClassName('partprices')[0].onchange = function() { if(this.value != 'custom') $(this).siblings('.partprice').val(this.value); };
 								newRoom.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(nrn,0); };
 								console.log(newRoom.getElementsByTagName('input')[0].onfocus);
 								document.getElementById('rooms').appendChild(newRoom);
@@ -210,6 +212,7 @@ class Proposals
 								newPart.setAttribute('data-pn',npn);
 								newPart.getElementsByClassName('partid')[0].name = 'partid' + npn;
 								newPart.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(rn,npn); };
+								newPart.getElementsByClassName('partprice')[0].onchange = function() { $(this).siblings('select').val('custom'); };
 								document.querySelectorAll('[data-rn]')[rn].getElementsByClassName('parts')[0].appendChild(newPart);
 								var curPart = document.querySelectorAll('[data-rn]')[rn].querySelectorAll('[data-pn]')[pn].getElementsByClassName('partid')[0];
 								partautoc(curPart);
@@ -217,6 +220,7 @@ class Proposals
 								curPart.onblur = function () { 
 									$(this).autocomplete('destroy');
 									part_name(this);
+									part_prices(this);
 								}; 
 
 							}
@@ -238,6 +242,30 @@ function part_name(that){
 		$(that).next().html(data);
 	});
 }
+
+function part_prices(that) {
+	$.ajax({
+		url: '<?=MY_URL?>',
+		data: { tiny: 'part_prices',
+					tp: that.value
+				}
+	}).done(function(data){
+		console.log(data);
+		var lowestprice = 99999999;
+		$.each(JSON.parse(data), function(i,value) {
+			console.log(value);
+			console.log($(that).siblings('select'));
+			$(that).siblings('select').append($('<option>').text(value).attr('value',value));
+			if(value < lowestprice) {
+				$(that).siblings('select').val(value);
+				lowestprice = value;
+			}
+			$(that).siblings('input').val(lowestprice);
+		});
+	});
+	
+}
+
 
 function partautoc(that) {
 	console.log(that);
