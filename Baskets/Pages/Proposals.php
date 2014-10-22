@@ -143,19 +143,25 @@ class Proposals
 						<div class='line'>
 							<div class='group'>
 								<label for='labor-total'>Labor</label>
-								<span><input type='number' step='0.01' min='0.01' name='labor-total' id='labor-total'></span>
+								<span><input type='number' step='0.01' min='0.01' name='labor-total' id='labor-total' value='200'></span>
 							</div>
 						</div>
 						<div class='line'>
 							<div class='group'>
 								<label for='profit-margin'>Profit Margin</label>
-								<span><input type='number' step='0.01' min='0.01' name='profit-margin' id='profit-margin'></span>
+								<span><input type='text' name='profit-margin' id='profit-margin'></span>
 							</div>
 						</div>
 						<div class='line'>
 							<div class='group'>
 								<label for='adjustment'>Adjust +/-</label>
-								<span><input type='number' step='0.01' min='0.01' name='adjustment' id='adjustment'></span>
+								<span><input type='number' step='0.01' min='0.01' name='adjustment' id='adjustment' value='500'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='profits'>Profits</label>
+								<span><input type='number' step='0.01' name='profits' id='profits'></span>
 							</div>
 						</div>
 						<div class='line'>
@@ -195,7 +201,10 @@ class Proposals
 								newRoom.setAttribute('data-rn',nrn);
 								newRoom.style.display = 'block';
 								newRoom.getElementsByTagName('input')[0].onfocus = function() { addRoomInput(nrn); };
-								newRoom.getElementsByClassName('partprice')[0].onchange = function() { $(this).siblings('select').val('custom'); };
+								newRoom.getElementsByClassName('partprice')[0].onchange = function() { 
+									$(this).siblings('select').val('custom');
+									update_totals(); 
+								};
 								newRoom.getElementsByClassName('partprices')[0].onchange = function() { if(this.value != 'custom') $(this).siblings('.partprice').val(this.value); };
 								newRoom.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(nrn,0); };
 								console.log(newRoom.getElementsByTagName('input')[0].onfocus);
@@ -212,7 +221,10 @@ class Proposals
 								newPart.setAttribute('data-pn',npn);
 								newPart.getElementsByClassName('partid')[0].name = 'partid' + npn;
 								newPart.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(rn,npn); };
-								newPart.getElementsByClassName('partprice')[0].onchange = function() { $(this).siblings('select').val('custom'); };
+								newPart.getElementsByClassName('partprice')[0].onchange = function() {
+									$(this).siblings('select').val('custom');
+									update_totals();
+								};
 								document.querySelectorAll('[data-rn]')[rn].getElementsByClassName('parts')[0].appendChild(newPart);
 								var curPart = document.querySelectorAll('[data-rn]')[rn].querySelectorAll('[data-pn]')[pn].getElementsByClassName('partid')[0];
 								partautoc(curPart);
@@ -261,6 +273,7 @@ function part_prices(that) {
 				lowestprice = value;
 			}
 			$(that).siblings('input').val(lowestprice);
+			update_totals();
 		});
 	});
 	
@@ -296,22 +309,39 @@ function partautoc(that) {
 }
 
 
-$(function() {
-	$('#contractor').typeahead({
-		hint: true,
-		highlight: true,
-		minLength:3
-	},
-	{
-		name: 'contractor',
-		displayKey: 'value',
-		source: substringMatcher(contractors)
+function update_totals() {
+	var totes = 0;
+
+
+	var parts_tote = 0;
+	$('input[class="partprice"]').each(function() {
+		console.log($(this).val());
+		parts_tote += Number($(this).val());
 	});
-});
+	$('input[name="parts-total"]').val(parts_tote);
+	totes += parts_tote;
 
-var contractors = [<? self::print_contractors() ?>];
+	var labor = Number($('input[name="labor-total"]').val());
+	totes += labor;
 
 
+	var adjust = Number($('input[name="adjustment"]').val());
+	totes += adjust;
+
+
+	var profits = totes - parts_tote - labor;
+
+	var promar = (( profits / totes ) * 100) + '%';
+	console.log(promar);
+
+	$('input[name="profit-margin"]').val(promar);
+	$('input[name="profits"]').val(profits);
+	$('input[name="total-dollar"]').val(totes);
+
+
+
+
+}
 
 
 					</script>
