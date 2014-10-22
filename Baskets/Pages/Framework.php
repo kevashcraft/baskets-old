@@ -15,8 +15,10 @@ class Framework
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src='<?=MY_URL?>/js/jquery-2.1.1.min.js'></script>
 		<link rel='stylesheet' type='text/css' href='<?=MY_URL?>/reset.css' />
+		<script src='<?=MY_URL?>/js/jquery-2.1.1.min.js'></script>
+		<link rel='stylesheet' type='text/css' href='https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css'>
+		<script src='https://code.jquery.com/ui/1.11.2/jquery-ui.min.js'></script>
 		<link rel='stylesheet' type='text/css' href='<?=MY_URL?>/style.css' />
 		<link rel='icon' type='image/png' href='<?=MY_URL?>/favicon.png'>
 		<meta name="viewport" content="width=device-width, user-scalable=no">

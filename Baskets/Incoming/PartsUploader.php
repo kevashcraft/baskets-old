@@ -20,7 +20,8 @@ class PartsUploader
 		$ins = \Baskets::$db->prepare("INSERT INTO parts($cols) VALUES($questions)");
 
 		while($line = fgets($file)) {
-			$ins->execute(str_getcsv($line));
+			$nowhitespace = preg_replace('/\s+/','', $line);
+			$ins->execute(str_getcsv($nowhitespace));
 			echo "ins";
 //			print_r(str_getcsv($line));
 		}	

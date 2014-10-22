@@ -198,7 +198,6 @@ class Proposals
 								newRoom.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(nrn,0); };
 								console.log(newRoom.getElementsByTagName('input')[0].onfocus);
 								document.getElementById('rooms').appendChild(newRoom);
-								//partta('room' + nrn + '-part0-id');
 							}
 
 						}
@@ -209,37 +208,63 @@ class Proposals
 							if ( typeof(document.querySelectorAll('[data-rn]')[rn].querySelectorAll('[data-pn]')[npn]) == 'undefined') {
 								var newPart = document.querySelectorAll('[data-rn]')[0].querySelectorAll('[data-pn]')[0].cloneNode(true);
 								newPart.setAttribute('data-pn',npn);
+								newPart.getElementsByClassName('partid')[0].name = 'partid' + npn;
 								newPart.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(rn,npn); };
 								document.querySelectorAll('[data-rn]')[rn].getElementsByClassName('parts')[0].appendChild(newPart);
-//								partta('room' + rn + '-part' + npn + '-id' );
+								var curPart = document.querySelectorAll('[data-rn]')[rn].querySelectorAll('[data-pn]')[pn].getElementsByClassName('partid')[0];
+								partautoc(curPart);
+								curPart.onfocus = function () { partautoc(this); };
+								curPart.onblur = function () { 
+									$(this).autocomplete('destroy');
+									part_name(this);
+								}; 
+
 							}
+
+
+
+
 						}
 
 function part_name(that){
-	var np = that.getAttribute('data-pn');
 	$.ajax({
 		url: '<?=MY_URL?>',
-		data: { tiny: 'part_name',
+		data: { tiny: 'part_desc',
 					tp: that.value
 				}
 	}).done(function(data){
-		var nn = 'partname' + np;
-		console.log(nn);
-		document.getElementById(nn).innerHTML = data;
+		console.log(data);
+		console.log($(that).next());
+		$(that).next().html(data);
 	});
 }
 
-function partta(pnn) {
-	$('#'+pnn).typeahead({
-		hint: true,
-		highlight: true,
-		minLength:0
-	},
-	{
-		name: pnn,
-		displayKey: 'value',
-		source: substringMatcher(parts)
+function partautoc(that) {
+	console.log(that);
+	$(that).autocomplete({
+		source: function(request,response) {
+			$.get( '<?=MY_URL?>', { 
+				tiny: 'part_id',
+				part_id: request.term
+			}, function (data) {
+				var parsed = JSON.parse(data);
+				var partslist = [];
+
+				for(var x in parsed) {
+					partslist.push( parsed[x] );
+				}
+			
+
+				console.log(partslist);
+				response(partslist);
+		
+			});
+		},
+		minLength: 3
 	});
+
+
+
 }
 
 
@@ -247,7 +272,7 @@ $(function() {
 	$('#contractor').typeahead({
 		hint: true,
 		highlight: true,
-		minLength:0
+		minLength:3
 	},
 	{
 		name: 'contractor',
@@ -257,7 +282,8 @@ $(function() {
 });
 
 var contractors = [<? self::print_contractors() ?>];
-var parts = [<? self::print_parts() ?>];
+
+
 
 
 					</script>
