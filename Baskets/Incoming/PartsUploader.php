@@ -5,18 +5,26 @@ class PartsUploader
 	public static function engine()
 	{
 
-//		print_r($_FILES['partslist']);
 		$file = fopen($_FILES['partslist']['tmp_name'],'r');
-		$cols = fgets($file);
-		echo $cols;
 
 
+		$colarray = str_getcsv(fgets($file));
+		$cols = implode(',',$colarray);
 
+		$questionsarray = array();
+		foreach ($colarray as $col) {
+			array_push($questionsarray,'?');
+		}
+		$questions = implode(',', $questionsarray);
 
+		$ins = \Baskets::$db->prepare("INSERT INTO parts($cols) VALUES($questions)");
 
+		while($line = fgets($file)) {
+			$ins->execute(str_getcsv($line));
+			echo "ins";
+//			print_r(str_getcsv($line));
+		}	
 
 	}
-
-
 
 }

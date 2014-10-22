@@ -167,13 +167,15 @@ var substringMatcher = function(strs) {
 	<div class='nav-img'><a href='http://bordeauplumbing.com/' target='_blank'><img src='<?php echo MY_URL?>/img/business-logo.png'></a></div>
 	<nav class='nav-main'>
 	  <ul>
-		 <li>Parts
-			<ul>
-				<li><a href='<?php echo MY_URL?>/parts/list'>List</a></li>
-				<li><a href='<?php echo MY_URL?>/suppliers/list'>Suppliers</a></li>
-				<li><a href='<?php echo MY_URL?>/bids/list'>Bids</a></li>
-			</ul>
-		 </li>
+		 <a href='<?=MY_URL?>/parts'>
+				<li>Parts
+				<ul>
+					<li><a href='<?php echo MY_URL?>/parts/list'>List</a></li>
+					<li><a href='<?php echo MY_URL?>/suppliers/list'>Suppliers</a></li>
+					<li><a href='<?php echo MY_URL?>/bids/list'>Bids</a></li>
+				</ul>
+			 </li>
+			</a>
 		 <li>Proposals
 			<ul>
 				<li><a href='<?php echo MY_URL?>/proposals/new'>New</a></li>

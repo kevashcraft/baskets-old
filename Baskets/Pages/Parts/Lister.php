@@ -24,7 +24,7 @@ class Lister
 
 		<?
 			// Print column titles
-			$cols = array('id','partid','partname','partdesc');
+			$cols = array('id','partid','partdesc','upc');
 			echo '<tr class="column-title">';
 			foreach($cols as $col)
 			{
