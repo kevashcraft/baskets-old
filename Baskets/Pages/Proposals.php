@@ -119,6 +119,12 @@ class Proposals
 								<span><input type='text' name='model' id='model'></span>
 							</div>
 						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='opt'>Opt</label>
+								<span><input type='text' name='opt' id='opt'></span>
+							</div>
+						</div>
 						<div id='rooms'>
 							<div data-rn='0' style='display:none'>
 								<input type='text' name='room' placeholder='Room' >
@@ -142,7 +148,13 @@ class Proposals
 						</div>
 						<div class='line'>
 							<div class='group'>
-								<label for='labor-total'>Labor</label>
+								<label for='hours'>Work Hours</label>
+								<span><input type='number' step='0.1' min='0.00' name='hours' id='hours' value='2'></span>
+							</div>
+						</div>
+						<div class='line'>
+							<div class='group'>
+								<label for='labor-total'>Labor $</label>
 								<span><input type='number' step='0.01' min='0.01' name='labor-total' id='labor-total' value='200'></span>
 							</div>
 						</div>

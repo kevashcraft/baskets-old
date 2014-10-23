@@ -47,11 +47,13 @@ CREATE TABLE proposals(
 	dtu DATETIME,
 	contractorid INT UNSIGNED,
 	model VARCHAR(128),
-	option VARCHAR(128),
+	opt VARCHAR(128),
 	hours SMALLINT,
 	labor DECIMAL(8,2),
-	amount DECIMAL(8,2),
+	totes DECIMAL(8,2),
 	adjust DECIMAL(8,2),
+	partstotal DECIMAL(8,2),
+	profitmargin VARCHAR(12),
 	PRIMARY KEY (id)
 ) ENGINE InnoDB;
 
