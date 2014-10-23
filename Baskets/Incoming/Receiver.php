@@ -9,6 +9,9 @@ class Receiver
 		if($purpose == 'none') $purpose = (isset($_GET['purpose']) ? $_GET['purpose'] : 'none');
 		switch ($purpose)
 		{
+			case 'proposals':
+				if(\Baskets::$authlevel > 0) Proposals::engine();
+				break;
 			case 'uploadpartslist':
 				if(\Baskets::$authlevel > 0) PartsUploader::engine();
 				break;

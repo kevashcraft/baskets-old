@@ -172,7 +172,6 @@ class Proposals
 						</div>
 						<div class='input-wrap'>
 							<input type='hidden' name='job' value='add_proposal'>
-							<input type='hidden' name='pp' id='pp' value='1'>
 							<input type='submit'>
 						</div>
 					</form>
@@ -180,7 +179,7 @@ class Proposals
 						$( 'form' ).submit( function( event ) {
 							event.preventDefault();
 							var formdata = JSON.stringify($( this ).serializeObject());
-							sender('proposals',formdata);
+							sender('proposals', formdata)
 						});
 
 						// PROPOSED ROOM INPUT ROW ADDITION
@@ -219,7 +218,6 @@ class Proposals
 							if ( typeof(document.querySelectorAll('[data-rn]')[rn].querySelectorAll('[data-pn]')[npn]) == 'undefined') {
 								var newPart = document.querySelectorAll('[data-rn]')[0].querySelectorAll('[data-pn]')[0].cloneNode(true);
 								newPart.setAttribute('data-pn',npn);
-								newPart.getElementsByClassName('partid')[0].name = 'partid' + npn;
 								newPart.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(rn,npn); };
 								newPart.getElementsByClassName('partprice')[0].onchange = function() {
 									$(this).siblings('select').val('custom');
@@ -342,6 +340,8 @@ function update_totals() {
 
 
 }
+
+
 
 
 					</script>

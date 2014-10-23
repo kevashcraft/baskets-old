@@ -2,6 +2,7 @@
 namespace Baskets\Incoming;
 class Proposals
 {
+
 	public static $info;
 
 	public static function engine()
