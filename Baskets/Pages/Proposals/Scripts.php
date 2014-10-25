@@ -9,7 +9,7 @@ class Scripts
 <script>
 $(function() {
 	var tabTitle = $('#tab_title'),
-		tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",	
+		tabTemplate = "<li><a class='tab-title' href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",	
 		tabCounter = 2;
 
 	var tabs = $('#tabs').tabs();
@@ -235,7 +235,43 @@ function partautoc(that) {
 }
 
 
-function update_totals() {
+function updateMyTotals() {
+
+	var activeTabNumber = $( "#tabs" ).tabs( "option", "active" ) + 1,
+		aT = $('#tabs-'+activeTabNumber),
+		laborRate = $('input[name="laborrate"]').val(),
+		partMarkUp = $('input[name="partmarkup"]').val(),
+		desiredMargin = $('input[name="desiredmargin"]').val();
+
+
+	var trimHours = $('
+
+
+
+
+
+
+
+
+
+	aT.children('tab-title').html()
+	partMarkup
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	var totes = 0;
 
 
