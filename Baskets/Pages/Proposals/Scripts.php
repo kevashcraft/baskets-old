@@ -9,7 +9,7 @@ class Scripts
 <script>
 $(function() {
 	var tabTitle = $('#tab_title'),
-		tabTemplate = "<li><a class='tab-title' href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",	
+		tabTemplate = "<li><a class='tab-title' data-tabname='#{label}' href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",	
 		tabCounter = 2;
 
 	var tabs = $('#tabs').tabs();
@@ -60,6 +60,7 @@ $(function() {
 		copyRooms(cT);
 		$('input[name="room"]').focus(function() { addRoomInput(this); } );
 		$('input[name="partid"]').focus(function() { addPartInput(this); partautoc(this); } );
+		plsUpdate();
 
 	 }
  
@@ -97,7 +98,7 @@ $(function() {
 		?>
 
 		<script>
-						$(function() { addRoomInput($('#room-template').children('input')) } );
+						$(function() { addRoomInput($('#room-template').children('input')); plsUpdate(); } );
 
 						function addRoomInput(elem) {
 							var activeTabNumber = $( "#tabs" ).tabs( "option", "active" ) + 1;
@@ -235,75 +236,136 @@ function partautoc(that) {
 }
 
 
-function updateMyTotals() {
-
-	var activeTabNumber = $( "#tabs" ).tabs( "option", "active" ) + 1,
-		aT = $('#tabs-'+activeTabNumber),
-		laborRate = $('input[name="laborrate"]').val(),
-		partMarkUp = $('input[name="partmarkup"]').val(),
-		desiredMargin = $('input[name="desiredmargin"]').val();
-
-
-	var trimHours = $('
-
-
-
-
-
-
-
-
-
-	aT.children('tab-title').html()
-	partMarkup
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	var totes = 0;
-
-
-	var parts_tote = 0;
-	$('input[class="partprice"]').each(function() {
-		console.log($(this).val());
-		parts_tote += Number($(this).val());
-	});
-	$('input[name="parts-total"]').val(parts_tote);
-	totes += parts_tote;
-
-	var labor = Number($('input[name="labor-total"]').val());
-	totes += labor;
-
-
-	var adjust = Number($('input[name="adjustment"]').val());
-	totes += adjust;
-
-
-	var profits = totes - parts_tote - labor;
-
-	var promar = (( profits / totes ) * 100) + '%';
-	console.log(promar);
-
-	$('input[name="profit-margin"]').val(promar);
-	$('input[name="profits"]').val(profits);
-	$('input[name="total-dollar"]').val(totes);
-
-
-
-
+function cl(logg) {
+	console.log(logg);
 }
+
+// The tab title / total update controller
+function plsUpdate ( upwhat ) {
+
+	cl('update control init.');
+
+	var upwhat = upwhat || $( "#tabs" ).tabs( "option", "active" ) + 1;
+
+	cl('upwhat='+upwhat);
+	
+	if ( upwhat == 'all' ) {
+		var numOfTabs = $('[data-tabname]').length;
+		cl('not='+numOfTabs);
+		for ( var t = 1; t <= numOfTabs; t++ ) {
+			cl('asking for update on t='+t);
+			updateTotes ( t );
+		}
+	} else {
+		cl('asking for single update on '+upwhat);
+		updateTotes ( upwhat );
+	}
+}
+
+
+var indinum = 0;
+function updateTotes( tabnumi ) {
+
+	var activeTabNumber = tabnumi,
+		aT = $('#tabs-'+activeTabNumber),
+		laborRate = $('[name="laborrate"]').val(),
+		partMarkUp = $('[name="partmarkup"]').val(),
+		desiredMargin = $('[name="desiredmargin"]').val(),
+		contingency = $('[name="contingency"]').val(),
+		taxRate = $('[name="taxrate"]').val(),
+		tabName = aT.attr('data-tabname');
+
+
+	cl('activeTabNumber='+activeTabNumber);
+	cl('aT='+aT);
+	cl('laborRate='+laborRate);
+	cl('partMarkUp='+partMarkUp);
+	cl('desiredMargin='+desiredMargin);
+	cl('contingency='+contingency);
+	cl('taxRate='+taxRate);
+	cl('tabName='+tabName);
+
+	var tubsetHours = 0,
+		trimHours = 0,
+		roughInHours = 0;
+
+	aT.find('[name="installpoint"]:checked').each(function() {
+		var thisis = $(this).val();
+		cl('thisis'+thisis);
+		var thishours = Number($(this).siblings('[name="parthours"]').val());
+		switch(thisis) {
+			case 'roughin':
+				roughInHours += thishours;
+				break;
+			case 'tubset':
+				tubsetHours += thishours;
+				break;
+			case 'trim':
+				trimHours += thishours;
+				break;
+		}
+	});
+
+	cl('roughInHours='+roughInHours);
+	cl('tubsetHours='+tubsetHours);
+	cl('trimHours='+trimHours);
+
+	var totesHours = trimHours + tubsetHours + roughInHours;
+	cl('totesHours='+totesHours);
+
+	var totesParts = 0;
+	aT.find('[name="partprice"]').each(function() {
+		totesParts += Number($(this).val());
+	});
+	cl('totesParts='+totesParts);
+	
+	var partCost = 0;
+	aT.find('[name="partprices"]').each(function() {
+		partCost += Number($(this).val());
+	});
+	
+	cl('partCost='+partCost);
+
+	var adjustment = aT.find('[name="adjustment"]').val();
+
+	cl('adjustment='+adjustment);
+
+	var propToteCost = partCost + ( totesHours * laborRate);
+	cl('propToteCost='+propToteCost);
+
+	var propTotePriceSubTax = (partCost * partMarkUp) + (totesHours * laborRate) + adjustment;
+	cl('propTotePriceSubTax='+propTotePriceSubTax);
+
+	var propTotePrice = propTotePriceSubTax * taxRate;
+
+	cl('propTotePrice='+propTotePrice);
+	var newTitle = tabName + ' - ' + propToteCost;
+
+	cl('newTitle='+newTitle);
+
+	aT.children('tab-title').html(newTitle);
+
+	aT.find('[type="number"]').each(function() { 
+		$(this).unbind('focus');
+		$(this).focus(function() {
+			var myOriginalVal = $(this).val();
+			$(this).blur(function() {
+				if ( $(this).val() != myOriginalVal ) {
+					plsUpdate();
+				}
+				$(this).unbind('blur');
+			});
+		});
+	});
+
+	
+	cl(indinum);
+	indinum += 1;
+}
+
+
+
+
 
 function copyRooms(mytc) {
 	var mytc = mytc || 1;

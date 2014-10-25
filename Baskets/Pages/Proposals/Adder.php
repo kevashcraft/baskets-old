@@ -29,13 +29,13 @@ Class Adder
 			<input type='text' class='partid' name='partid' placeholder='Part ID' >
 			<input type='number' min='1' name='partqty' value='1'>
 			<span class='partname'></span>
-			<select class='partprices'>
+			<select class='partprices' name='partprices'>
 				<option value='custom'>Custom</option>
 			</select>
 			<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
-			Rough In <input type='radio' name='intallpoint' value='roughin'> |
-			Tub Set <input type='radio' name='intallpoint' value='tubset'> |
-			Trim <input type='radio' name='intallpoint' value='trim'>
+			Rough In <input type='radio' name='installpoint' value='roughin'> |
+			Tub Set <input type='radio' name='installpoint' value='tubset'> |
+			Trim <input type='radio' name='installpoint' value='trim'>
 			Hours: <input type='number' name='parthours' min='0'>
 		</div>
 	</div>
@@ -75,10 +75,14 @@ Class Adder
 				<span>Desired Margin %: </span>
 				<input type='text' name='desiredmargin'>
 			</div>
+			<div>
+				<span>Tax Rate: </span>
+				<input type='text' name='taxrate'>
+			</div>
 			<button id="add_tab">Add Option</button>
 			<div id='tabs'>
 				<ul>
-					<li><a href='#tabs-1'>Main</a><span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>
+					<li><a href='#tabs-1' data-tabname='Main'>Main</a><span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>
 				</ul>
 				<div id='tabs-1'>
 					<div class='rooms'></div>
