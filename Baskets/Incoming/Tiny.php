@@ -31,9 +31,15 @@ class Tiny{
 	}
 
 	public static function part_prices() {
-		$stm = \Baskets::$db->prepare("SELECT price FROM bidparts WHERE partid IN (SELECT id FROM parts WHERE partid=?)");
+		$stm = \Baskets::$db->prepare("SELECT suppliers.supplier,bidparts.price,bids.id FROM suppliers,bids,bidparts WHERE bidparts.partid IN (SELECT id FROM parts WHERE partid=?) AND bidparts.bidid = bids.id && suppliers.id = bids.supplierid;");
 		$stm->execute(array($_GET['tp']));
-		echo json_encode($stm->fetchAll(\PDO::FETCH_COLUMN));
+		$return = [];
+		while($stick = $stm->fetch(\PDO::FETCH_ASSOC)) {
+			$return[$stick['supplier']]['price'] = $stick['price'];
+			$return[$stick['supplier']]['bidid'] = $stick['id'];
+		}
+
+		echo json_encode($return);
 	}
 
 

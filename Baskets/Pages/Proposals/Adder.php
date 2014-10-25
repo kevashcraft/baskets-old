@@ -30,7 +30,6 @@ Class Adder
 			<input type='number' min='1' name='partqty' value='1'>
 			<span class='partname'></span>
 			<select class='partprices' name='partprices'>
-				<option value='custom'>Custom</option>
 			</select>
 			<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
 			Rough In <input type='radio' name='installpoint' value='roughin'> |
@@ -65,30 +64,30 @@ Class Adder
 			</div>
 			<div>
 				<span>Labor Hourly Rate: </span>
-				<input type='text' name='laborrate'>
+				<input type='text' name='laborrate' value='75'>
 			</div>
 			<div>
 				<span>Part Markup %: </span>
-				<input type='text' name='partmarkup'>
+				<input type='text' name='partmarkup' value='35'>
 			</div>
 			<div>
 				<span>Desired Margin %: </span>
-				<input type='text' name='desiredmargin'>
+				<input type='text' name='desiredmargin' value='27'>
 			</div>
 			<div>
-				<span>Tax Rate: </span>
-				<input type='text' name='taxrate'>
+				<span>Tax Rate %: </span>
+				<input type='text' name='taxrate' value='7'>
 			</div>
 			<button id="add_tab">Add Option</button>
 			<div id='tabs'>
 				<ul>
 					<li><a href='#tabs-1' data-tabname='Main'>Main</a><span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>
 				</ul>
-				<div id='tabs-1'>
+				<div id='tabs-1' data-tabname='Main'>
 					<div class='rooms'></div>
 					<div>
 						<span>Adjustment</span>
-						<input type='number' name='adjustment' step='.01'>
+						<input type='number' name='adjustment' step='.01' value='0'>
 					</div>
 					<div>
 						<span>Parts $</span><span class='partstotal'>

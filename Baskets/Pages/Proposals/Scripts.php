@@ -44,6 +44,7 @@ $(function() {
 		var cT = tabCounter - 1;
 		var tabContentHtml = $('#tabs-' + cT).clone();
 		$(tabContentHtml).attr('id',id);
+		$(tabContentHtml).attr('data-tabname',label);
 		$(tabContentHtml).find('.partname').html('');
 		$(tabContentHtml).find('.partprices').html("<option value='custom'>Custom</option>");
 		$(tabContentHtml).find('.partprice').val('');
@@ -173,7 +174,7 @@ function part_name(that){
 	}).done(function(data){
 		console.log(data);
 		console.log($(that).next());
-		$(that).next().html(data);
+		$(that).next('[name="partdesc"]').html(data);
 	});
 }
 
@@ -184,19 +185,19 @@ function part_prices(that) {
 					tp: that.value
 				}
 	}).done(function(data){
+		$(that).siblings('select').html('');
 		console.log(data);
 		var lowestprice = 99999999;
 		$.each(JSON.parse(data), function(i,value) {
-			console.log(value);
-			console.log($(that).siblings('select'));
-			$(that).siblings('select').append($('<option>').text(value).attr('value',value));
-			if(value < lowestprice) {
-				$(that).siblings('select').val(value);
-				lowestprice = value;
+			$(that).siblings('select').append($('<option>').text(i + ' - ' + value.bidid).attr('value',value.price));
+			if(value.price < lowestprice) {
+				$(that).siblings('select').val(value.price);
+				lowestprice = value.price;
 			}
-			$(that).siblings('input').val(lowestprice);
-			update_totals();
+			$(that).siblings('[name="partprice"]').val(lowestprice);
+			plsUpdate();
 		});
+		$(that).parent().next('[data-pn]').children('.partid').focus();
 	});
 	
 }
@@ -268,12 +269,13 @@ function updateTotes( tabnumi ) {
 
 	var activeTabNumber = tabnumi,
 		aT = $('#tabs-'+activeTabNumber),
-		laborRate = $('[name="laborrate"]').val(),
-		partMarkUp = $('[name="partmarkup"]').val(),
-		desiredMargin = $('[name="desiredmargin"]').val(),
-		contingency = $('[name="contingency"]').val(),
-		taxRate = $('[name="taxrate"]').val(),
+		laborRate = Number($('[name="laborrate"]').val()),
+		partMarkUp = Number($('[name="partmarkup"]').val()) / 100 + 1,
+		desiredMargin = Number($('[name="desiredmargin"]').val()) / 100,
+		contingency = Number($('[name="contingency"]').val()),
+		taxRate = Number($('[name="taxrate"]').val()) / 100,
 		tabName = aT.attr('data-tabname');
+
 
 
 	cl('activeTabNumber='+activeTabNumber);
@@ -315,13 +317,15 @@ function updateTotes( tabnumi ) {
 
 	var totesParts = 0;
 	aT.find('[name="partprice"]').each(function() {
-		totesParts += Number($(this).val());
+		var adder = Number($(this).val()) || 0;
+		totesParts += adder;
 	});
 	cl('totesParts='+totesParts);
 	
 	var partCost = 0;
-	aT.find('[name="partprices"]').each(function() {
-		partCost += Number($(this).val());
+	aT.find('[name="partprice"]').each(function() {
+		var adder = Number($(this).val()) || 0;
+		partCost += adder;
 	});
 	
 	cl('partCost='+partCost);
@@ -343,7 +347,9 @@ function updateTotes( tabnumi ) {
 
 	cl('newTitle='+newTitle);
 
-	aT.children('tab-title').html(newTitle);
+	$('a[data-tabname="' + tabName + '"]').html(newTitle);
+
+
 
 	aT.find('[type="number"]').each(function() { 
 		$(this).unbind('focus');
