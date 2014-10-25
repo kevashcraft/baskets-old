@@ -42,17 +42,18 @@ $(function() {
 		  id = "tabs-" + tabCounter,
 		  li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{label\}/g, label ) );
 		var cT = tabCounter - 1;
-		var tabContentHtml = $('#tabs-' + cT).children('.rooms').clone();
+		var tabContentHtml = $('#tabs-' + cT).clone();
+		$(tabContentHtml).attr('id',id);
 		$(tabContentHtml).find('.partname').html('');
 		$(tabContentHtml).find('.partprices').html("<option value='custom'>Custom</option>");
 		$(tabContentHtml).find('.partprice').val('');
 		$(tabContentHtml).find('.partid').val('');
 
 
+
 		tabs.find( ".ui-tabs-nav" ).append( li );
-		tabs.append( "<div id='" + id + "'></div>"  );
+		tabs.append( tabContentHtml  );
 		tabs.tabs( "refresh" );
-		$('#tabs-'+tabCounter).append(tabContentHtml);
 		tabCounter++;
 		var tC = tabCounter - 2;
 		$( "#tabs" ).tabs( "option", "active", tC );
