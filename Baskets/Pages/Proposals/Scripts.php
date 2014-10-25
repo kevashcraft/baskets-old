@@ -42,8 +42,13 @@ $(function() {
 		  id = "tabs-" + tabCounter,
 		  li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{label\}/g, label ) );
 		var cT = tabCounter - 1;
-		var tabContentHtml = $('#tabs-' + cT).html();
- 
+		var tabContentHtml = $('#tabs-' + cT).children('.rooms').clone();
+		$(tabContentHtml).find('.partname').html('');
+		$(tabContentHtml).find('.partprices').html("<option value='custom'>Custom</option>");
+		$(tabContentHtml).find('.partprice').val('');
+		$(tabContentHtml).find('.partid').val('');
+
+
 		tabs.find( ".ui-tabs-nav" ).append( li );
 		tabs.append( "<div id='" + id + "'></div>"  );
 		tabs.tabs( "refresh" );
@@ -54,6 +59,7 @@ $(function() {
 		copyRooms(cT);
 		$('input[name="room"]').focus(function() { addRoomInput(this); } );
 		$('input[name="partid"]').focus(function() { addPartInput(this); partautoc(this); } );
+
 	 }
  
 	 // addTab button: just opens the dialog
