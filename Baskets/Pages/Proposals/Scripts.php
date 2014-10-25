@@ -40,19 +40,20 @@ $(function() {
 	 function addTab() {
 		var label = tabTitle.val() || "Tab " + tabCounter,
 		  id = "tabs-" + tabCounter,
-		  li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{label\}/g, label ) ),
-		  tabContentHtml = "<div class='rooms'></div>";
+		  li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{label\}/g, label ) );
+		var cT = tabCounter - 1;
+		var tabContentHtml = $('#tabs-' + cT).html();
  
 		tabs.find( ".ui-tabs-nav" ).append( li );
-		tabs.append( "<div id='" + id + "'>" + tabContentHtml + "</div>"  );
+		tabs.append( "<div id='" + id + "'></div>"  );
 		tabs.tabs( "refresh" );
+		$('#tabs-'+tabCounter).append(tabContentHtml);
 		tabCounter++;
 		var tC = tabCounter - 2;
 		$( "#tabs" ).tabs( "option", "active", tC );
-		console.log('sdvsdv');
-		console.log(tC);
-		console.log($( "#tabs" ).tabs( "option", "active"));
-		addRoomInput(0);
+		copyRooms(cT);
+		$('input[name="room"]').focus(function() { addRoomInput(this); } );
+		$('input[name="partid"]').focus(function() { addPartInput(this); partautoc(this); } );
 	 }
  
 	 // addTab button: just opens the dialog
@@ -89,54 +90,64 @@ $(function() {
 		?>
 
 		<script>
-						$(function() { addRoomInput(0) } );
+						$(function() { addRoomInput($('#room-template').children('input')) } );
 
-						function addRoomInput(rn) {
-							var activeT = $( "#tabs" ).tabs( "option", "active" );
-							activeT += 1;
-							console.log('roominput');
-							console.log(rn);
-							console.log($( "#tabs" ).tabs( "option", "active"));
-							var nrn = rn + 1;
-							console.log('a');
-							console.log($('#tabs-' + activeT).find('[data-rn="' + nrn + '"]').length);
-							if ( $('#tabs-' + activeT).find('[data-rn="' + nrn + '"]').length == false ) {
+						function addRoomInput(elem) {
+							var activeTabNumber = $( "#tabs" ).tabs( "option", "active" ) + 1;
+							var aT = $('#tabs-'+activeTabNumber);
+							var numberOfRooms = aT.find('[data-rn]').length;
+							console.log('nor='+numberOfRooms);
+							var thisRoomNumber = $(elem).parent().attr('data-rn');
+							console.log('trn'+thisRoomNumber); 
+
+							if(numberOfRooms == thisRoomNumber) {
+								console.log('you appear to be using the last room, going to add another blank one');
+
+								var nrn = numberOfRooms + 1;
 								var newRoom = document.getElementById('room-template').cloneNode(true);
 								newRoom.id = '';
 								newRoom.getElementsByClassName('part')[0].id='';
 								newRoom.setAttribute('data-rn',nrn);
 								newRoom.style.display = 'block';
-								newRoom.getElementsByTagName('input')[0].onfocus = function() { addRoomInput(nrn); };
+								newRoom.getElementsByTagName('input')[0].onfocus = function() { addRoomInput(this); };
 								newRoom.getElementsByClassName('partprice')[0].onchange = function() { 
 									$(this).siblings('select').val('custom');
 									update_totals(); 
 								};
 								newRoom.getElementsByClassName('partprices')[0].onchange = function() { if(this.value != 'custom') $(this).siblings('.partprice').val(this.value); };
-								newRoom.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(nrn,1); };
-								$('#tabs-' + activeT).find('.rooms').append(newRoom);
+								newRoom.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(this); };
+								$('.rooms').append(newRoom);
 	
 							}
 
 						}
 
 
-						function addPartInput(rn,pn) {
-							var activeT = $( "#tabs" ).tabs( "option", "active" );
-							activeT += 1;
-							var npn = pn + 1;
-							if ( $('#tabs-' + activeT).find('[data-rn="' + rn + '"]').find('[data-pn="' + npn + '"]').length == false ) {
+						function addPartInput(elem) {
+							console.log('at part adder');
+							var activeTabNumber = $( "#tabs" ).tabs( "option", "active" ) + 1;
+							var aT = $('#tabs-'+activeTabNumber);
+							var thisRoomNumber = $(elem).parents('[data-rn]').attr('data-rn');
+							var numberOfParts = aT.find('[data-rn="'+thisRoomNumber+'"]').find('[data-pn]').length;
+							console.log('nop='+numberOfParts);
+							var thisPartNumber = $(elem).parent().attr('data-pn');
+							console.log('tpn'+thisPartNumber); 
+
+							if(numberOfParts == thisPartNumber) {
+								var npn = numberOfParts + 1;
+								var pn = thisPartNumber;
+								var rn = thisRoomNumber;
 								var newPart = document.getElementById('part-template').cloneNode(true);
 								newPart.id = '';
 								newPart.setAttribute('data-pn',npn);
-								newPart.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(rn,npn); };
+								newPart.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(this); };
 								newPart.getElementsByClassName('partprice')[0].onchange = function() {
 									$(this).siblings('select').val('custom');
 									update_totals();
 								};
-								$('#tabs-' + activeT).find('[data-rn="'+rn+'"]').find('.parts').append(newPart);
-								var curPart = $('#tabs-' + activeT).find('[data-rn="' + rn + '"]').find('[data-pn="' + pn + '"]').find('.partid')[0];
-								partautoc(curPart);
-								curPart.onfocus = function () { partautoc(this); };
+								$('[data-rn="'+rn+'"]').find('.parts').append(newPart);
+								partautoc(elem);
+								elem.onfocus = function () { partautoc(this); };
 
 							}
 
@@ -250,6 +261,22 @@ function update_totals() {
 
 
 }
+
+function copyRooms(mytc) {
+	var mytc = mytc || 1;
+	$('#tabs-' + mytc).find('[data-rn]').each(function() {
+		var myRoom = $(this).children('input').val(),
+			rn = $(this).attr('data-rn');
+		$('[data-rn="' + rn + '"]').each(function() {
+			$(this).children('input').val(myRoom);
+		});
+	});
+
+}
+
+
+
+
 
 </script>
 
