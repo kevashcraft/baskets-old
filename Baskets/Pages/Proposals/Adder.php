@@ -37,7 +37,6 @@ Class Adder
 			Tub Set <input type='radio' name='intallpoint' value='tubset'> |
 			Trim <input type='radio' name='intallpoint' value='trim'>
 			Hours: <input type='number' name='parthours' min='0'>
-			Color: <input type='text' name='partcolor'>
 		</div>
 	</div>
 </div>
@@ -72,6 +71,10 @@ Class Adder
 				<span>Part Markup %: </span>
 				<input type='text' name='partmarkup'>
 			</div>
+			<div>
+				<span>Desired Margin %: </span>
+				<input type='text' name='desiredmargin'>
+			</div>
 			<button id="add_tab">Add Option</button>
 			<div id='tabs'>
 				<ul>
@@ -88,21 +91,9 @@ Class Adder
 					</div>
 				</div>
 			</div>
-			<div>
-				<h2>Hours breakdown</h2>
-				<span>Rough In: </span><input type='number' name='roughinhours' min='0'>
-				<span>Tub Set: </span><input type='number' name='tubsethours' min='0'>
-				<span>Trim: </span><input type='number' name='trimhours' min='0'>
-				<span>Total Hours</span>
+			<h2>Options</h2>
+			<div class='options-info'>
 			</div>
-			<div>
-				<h2>Hours breakdown</h2>
-				<span>Rough In: </span><input type='number' name='roughinhours' min='0'>
-				<span>Tub Set: </span><input type='number' name='tubsethours' min='0'>
-				<span>Trim: </span><input type='number' name='trimhours' min='0'>
-				<span>Total Hours</span>
-			</div>
-
 		</form>
 </div>
 		<?
