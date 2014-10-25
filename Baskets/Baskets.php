@@ -76,7 +76,7 @@ class Baskets
 				Baskets\Pages\Contractors::display();
 				break;
 			case 'proposals':
-				Baskets\Pages\Proposals::display();
+				Baskets\Pages\Proposals\Adder::adder();
 				break;
 			default: // if the requested page was not found, display the dashboard for authed users, or display the login page
 				if(self::$authlevel) Baskets\Pages\Dashboard::display();
