@@ -27,8 +27,8 @@ Class Adder
 	<div class='parts'>
 		<div id='part-template' class='part' data-pn='1'>
 			<input type='text' class='partid' name='partid' placeholder='Part ID' >
-			<input type='number' min='1' name='partqty' value='1'>
-			<span class='partname'></span>
+			<input type='number' min='1' name='partqty' value='1' placeholder='Qty'>
+			<input type='text' name='partdesc' placeholder='Description'>
 			<select class='partprices' name='partprices'>
 			</select>
 			<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>

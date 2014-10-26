@@ -174,7 +174,7 @@ function part_name(that){
 	}).done(function(data){
 		console.log(data);
 		console.log($(that).next());
-		$(that).next('[name="partdesc"]').html(data);
+		$(that).siblings('[name="partdesc"]').val(data);
 	});
 }
 
