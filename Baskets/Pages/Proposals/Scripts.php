@@ -8,7 +8,6 @@ class Scripts
 <script>
 $(function() {
 
-	setpartupdater();
 
 	var contractorsList = [];
 	$.get( '<?=MY_URL?>', { 
@@ -222,7 +221,7 @@ $(function() {
 								newRoom.getElementsByTagName('input')[0].onfocus = function() { addRoomInput(this); };
 								newRoom.getElementsByClassName('partprice')[0].onchange = function() { 
 									$(this).siblings('select').val('custom');
-									update_totals(); 
+									plsUpdate(); 
 								};
 								newRoom.getElementsByClassName('partprices')[0].onchange = function() { if(this.value != 'custom') $(this).siblings('.partprice').val(this.value); };
 								newRoom.getElementsByClassName('partid')[0].onfocus = function() { addPartInput(this); };
@@ -276,7 +275,12 @@ function part_name(that){
 		var pdata = JSON.parse(data);
 		$(that).siblings('[name="partdesc"]').val(pdata.desc);
 		$(that).parent('[data-pn]').attr('data-entryid',pdata.id);
+		$(that).siblings('[name="installpoint"]').val(pdata.installpoint);
 	});
+
+
+
+
 }
 
 function part_prices(that) {
@@ -286,18 +290,18 @@ function part_prices(that) {
 					tp: that.value
 				}
 	}).done(function(data){
-		$(that).siblings('select').html('');
+		$(that).siblings('select[name="partprices"]').html('');
 		console.log(data);
 		var lowestprice = 99999999;
 		$.each(JSON.parse(data), function(i,value) {
-			$(that).siblings('select').append($('<option>').text(i + ' - ' + value.bidid).attr('value',value.price));
+			$(that).siblings('select[name="partprices"]').append($('<option>').text(i + ' - ' + value.bidid).attr('value',value.price));
 			if(value.price < lowestprice) {
-				$(that).siblings('select').val(value.price);
+				$(that).siblings('select[name="partprices"]').val(value.price);
 				lowestprice = value.price;
 			}
 			$(that).siblings('[name="partprice"]').val(lowestprice);
-			plsUpdate();
 		});
+		plsUpdate();
 //		$(that).parent().next('[data-pn]').children('.partid').focus();
 	});
 	
@@ -361,6 +365,8 @@ function plsUpdate ( upwhat ) {
 		cl('asking for single update on '+upwhat);
 		updateTotes ( upwhat );
 	}
+	setpartupdater();	
+
 }
 
 
@@ -465,7 +471,6 @@ function updateTotes( tabnumi ) {
 	});
 
 
-	setpartupdater($('[data-updateme="please"]'));	
 	cl(indinum);
 	indinum += 1;
 }
@@ -487,9 +492,11 @@ function copyRooms(mytc) {
 }
 
 
-function setpartupdater(that) {
+function setpartupdater() {
 	console.log('setting');
-	$(that).unbind('focus').focus(function() {
+	var aTn = $( "#tabs" ).tabs( "option", "active" ) + 1;
+	var aT = $('#tabs-' + aTn);
+	aT.find('[data-updateme="please"]').unbind('focus').focus(function() {
 		console.log("THIS");
 		console.log(this);
 		var mytv = $(this).val();

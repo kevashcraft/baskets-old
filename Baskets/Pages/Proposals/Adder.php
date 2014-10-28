@@ -34,9 +34,11 @@ Class Adder
 			<select class='partprices' name='partprices'>
 			</select>
 			<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
-			Rough In <input type='radio' name='installpoint' value='roughin' data-updateme='please'> |
-			Tub Set <input type='radio' name='installpoint' value='tubset' data-updateme='please'> |
-			Trim <input type='radio' name='installpoint' value='trim' data-updateme='please'>
+			<select name='installpoint' data-updateme="please">
+				<option value='roughin'>Rough In</option>
+				<option value='tubset'>Tub Set</option>
+				<option value='trim'>Trim Out</option>
+			</select>
 			Hours: <input type='number' name='parthours' min='0' data-updateme='please'>
 		</div>
 	</div>

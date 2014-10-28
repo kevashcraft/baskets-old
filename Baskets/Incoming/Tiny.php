@@ -20,11 +20,18 @@ class Tiny{
 	}
 
 	public static function part_desc(){
-		$stm = \Baskets::$db->prepare("SELECT id,partdesc FROM parts WHERE partid=?");
+		$stm = \Baskets::$db->prepare("SELECT id,partdesc,installpoint FROM parts WHERE partid=?");
 		$stm->execute(array($_GET['tp']));
 		$res = $stm->fetch();
+		if(!$res) {
+			$ins = \Baskets::$db->prepare("INSERT INTO parts(partid,dt,dtu) VALUES(?,NOW(),NOW())");
+			$ins->execute(array($_GET['tp']));
+			$stm->execute(array($_GET['tp']));
+			$res = $stm->fetch();
+		}
 		$ret['id'] = $res['id'];
 		$ret['desc'] = $res['partdesc'];
+		$ret['installpoint'] = $res['installpoint'];
 		echo json_encode($ret);
 	}
 
