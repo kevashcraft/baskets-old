@@ -34,14 +34,38 @@ class Parts
 
 	public static function update_part()
 	{
-		$stm = \Baskets::$db->prepare("UPDATE parts SET partid=?, partdesc=?, hours=?, installpoint=? WHERE id=?");
-		$up = $stm->execute(array(self::$info['part-id'],
-									self::$info['part-desc'],
-									self::$info['parthours'],
-									self::$info['installpoint'],
-									self::$info['entry-id']));
-		if($up) echo 'part has been updated';
-		else echo 'there where an error..';
+		$dothis = true;
+		switch(self::$info['partcolumn']) {
+			case 'installpoint':
+				$pc = 'installpoint';
+				break;
+			case 'partdesc':
+				$pc = 'partdesc';
+				break;
+			case 'parthours':
+				$pc = 'parthours';
+				break;
+			default:
+				$dothis = false;
+				break;
+		}
+
+		if($dothis) {
+
+			$stm = \Baskets::$db->prepare("UPDATE parts SET $pc=? WHERE id=?");
+
+			$up = $stm->execute(array(self::$info['partval'],
+										self::$info['entryid']));
+			print_r($up);
+			if($up) {
+				echo 'part has been updated';
+			} else {
+				echo 'there where an error..';
+				 print_r(\Baskets::$db->errorInfo());
+			}
+		} else {
+			echo "nope!";
+		}
 	}
 
 

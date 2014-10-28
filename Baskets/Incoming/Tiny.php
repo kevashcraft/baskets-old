@@ -3,7 +3,7 @@ namespace Baskets\Incoming;
 class Tiny{
 	public static function tim(){
 		switch($_GET['tiny']){
-			case 'part_desc':
+			case 'part_info':
 				self::part_desc();
 				break;
 			case 'part_id':
@@ -20,10 +20,12 @@ class Tiny{
 	}
 
 	public static function part_desc(){
-		$stm = \Baskets::$db->prepare("SELECT partdesc FROM parts WHERE partid=?");
+		$stm = \Baskets::$db->prepare("SELECT id,partdesc FROM parts WHERE partid=?");
 		$stm->execute(array($_GET['tp']));
 		$res = $stm->fetch();
-		echo $res['partdesc'];
+		$ret['id'] = $res['id'];
+		$ret['desc'] = $res['partdesc'];
+		echo json_encode($ret);
 	}
 
 	public static function part_id() {

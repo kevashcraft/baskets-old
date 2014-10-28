@@ -7,6 +7,9 @@ class Scripts
 	{ ?>
 <script>
 $(function() {
+
+	setpartupdater();
+
 	var contractorsList = [];
 	$.get( '<?=MY_URL?>', { 
 		tiny: 'contractors'
@@ -156,6 +159,9 @@ $(function() {
 		copyRooms(cT);
 		$('input[name="room"]').unbind('focus').focus(function() { addRoomInput(this); } );
 		$('input[name="partid"]').unbind('focus').focus(function() { addPartInput(this); partautoc(this); } );
+		setpartupdater();
+						
+
 		plsUpdate();
 
 	 }
@@ -263,13 +269,13 @@ $(function() {
 function part_name(that){
 	$.ajax({
 		url: '<?=MY_URL?>',
-		data: { tiny: 'part_desc',
+		data: { tiny: 'part_info',
 					tp: that.value
 				}
 	}).done(function(data){
-		console.log(data);
-		console.log($(that).next());
-		$(that).siblings('[name="partdesc"]').val(data);
+		var pdata = JSON.parse(data);
+		$(that).siblings('[name="partdesc"]').val(pdata.desc);
+		$(that).parent('[data-pn]').attr('data-entryid',pdata.id);
 	});
 }
 
@@ -458,7 +464,8 @@ function updateTotes( tabnumi ) {
 		});
 	});
 
-	
+
+	setpartupdater($('[data-updateme="please"]'));	
 	cl(indinum);
 	indinum += 1;
 }
@@ -480,8 +487,43 @@ function copyRooms(mytc) {
 }
 
 
-
-
+function setpartupdater(that) {
+	console.log('setting');
+	$(that).unbind('focus').focus(function() {
+		console.log("THIS");
+		console.log(this);
+		var mytv = $(this).val();
+		console.log('mytv');
+		$(this).blur(function() {
+			if($(this).val() != mytv) {
+				var partdata = {};
+				
+				partdata.job = 'update_part';
+				partdata.partcolumn = $(this).attr('name');
+				partdata.partval = $(this).val();
+				partdata.entryid = $(this).parent('[data-pn]').attr('data-entryid');
+		
+				var postit = {};
+	
+				postit.annyong = 'hello';
+				postit.purpose = 'parts';
+				postit.what = JSON.stringify(partdata);
+				console.log('POSTING PART UPDATE');
+				console.log(postit);
+				$.post('<?=MY_URL?>',
+					postit,
+					function(data) { 
+						$('[data-entryid="' + partdata.entryid + '"]')
+							.find('[name="' + partdata.partcolumn + '"]')
+							.val(partdata.partval);
+						console.log(data);
+					}
+				);
+			}
+			$(this).unbind('blur');
+		});
+	});
+}
 
 </script>
 

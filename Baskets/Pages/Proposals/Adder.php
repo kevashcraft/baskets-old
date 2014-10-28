@@ -30,14 +30,14 @@ Class Adder
 		<div id='part-template' class='part' data-pn='1'>
 			<input type='text' class='partid' name='partid' placeholder='Part ID' >
 			<input type='number' min='1' name='partqty' value='1' placeholder='Qty'>
-			<input type='text' name='partdesc' placeholder='Description'>
+			<input type='text' name='partdesc' placeholder='Description' data-updateme='please'>
 			<select class='partprices' name='partprices'>
 			</select>
 			<input type='number' class='partprice' step='0.01' min='0.01' name='partprice' placeholder='0.01'>
-			Rough In <input type='radio' name='installpoint' value='roughin'> |
-			Tub Set <input type='radio' name='installpoint' value='tubset'> |
-			Trim <input type='radio' name='installpoint' value='trim'>
-			Hours: <input type='number' name='parthours' min='0'>
+			Rough In <input type='radio' name='installpoint' value='roughin' data-updateme='please'> |
+			Tub Set <input type='radio' name='installpoint' value='tubset' data-updateme='please'> |
+			Trim <input type='radio' name='installpoint' value='trim' data-updateme='please'>
+			Hours: <input type='number' name='parthours' min='0' data-updateme='please'>
 		</div>
 	</div>
 </div>
@@ -100,7 +100,7 @@ Class Adder
 			<div class='options-info'>
 			</div>
 			<div>
-				<button onclick='propO(event)'>Click Me!</button>
+				<button onclick='setpartupdater(event)'>Click Me!</button>
 			</div>
 		</form>
 </div>
