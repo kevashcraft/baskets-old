@@ -12,6 +12,8 @@ class Tiny{
 			case 'part_prices':
 				self::part_prices();
 				break;
+			case 'contractors':
+				self::contractors();
 			default:
 				break;
 		}	
@@ -41,6 +43,18 @@ class Tiny{
 
 		echo json_encode($return);
 	}
+
+
+	public static function contractors() {
+		$stm = \Baskets::$db->prepare("SELECT contractor FROM contractors WHERE valid=1");
+		$stm->execute();
+		$return = [];
+		while ($line = $stm->fetch()) {
+			$return[] = $line['contractor'];
+		}
+		echo json_encode($return);
+	}
+
 
 
 }

@@ -115,6 +115,8 @@ CREATE TABLE parts(
 	partid VARCHAR(64) UNIQUE,
 	brand VARCHAR(32),
 	partdesc VARCHAR(512),
+	installhours DECIMAL(3,3),
+	installpoint VARCHAR(16),
 	upc VARCHAR(64),
 	listprice DECIMAL(8,2),
 	smallpic VARCHAR(512),

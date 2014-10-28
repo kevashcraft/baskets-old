@@ -3,6 +3,101 @@ namespace Baskets\Pages\Proposals;
 class Scripts
 {
 
+	public static function defscripts()
+	{ ?>
+<script>
+$(function() {
+	var contractorsList = [];
+	$.get( '<?=MY_URL?>', { 
+		tiny: 'contractors'
+	}, function (data) {
+			var parsed = JSON.parse(data);
+			for(var x in parsed) {
+				contractorsList.push( parsed[x] );
+			}
+			console.log(contractorsList);
+			$('[name="contractor"]').autocomplete({
+				source: contractorsList
+			});
+		}
+	);
+});
+
+</script>
+
+	<? }
+
+
+
+
+	public static function propformer()
+	{
+		?>
+<script>
+	function propformer () {
+
+
+	}
+
+
+function propO(e){
+	e.preventDefault();
+	console.log('oooooooooOOOOOOOOOHHH BABY!');
+
+	var p = {};
+
+	p.laborRate = Number($('[name="laborrate"]').val());
+	p.partMarkUp = Number($('[name="partmarkup"]').val()) / 100 + 1;
+	p.desiredMargin = Number($('[name="desiredmargin"]').val()) / 100;
+	p.contingency = Number($('[name="contingency"]').val());
+	p.taxRate = Number($('[name="taxrate"]').val()) / 100;
+	
+
+	p.rooms = [];
+
+	$('[data-rn]').each(function() {
+		 var msel = $(this);
+		if(msel.attr('data-rn') != 0) {
+			var roomName = msel.children('[name="room"]').val();
+			if(roomName != '') {
+				p.rooms[roomName] = {};
+				p.rooms[roomName].parts = [];
+				msel.find('[data-pn]').each(function() {
+					var dsel = $(this),
+						partID = dsel.children('[name="partid"]').val();
+					if(partID != '') {
+						p.rooms[roomName].parts[partID] = [],
+						mytp = p.rooms[roomName].parts[partID],
+						mytp['price'] = dsel.children('[name="partprice"]').val(),
+						mytp['insallPoint'] = dsel.children('[name="installpoint"]').val(),
+						mytp['qty'] = dsel.children('[name="partqty"]').val(),
+						mytp['parthours'] = dsel.children('[name="parthours"]').val();
+						console.log('MY PART');
+						console.log(mytp);
+					}
+				});
+				console.log('ROOM & Parts');
+				console.log(roomName);
+				console.log(Object.keys(p.rooms[roomName].parts));
+			}
+		}
+	});
+	
+
+}
+
+			
+
+
+
+		</script>
+		<?
+	}
+
+
+
+
+
 	public static function juitabs()
 	{
 		?>
@@ -59,8 +154,8 @@ $(function() {
 		var tC = tabCounter - 2;
 		$( "#tabs" ).tabs( "option", "active", tC );
 		copyRooms(cT);
-		$('input[name="room"]').focus(function() { addRoomInput(this); } );
-		$('input[name="partid"]').focus(function() { addPartInput(this); partautoc(this); } );
+		$('input[name="room"]').unbind('focus').focus(function() { addRoomInput(this); } );
+		$('input[name="partid"]').unbind('focus').focus(function() { addPartInput(this); partautoc(this); } );
 		plsUpdate();
 
 	 }
@@ -197,14 +292,13 @@ function part_prices(that) {
 			$(that).siblings('[name="partprice"]').val(lowestprice);
 			plsUpdate();
 		});
-		$(that).parent().next('[data-pn]').children('.partid').focus();
+//		$(that).parent().next('[data-pn]').children('.partid').focus();
 	});
 	
 }
 
 
 function partautoc(that) {
-	console.log(that);
 	$(that).autocomplete({
 		source: function(request,response) {
 			$.get( '<?=MY_URL?>', { 

@@ -7,8 +7,10 @@ Class Adder
 	{
 		\Baskets\Pages\Framework::page_header('Add Proposal | Baskets');
 		Styles::juitabs();
+		Scripts::defscripts();
 		Scripts::juitabs();
 		Scripts::propform();
+		Scripts::propformer();
 		?>
 
 
@@ -96,6 +98,9 @@ Class Adder
 			</div>
 			<h2>Options</h2>
 			<div class='options-info'>
+			</div>
+			<div>
+				<button onclick='propO(event)'>Click Me!</button>
 			</div>
 		</form>
 </div>
