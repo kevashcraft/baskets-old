@@ -142,9 +142,9 @@ $(function() {
 		var tabContentHtml = $('#tabs-' + cT).clone();
 		$(tabContentHtml).attr('id',id);
 		$(tabContentHtml).attr('data-tabname',label);
-		$(tabContentHtml).find('.partname').html('');
 		$(tabContentHtml).find('.partprices').html("<option value='custom'>Custom</option>");
 		$(tabContentHtml).find('.partprice').val('');
+		$(tabContentHtml).find('.partdesc').val('');
 		$(tabContentHtml).find('.partid').val('');
 
 
@@ -156,7 +156,7 @@ $(function() {
 		var tC = tabCounter - 2;
 		$( "#tabs" ).tabs( "option", "active", tC );
 		copyRooms(cT);
-		$('input[name="room"]').unbind('focus').focus(function() { addRoomInput(this); } );
+		$('input[name="room"]').unbind('focus').focus(function() { addRoomInput(this); roomupdater(this); } );
 		$('input[name="partid"]').unbind('focus').focus(function() { addPartInput(this); partautoc(this); } );
 		setpartupdater();
 						
@@ -215,6 +215,7 @@ $(function() {
 								var nrn = numberOfRooms + 1;
 								var newRoom = document.getElementById('room-template').cloneNode(true);
 								newRoom.id = '';
+								$(newRoom).children('[name="room"]').focus(function() { roomupdater(this); });
 								newRoom.getElementsByClassName('part')[0].id='';
 								newRoom.setAttribute('data-rn',nrn);
 								newRoom.style.display = 'block';
@@ -230,6 +231,8 @@ $(function() {
 							}
 
 						}
+
+
 
 
 						function addPartInput(elem) {
@@ -264,6 +267,21 @@ $(function() {
 
 
 						}
+
+function roomupdater(that) {
+	var mytv = $(that).val();
+	var nrn = $(that).parent('[data-rn]').attr('data-rn');
+	$(that).blur(function() {
+		if($(this).val() != mytv && mytv != '') {
+			var nv = $(this).val();
+			$('[data-rn="' + nrn + '"]').each(function() {
+				$(this).children('[name="room"]').val(nv);
+			});
+		}
+		$(this).unbind('blur');
+	});
+}
+
 
 function part_name(that){
 	$.ajax({
