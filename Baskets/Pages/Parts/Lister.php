@@ -23,28 +23,28 @@ class Lister
 		<div class='page_list'>
 			<h2>Total Parts: <?=$totalrows?></h2>
 			<a href='<?=MY_URL?>/parts/list'>1</a>...
-			<?
-				for($x=-1;$x<=1;$x++) {
+<?	for($x=-1;$x<=1;$x++) {
 					$nexprev = $page + $x + 1;
 					if($nexprev <= 1 || $nexprev > $numopages) continue;
 					$url = MY_URL . '/parts/list/' . $nexprev;
 					echo "<a href='$url'>$nexprev</a> ";
-				}
-			?>
+} ?>
 		</div>
 		<ul class='part-list list'>
-<?
-	while($parts = $stm->fetch()) {
-?>
+			<li class='col-titles'>
+				<span class='part-id'>ID</span>
+				<span class='part-partid'>PartID</span>
+				<span class='part-partdesc'>Description</span>
+				<span class='part-upc'>UPC</span>
+			</li>
+<?	while($parts = $stm->fetch()) { ?>
 			<li>
 				<span class='part-id'><?=$parts['id']?></span>
 				<span class='part-partid'><?=$parts['partid']?></span>
 				<span class='part-partdesc'><?=$parts['partdesc']?></span>
 				<span class='part-upc'><?=$parts['upc']?></span>
 			</li>
-<?
-		}
-?>
+<?	} ?>
 		</ul>
 	</div>
 </div>

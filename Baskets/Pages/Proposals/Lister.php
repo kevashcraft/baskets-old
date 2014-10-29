@@ -11,8 +11,6 @@ class Lister
 		$stm->execute();
 		$totalrows = \Baskets::$db->query("SELECT COUNT(*) FROM proposals")->fetchColumn();
 		$numopages = $totalrows / 50;
-
-
 		\Baskets\Pages\Framework::page_header('Proposals List | Baskets');
 ?>
 <div class='main-viewer'>
@@ -24,29 +22,27 @@ class Lister
 		<div class='page_list'>
 			<h2>Total Proposals: <?=$totalrows?></h2>
 			<a href='<?=MY_URL?>/proposals/list'>1</a>...
-			<?
-				for($x=-1;$x<=1;$x++) {
+<?	for($x=-1;$x<=1;$x++) {
 					$nexprev = $page + $x + 1;
 					if($nexprev <= 1 || $nexprev > $numopages) continue;
 					$url = MY_URL . '/proposals/list/' . $nexprev;
 					echo "<a href='$url'>$nexprev</a> ";
-				}
-			?>
+} ?>
 		</div>
 		<ul class='list prop-list'>
+			<li class='titles'>
+				<span class='prop-id'>ID</span>
+				<span class='prop-contractor'>Contractor</span>
+				<span class='prop-model'>Model</span>
+			</li>
 
-<?php
-	while($prop = $stm->fetch())
-	{
-?>
+<?	while($prop = $stm->fetch()) { ?>
 			<li>
 				<span class='prop-id'><?=$prop['id']?></span>
 				<span class='prop-contractor'><?=$prop['contractor']?></span>
 				<span class='prop-model'><?=$prop['model']?></span>
 			</li>
-<?
-	}
-?>
+<?	} ?>
 
 		</ul>
 	</div>
