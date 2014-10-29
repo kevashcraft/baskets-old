@@ -122,7 +122,7 @@ function propsender () {
 							proprooms: JSON.stringify(prop.rooms)
 						};
 	
-	$.post('<?=MY_URL?>',formData,function(data) { console.log(JSON.parse(data)) });
+	$.post('<?=MY_URL?>',formData,function(data) { alert(data) });
 
 
 }

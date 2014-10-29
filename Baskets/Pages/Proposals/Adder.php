@@ -1,6 +1,6 @@
 <?php
 namespace Baskets\Pages\Proposals;
-Class Adder
+class Adder
 {
 
 	public static function adder()
