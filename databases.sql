@@ -47,20 +47,31 @@ CREATE TABLE proposals(
 	dtu DATETIME,
 	contractorid INT UNSIGNED,
 	model VARCHAR(128),
-	opt VARCHAR(128),
-	hours SMALLINT,
-	labor DECIMAL(8,2),
-	totes DECIMAL(8,2),
-	adjust DECIMAL(8,2),
-	partstotal DECIMAL(8,2),
-	profitmargin VARCHAR(12),
+	validstart DATE,
+	validend DATE,
+	valid BOOLEAN,
+	partMarkup DECIMAL(3,3),
+	desiredMargin DECIMAL(3,3),
+	taxRate DECIMAL(3,2),
 	PRIMARY KEY (id)
 ) ENGINE InnoDB;
 
-CREATE TABLE proposalparts(
+CREATE TABLE propoptions(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	room VARCHAR(64),
+	optionName VARCHAR(64),
+	propid INT UNSIGNED,
+	adjustment DECIMAL(5,2),
+	PRIMARY KEY (id),
+) ENGINE InnoDB;
+
+CREATE TABLE propparts(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	partid INT UNSIGNED,
+	optid INT UNSIGNED,
+	room VARCHAR(64),
+	installpoint VARCHAR(16),
+	installhours DECIMAL(3,3),
+	cost DECIMAL(5,2),
 	price DECIMAL(8,2),
 	PRIMARY KEY (id)
 )	ENGINE InnoDB;

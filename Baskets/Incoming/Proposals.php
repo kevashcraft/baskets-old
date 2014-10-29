@@ -29,6 +29,16 @@ class Proposals
 
 	public static function add_proposal()
 	{
+
+
+		/*
+			Tables: Proposals -> basic info (money and such)
+						proposalparts -> optid, propid, price, installhours, cost, installpoint
+						propoptions -> optionname, propid, adjustment
+
+		*/
+
+
 		$stm = \Baskets::$db->prepare("INSERT INTO proposals(dt,dtu,contractorid,model,opt,hours,labor,totes,adjust,partstotal,profitmargin) VALUES (NOW(),NOW(),?,?,?,?,?,?,?,?,?)");
 		$ins = $stm->execute(array(self::$info['contractor'],self::$info['model'],self::$info['opt'],self::$info['hours'],self::$info['labor-total'],self::$info['total-dollar'],self::$info['adjustment'],self::$info['parts-total'],self::$info['profit-margin']));
 		if($ins) echo 'proposal has been added';
