@@ -61,12 +61,48 @@ function propO(){
 
 	
 	rooms = [];
+	opts = [];
 
 	// Loop through all options 
 	$('#tabs').find('div[data-tabname]').each(function() {
 		mytab = $(this);
 		var optName = mytab.attr('data-tabname');
 		var adjustment = mytab.find('[name="adjustment"]').val();
+		var tubsetHours = 0,
+			trimHours = 0,
+			roughInHours = 0;
+
+		mytab.find('[name="installpoint"]:checked').each(function() {
+			var thisis = $(this).val();
+			var thishours = Number($(this).siblings('[name="parthours"]').val());
+			switch(thisis) {
+				case 'roughin':
+					roughInHours += thishours;
+					break;
+				case 'tubset':
+					tubsetHours += thishours;
+					break;
+				case 'trim':
+					trimHours += thishours;
+					break;
+			}
+		});
+
+		var totesParts = 0;
+		mytab.find('[name="partprice"]').each(function() {
+			var adder = Number($(this).val()) || 0;
+			totesParts += adder;
+		});
+	
+		opts.push({
+						optName: optName,
+						adjustment: adjustment,
+						tubsetHours: tubsetHours,
+						trimHours: trimHours,
+						roughInHours: roughInHours,
+						partcost: totesParts
+					});	
+
 
 		// loop throung all rooms in option
 		mytab.find('[data-rn]').each(function() {
@@ -93,9 +129,7 @@ function propO(){
 
 				rooms.push({
 					roomname: roomName,
-					option: optName,
 					parts: parts,
-					adjustment: adjustment
 				});
 
 				}
@@ -104,6 +138,7 @@ function propO(){
 	});
 	
 	p.rooms = rooms;
+	p.opts = opts;
 	console.log('this is P');
 	console.log(p);
 	return p;
@@ -119,7 +154,8 @@ function propsender () {
 							purpose: 'proposals',
 							job: 'add_proposal',
 							propinfo: JSON.stringify(prop.info),
-							proprooms: JSON.stringify(prop.rooms)
+							proprooms: JSON.stringify(prop.rooms),
+							propopts: JSON.stringify(prop.opts)
 						};
 	
 	$.post('<?=MY_URL?>',formData,function(data) { alert(data) });
@@ -436,23 +472,12 @@ function updateTotes( tabnumi ) {
 		tabName = aT.attr('data-tabname');
 
 
-
-	cl('activeTabNumber='+activeTabNumber);
-	cl('aT='+aT);
-	cl('laborRate='+laborRate);
-	cl('partMarkUp='+partMarkUp);
-	cl('desiredMargin='+desiredMargin);
-	cl('contingency='+contingency);
-	cl('taxRate='+taxRate);
-	cl('tabName='+tabName);
-
 	var tubsetHours = 0,
 		trimHours = 0,
 		roughInHours = 0;
 
 	aT.find('[name="installpoint"]:checked').each(function() {
 		var thisis = $(this).val();
-		cl('thisis'+thisis);
 		var thishours = Number($(this).siblings('[name="parthours"]').val());
 		switch(thisis) {
 			case 'roughin':
@@ -467,19 +492,12 @@ function updateTotes( tabnumi ) {
 		}
 	});
 
-	cl('roughInHours='+roughInHours);
-	cl('tubsetHours='+tubsetHours);
-	cl('trimHours='+trimHours);
-
 	var totesHours = trimHours + tubsetHours + roughInHours;
-	cl('totesHours='+totesHours);
-
 	var totesParts = 0;
 	aT.find('[name="partprice"]').each(function() {
 		var adder = Number($(this).val()) || 0;
 		totesParts += adder;
 	});
-	cl('totesParts='+totesParts);
 	
 	var partCost = 0;
 	aT.find('[name="partprice"]').each(function() {
@@ -487,24 +505,18 @@ function updateTotes( tabnumi ) {
 		partCost += adder;
 	});
 	
-	cl('partCost='+partCost);
 
 	var adjustment = aT.find('[name="adjustment"]').val();
 
-	cl('adjustment='+adjustment);
 
 	var propToteCost = partCost + ( totesHours * laborRate);
-	cl('propToteCost='+propToteCost);
 
 	var propTotePriceSubTax = (partCost * partMarkUp) + (totesHours * laborRate) + adjustment;
-	cl('propTotePriceSubTax='+propTotePriceSubTax);
 
 	var propTotePrice = propTotePriceSubTax * taxRate;
 
-	cl('propTotePrice='+propTotePrice);
 	var newTitle = tabName + ' - ' + propToteCost;
 
-	cl('newTitle='+newTitle);
 
 	$('a[data-tabname="' + tabName + '"]').html(newTitle);
 

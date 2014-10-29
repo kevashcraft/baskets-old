@@ -62,7 +62,11 @@ CREATE TABLE propoptions(
 	optionName VARCHAR(64),
 	propid INT UNSIGNED,
 	adjustment DECIMAL(5,2),
-	PRIMARY KEY (id),
+	tubsetHours DECIMAL(5,3),
+	trimHours DECIMAL(5,3),
+	roughInHours DECIMAL(5,3),
+	partCost DECIMAL(5,3),
+	PRIMARY KEY (id)
 ) ENGINE InnoDB;
 
 CREATE TABLE propparts(

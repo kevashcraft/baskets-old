@@ -5,6 +5,7 @@ class Proposals
 
 	public static $prop;
 	public static $rooms;
+	public static $opts;
 
 	public static function engine()
 	{
@@ -13,6 +14,8 @@ class Proposals
 		self::$prop = json_decode($rawinfo,true);
 		$rawinfo = isset($_POST['proprooms']) ? $_POST['proprooms'] : $_GET['proprooms'];
 		self::$rooms = json_decode($rawinfo,true);
+		$rawinfo = isset($_POST['propopts']) ? $_POST['propopts'] : $_GET['propopts'];
+		self::$opts = json_decode($rawinfo,true);
 
 		switch($job)
 		{
@@ -58,7 +61,7 @@ class Proposals
 
 
 
-		$addOpt = \Baskets::$db->prepare("INSERT INTO propoptions (optionName,propid,adjustment) VALUES(?,?,?)");
+		$addOpt = \Baskets::$db->prepare("INSERT INTO propoptions (optionName,propid,adjustment,tubsetHours,trimHours,roughInHours,partCost) VALUES(?,?,?,?,?,?,?)");
 
 		$p = self::$prop;
 
@@ -77,46 +80,45 @@ class Proposals
 		if($ex) echo "added prop!";
 		$propid = \Baskets::$db->lastInsertId();
 
-		$addedOpts = array();
 
-		foreach(self::$rooms as $room) {
+		foreach(self::$opts as $opt) {
+			$optinfo = array(
+									$opt['optName'],
+									$propid,
+									$opt['adjustment'],
+									$opt['tubsetHours'],
+									$opt['trimHours'],
+									$opt['roughInHours'],
+									$opt['partcost']
+								);
 
-			if(!in_array($room['option'],$addedOpts)) {
-				$optinfo = array(
-										$room['option'],
-										$propid,
-										$room['adjustment']
-										);
+			$ex = $addOpt->execute($optinfo);
+			if($ex) echo "option added!";
+			$optid = \Baskets::$db->lastInsertId();
+
+
+			foreach(self::$rooms as $room) {
 	
-				$ex = $addOpt->execute($optinfo);
-				if($ex) echo "option added!";
-				$addedOpts[] = $room['option'];
-				$optid = \Baskets::$db->lastInsertId();
+				foreach($room['parts'] as $part) {
+	
+					if($part['partid'] == '') continue;
+	
+					$partinfo = array (
+												$part['partid'],
+												$optid,
+												$room['roomname'],
+												$part['installpoint'],
+												$part['parthours'],
+												$part['qty'],
+												$part['cost'],
+												$part['price']
+											);
+	
+					$ex = $addPart->execute($partinfo);
+					if($ex) echo "added part!!!";
+				}
 			}
-
-
-			foreach($room['parts'] as $part) {
-
-				if($part['partid'] == '') continue;
-
-				$partinfo = array (
-											$part['partid'],
-											$optid,
-											$room['roomname'],
-											$part['installpoint'],
-											$part['parthours'],
-											$part['qty'],
-											$part['cost'],
-											$part['price']
-										);
-
-				$ex = $addPart->execute($partinfo);
-				if($ex) echo "added part!!!";
-			}
-
-
-		}
-
+		}	
 
 		echo "Hello, thank you for contacting the proposal receiving service. My name is Todd and here is a copy of the proposal that I received:";
 		print_r(self::$prop);
