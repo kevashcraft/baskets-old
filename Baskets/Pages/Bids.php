@@ -300,14 +300,9 @@ function tahead(docid){
 
 	public static function bid()
 	{
-		$stm = \Baskets::$db->prepare("SELECT * FROM bids WHERE id=?");
+		$stm = \Baskets::$db->prepare("SELECT parts.partid as pid, parts.partdesc,bidparts.price,bids.bid,suppliers.supplier FROM parts,bidparts,bids,suppliers WHERE bids.id=? AND bidparts.bidid=? AND parts.id=bidparts.partid");
 		$stm->execute(array(\Baskets\Tools\Tracker::$uri[3]));
 		$bid = $stm->fetch();
-
-		$stm = \Baskets::$db->prepare("SELECT supplier FROM suppliers WHERE id=?");
-		$stm->execute(array($bid['supplierid']));
-		$res = $stm->fetch();
-		$supplier = $res['supplier'];
 
 		Framework::page_header('Update Bid ' . $bid['bid'] . ' | Baskets');
 	?>
@@ -317,60 +312,34 @@ function tahead(docid){
 					<h1><i class="fa fa-leaf"></i> Update Bid</h1>
 					<a href='<?=MY_URL?>/bids/list' class='add-button'>List Bids</a>
 				</div>
-				<p>
-					<form class='formula-one'>
-						<div class='line'>
-							<div class='group'>
-								<label for='supplier'>Supplier</label>
-								<input type='text' name='supplier' id='supplier' value='<?=$supplier?>'>
-							</div>
-						</div>	
-						<div class='line'>
-							<div class='group'>
-								<label for='bid'>Bid</label>
-								<span><input type='text' name='bid' id='bid' value='<?=$bid['bid']?>'></span>
-							</div>
-						</div>
-						<div class='bid-pp-cont' id='bid-pp-cont'>
-							<div class='bid-pp-line'>
-								<div class='bid-part'>Part ID</div>
-								<div class='bid-name'>Name</div>
-								<div class='bid-price'>Price</div>
-							</div>
-							<div class='bid-pp-line' id='pp0' style='display:none'>
-								<div class='bid-part'><input type='text' name='part0' id='part0' data-pn='0' onfocus="checkpp(this)"></div>
-								<div class='bid-name'>item name here</div>
-								<div class='bid-price'><input type='number' name='price0' id='price0' data-pn='0' onfocus="checkpp(this)"></div>
-							</div>
-						<?
-							$astm = \Baskets::$db->prepare("SELECT * FROM parts WHERE id=?");
-							$stm = \Baskets::$db->prepare("SELECT * FROM bidparts WHERE bidid=?");
-							$stm->execute(array($bid['id']));
-							$pp=0;
-							while($bp = $stm->fetch()) {
-								$pp++;
-								$astm->execute(array($bp['partid']));
-								$part = $astm->fetch();
-								?>
-							<div class='bid-pp-line' id='pp<?=$pp?>'>
-								<div class='bid-part'><input value='<?=$part['partid']?>' type='text' name='part<?=$pp?>' id='part<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
-								<div class='bid-name'><?=$part['partname']?></div>
-								<div class='bid-price'><input value='<?=$bp['price']?>' type='number' step="0.01" name='price<?=$pp?>' id='price<?=$pp?>' data-pn='<?=$pp?>' onfocus="checkpp(this)"></div>
-							</div>
-							<script>
-								$(function(){ tahead('part<?=$pp?>'); });
-							</script>
-							<? } ?>
-						</div>
+				<form class='bid-form form'>
+					<div>
+						Supplier: <input type='text' name='supplier' value='<?=$bid['supplier']?>'>
+					</div>
+					<div>
+						Bid: <input type='text' name='bid' value='<?=$bid['bid']?>'>
+					</div>
+					<div>
+						<span class='bid-part'>Part ID</span>
+						<span class='bid-name'>Name</span>
+						<span class='bid-price'>Price</span>
+					</div>
+					<div class='template'>
+						<span class='bid-part'><input type='text' name='partid'></span>
+						<span class='bid-name'><input type='text' name='partdesc'></span>
+						<span class='bid-price'><input type='number' min='0' step='0.01'></span>
+					</div>
+<? do { ?>
+					<div>
+						<span class='bid-part'><input type='text' name='partid' value='<?$bid['pid']?>'></span>
+						<span class='bid-name'><input type='text' name='partdesc' value='<?$bid['partdesc']?>'></span>
+						<span class='bid-price'><input type='number' min='0' step='0.01' value='<?$bid['price']?>'></span>
+					</div>
+<? } while ($bid = $stm->fetch()); ?>
 
-						<div class='input-wrap'>
-							<input type='hidden' name='job' value='update_bid'>
-							<input type='hidden' name='bidid' value='<?=$bid['id']?>'>
-							<input type='hidden' name='pp' id='pp' value='<?=$pp?>'>
-							<input type='submit' value='Update'>
-						</div>
-					</form>
-					<script>
+
+				</form>
+				<script>
 						$( 'form' ).submit( function( event ) {
 							event.preventDefault();
 							var formdata = JSON.stringify($( this ).serializeObject());
