@@ -3,14 +3,18 @@ namespace Baskets\Incoming;
 class Proposals
 {
 
-	public static $info;
+	public static $prop;
+	public static $rooms;
 
 	public static function engine()
 	{
-		$rawinfo = isset($_POST['what']) ? $_POST['what'] : $_GET['what'];
-		self::$info = json_decode($rawinfo,true);
-//		print_r(self::$info);
-		switch(self::$info['job'])
+		$job = isset($_POST['job']) ? $_POST['job'] : $_GET['job'];
+		$rawinfo = isset($_POST['propinfo']) ? $_POST['propinfo'] : $_GET['propinfo'];
+		self::$prop = json_decode($rawinfo,true);
+		$rawinfo = isset($_POST['proprooms']) ? $_POST['proprooms'] : $_GET['proprooms'];
+		self::$rooms = json_decode($rawinfo,true);
+
+		switch($job)
 		{
 			case 'add_proposal':
 				self::add_proposal();
@@ -32,17 +36,89 @@ class Proposals
 
 
 		/*
-			Tables: Proposals -> basic info (money and such)
-						proposalparts -> optid, propid, price, installhours, cost, installpoint
+			Tables:
+						proposals -> basic info (money and such)
+						propparts -> optid, propid, price, installhours, cost, installpoint
 						propoptions -> optionname, propid, adjustment
 
 		*/
 
 
-		$stm = \Baskets::$db->prepare("INSERT INTO proposals(dt,dtu,contractorid,model,opt,hours,labor,totes,adjust,partstotal,profitmargin) VALUES (NOW(),NOW(),?,?,?,?,?,?,?,?,?)");
-		$ins = $stm->execute(array(self::$info['contractor'],self::$info['model'],self::$info['opt'],self::$info['hours'],self::$info['labor-total'],self::$info['total-dollar'],self::$info['adjustment'],self::$info['parts-total'],self::$info['profit-margin']));
-		if($ins) echo 'proposal has been added';
-		else echo 'could not add proposal :(';
+		// Get necessary info
+
+		$consel = \Baskets::$db->prepare("SELECT id FROM contractors WHERE contractor=?");
+		$consel->execute(array($prop['contractor']));
+		$conret = $consel->fetch();
+		$contractorid = $conret['id'];
+
+		$addProp = \Baskets::$db->prepare("INSERT INTO proposals (dt,dtu,contractorid,model,validstart,validend,partMarkup,desiredMargin,contingency,taxRate,valid) VALUES(NOW(),NOW(),?,?,?,?,?,?,?,1)");
+
+
+		$addPart = \Baskets::$db->prepare("INSERT INTO propparts (partid,optid,room,installpoint,installhours,qty,cost,price) VALUES(?,?,?,?,?,?,?)");
+
+
+
+		$addOpt = \Baskets::$db->prepare("INSERT INTO propoptions (optionName,propid,adjustment) VALUES(?,?,?)");
+
+		$p = self::$prop;
+
+		$partinfo = array(
+									$contractorid,
+									$p['model'],
+									$p['validstart'],
+									$p['validend'],
+									$p['partMarkup'],
+									$p['desiredMargin'],
+									$p['contingency'],
+									$p['taxRate']
+							);
+
+
+		$ex = $addPart->execute($partinfo);
+
+		if($ex) echo "added part!";
+		$propid = \Baskets::$db->lastInsertId();
+
+
+
+
+		foreach(self::$rooms as $room) {
+
+			$optinfo = array(
+									$room['option'],
+									$propid,
+									$room['adjustment']
+									);
+
+			$ex = $addOpt->execute($optinfo);
+			if($ex) "option added!";
+			$optid = \Baskets::$db->lastInsertId();
+
+			foreach($room['parts'] as $part) {
+
+				$partinfo = array (
+											$part['partid'],
+											$optid,
+											$room['roomname'],
+											$part['installpoint'],
+											$part['installhours'],
+											$part['qty'],
+											$part['cost'],
+											$part['price']
+										);
+
+				$ex = $addPart->execute($partinfo);
+				if($ex) echo "added part!!!";
+			}
+
+
+		}
+
+
+		echo "Hello, thank you for contacting the proposal receiving service. My name is Todd and here is a copy of the proposal that I received:";
+		print_r(self::$prop);
+		echo "AND THE RROOMS!";
+		print_r(self::$rooms);
 	}
 
 	public static function update_proposal()

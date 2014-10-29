@@ -8,7 +8,11 @@ class Scripts
 <script>
 $(function() {
 
-
+	$('form').submit(function() {
+		event.preventDefault();
+		console.log('sending prop...');
+		propsender();
+	});		
 	var contractorsList = [];
 	$.get( '<?=MY_URL?>', { 
 		tiny: 'contractors'
@@ -36,61 +40,92 @@ $(function() {
 	{
 		?>
 <script>
-	function propformer () {
 
 
-	}
-
-
-function propO(e){
-	e.preventDefault();
-	console.log('oooooooooOOOOOOOOOHHH BABY!');
+//		Create an object from the prop info
+function propO(){
 
 	var p = {};
 
-	p.laborRate = Number($('[name="laborrate"]').val());
-	p.partMarkUp = Number($('[name="partmarkup"]').val()) / 100 + 1;
-	p.desiredMargin = Number($('[name="desiredmargin"]').val()) / 100;
-	p.contingency = Number($('[name="contingency"]').val());
-	p.taxRate = Number($('[name="taxrate"]').val()) / 100;
+	p.info = {};
+	p.info.contractor = $('[name="contractor"]').val();
+	p.info.model = $('[name="model"]').val();
+	p.info.laborRate = Number($('[name="laborrate"]').val());
+	p.info.partMarkUp = Number($('[name="partmarkup"]').val()) / 100 + 1;
+	p.info.desiredMargin = Number($('[name="desiredmargin"]').val()) / 100;
+	p.info.contingency = Number($('[name="contingency"]').val());
+	p.info.taxRate = Number($('[name="taxrate"]').val()) / 100;
+	p.info.validStart = $('[name="datestart"]').val();
+	p.info.validEnd = $('[name="dateend"]').val();
 	
 
-	p.rooms = [];
+	
+	rooms = [];
 
-	$('[data-rn]').each(function() {
-		 var msel = $(this);
-		if(msel.attr('data-rn') != 0) {
-			var roomName = msel.children('[name="room"]').val();
-			if(roomName != '') {
-				p.rooms[roomName] = {};
-				p.rooms[roomName].parts = [];
-				msel.find('[data-pn]').each(function() {
-					var dsel = $(this),
-						partID = dsel.children('[name="partid"]').val();
-					if(partID != '') {
-						p.rooms[roomName].parts[partID] = [],
-						mytp = p.rooms[roomName].parts[partID],
-						mytp['price'] = dsel.children('[name="partprice"]').val(),
-						mytp['insallPoint'] = dsel.children('[name="installpoint"]').val(),
-						mytp['qty'] = dsel.children('[name="partqty"]').val(),
-						mytp['parthours'] = dsel.children('[name="parthours"]').val();
-						console.log('MY PART');
-						console.log(mytp);
-					}
+	// Loop through all options 
+	$('#tabs').find('div[data-tabname]').each(function() {
+		mytab = $(this);
+		var optName = mytab.attr('data-tabname');
+		var adjustment = mytab.find('[name="adjustment"]').val();
+
+		// loop throung all rooms in option
+		mytab.find('[data-rn]').each(function() {
+			var msel = $(this);
+			if(msel.attr('data-rn') != 0) {
+				var roomName = msel.children('[name="room"]').val();
+				if(roomName != '') {
+					var parts = [];
+					msel.find('[data-pn]').each(function() {
+						var dsel = $(this),
+							partID = dsel.children('[name="partid"]').val();
+						if(partID != '') {
+							parts.push({
+								partid: partID,
+								price: dsel.children('[name="partprice"]').val(),
+								cost: dsel.children('[name="partprices"] option:selected').val(),
+								installpoint: dsel.children('[name="installpoint"]').val(),
+								qty: dsel.children('[name="partqty"]').val(),
+								parthours: dsel.children('[name="parthours"]').val()
+							});
+
+						}
+					});
+
+				rooms.push({
+					roomname: roomName,
+					option: optName,
+					parts: parts,
+					adjustment: adjustment
 				});
-				console.log('ROOM & Parts');
-				console.log(roomName);
-				console.log(Object.keys(p.rooms[roomName].parts));
+
+				}
 			}
-		}
+		});
 	});
 	
-
+	p.rooms = rooms;
+	console.log('this is P');
+	console.log(p);
+	return p;
 }
 
 			
 
 
+function propsender () {
+	var prop = propO();
+	var formData = {
+							annyong: 'hello',
+							purpose: 'proposals',
+							job: 'add_proposal',
+							propinfo: JSON.stringify(prop.info),
+							proprooms: JSON.stringify(prop.rooms)
+						};
+	
+	$.post('<?=MY_URL?>',formData,function(data) { console.log(JSON.parse(data)) });
+
+
+}
 
 		</script>
 		<?

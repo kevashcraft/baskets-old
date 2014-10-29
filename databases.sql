@@ -51,6 +51,7 @@ CREATE TABLE proposals(
 	validend DATE,
 	valid BOOLEAN,
 	partMarkup DECIMAL(3,3),
+	contingency DECIMAL(3,3),
 	desiredMargin DECIMAL(3,3),
 	taxRate DECIMAL(3,2),
 	PRIMARY KEY (id)
@@ -73,19 +74,9 @@ CREATE TABLE propparts(
 	installhours DECIMAL(3,3),
 	cost DECIMAL(5,2),
 	price DECIMAL(8,2),
+	qty INT UNSIGNED,
 	PRIMARY KEY (id)
 )	ENGINE InnoDB;
-
-
-CREATE TABLE estimateparts(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	room VARCHAR(128),
-	partid INT UNSIGNED,
-	bidit INT UNSIGNED,
-	price DECIMAL(8,2),
-	PRIMARY KEY (id)
-) ENGINE InnoDB;
-
 
 
 
