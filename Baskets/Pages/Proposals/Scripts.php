@@ -82,7 +82,7 @@ function propO(){
 							parts.push({
 								partid: partID,
 								price: dsel.children('[name="partprice"]').val(),
-								cost: dsel.children('[name="partprices"] option:selected').val(),
+								cost: dsel.children('[name="partprices"]').children('option:selected').val(),
 								installpoint: dsel.children('[name="installpoint"]').val(),
 								qty: dsel.children('[name="partqty"]').val(),
 								parthours: dsel.children('[name="parthours"]').val()

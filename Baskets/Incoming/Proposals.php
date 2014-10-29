@@ -47,14 +47,14 @@ class Proposals
 		// Get necessary info
 
 		$consel = \Baskets::$db->prepare("SELECT id FROM contractors WHERE contractor=?");
-		$consel->execute(array($prop['contractor']));
+		$consel->execute(array(self::$prop['contractor']));
 		$conret = $consel->fetch();
 		$contractorid = $conret['id'];
 
-		$addProp = \Baskets::$db->prepare("INSERT INTO proposals (dt,dtu,contractorid,model,validstart,validend,partMarkup,desiredMargin,contingency,taxRate,valid) VALUES(NOW(),NOW(),?,?,?,?,?,?,?,1)");
+		$addProp = \Baskets::$db->prepare("INSERT INTO proposals (dt,dtu,contractorid,model,validstart,validend,partMarkup,desiredMargin,contingency,taxRate,valid) VALUES(NOW(),NOW(),?,?,?,?,?,?,?,?,1)");
 
 
-		$addPart = \Baskets::$db->prepare("INSERT INTO propparts (partid,optid,room,installpoint,installhours,qty,cost,price) VALUES(?,?,?,?,?,?,?)");
+		$addPart = \Baskets::$db->prepare("INSERT INTO propparts (partid,optid,room,installpoint,installhours,qty,cost,price) VALUES(?,?,?,?,?,?,?,?)");
 
 
 
@@ -62,25 +62,20 @@ class Proposals
 
 		$p = self::$prop;
 
-		$partinfo = array(
+		$propinfo = array(
 									$contractorid,
 									$p['model'],
-									$p['validstart'],
-									$p['validend'],
-									$p['partMarkup'],
+									$p['validStart'],
+									$p['validEnd'],
+									$p['partMarkUp'],
 									$p['desiredMargin'],
 									$p['contingency'],
 									$p['taxRate']
 							);
+		$ex = $addProp->execute($propinfo);
 
-
-		$ex = $addPart->execute($partinfo);
-
-		if($ex) echo "added part!";
+		if($ex) echo "added prop!";
 		$propid = \Baskets::$db->lastInsertId();
-
-
-
 
 		foreach(self::$rooms as $room) {
 
@@ -101,7 +96,7 @@ class Proposals
 											$optid,
 											$room['roomname'],
 											$part['installpoint'],
-											$part['installhours'],
+											$part['parthours'],
 											$part['qty'],
 											$part['cost'],
 											$part['price']
