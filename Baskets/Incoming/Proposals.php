@@ -77,19 +77,27 @@ class Proposals
 		if($ex) echo "added prop!";
 		$propid = \Baskets::$db->lastInsertId();
 
+		$addedOpts = array();
+
 		foreach(self::$rooms as $room) {
 
-			$optinfo = array(
-									$room['option'],
-									$propid,
-									$room['adjustment']
-									);
+			if(!in_array($room['option'],$addedOpts)) {
+				$optinfo = array(
+										$room['option'],
+										$propid,
+										$room['adjustment']
+										);
+	
+				$ex = $addOpt->execute($optinfo);
+				if($ex) echo "option added!";
+				$addedOpts[] = $room['option'];
+				$optid = \Baskets::$db->lastInsertId();
+			}
 
-			$ex = $addOpt->execute($optinfo);
-			if($ex) "option added!";
-			$optid = \Baskets::$db->lastInsertId();
 
 			foreach($room['parts'] as $part) {
+
+				if($part['partid'] == '') continue;
 
 				$partinfo = array (
 											$part['partid'],
