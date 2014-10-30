@@ -67,10 +67,10 @@ class Baskets
 				Baskets\Pages\Parts\Handler::begin();
 				break;
 			case 'suppliers':
-				Baskets\Pages\Suppliers::display();
+				Baskets\Pages\Suppliers\Handler::begin();
 				break;
 			case 'bids':
-				Baskets\Pages\Bids::display();
+				Baskets\Pages\Bids\Handler::display();
 				break;
 			case 'contractors':
 				Baskets\Pages\Contractors::display();
