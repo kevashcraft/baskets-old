@@ -16,10 +16,10 @@ class Adder
 <div class='dash-box'>
 	<form class='form'>
 		<div>
-			Supplier: <input type='text' name='supplier' value='ttest'>
+			Supplier: <input type='text' name='supplier'>
 		</div>
 		<div>
-			Bid: <input type='text' name='bid' value='noobid'>
+			Bid: <input type='text' name='bid'>
 		</div>
 		<div>
 			Valid: <input type='date' name='validstart' value="<?=date('Y-m-d')?>"> to <input type='date' name='validend' value="<?=date('Y-m-d', strtotime('+1 year'))?>">

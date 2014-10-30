@@ -17,7 +17,7 @@ class Lister
 	<div class='dash-box'>
 		<div class='dash-box-header'>
 			<h1><i class="fa fa-leaf"></i> All Bids</h1>
-			<a href='<?=MY_URL?>/parts/add' class='add-button'>Add Bid</a>
+			<a href='<?=MY_URL?>/bids/add' class='add-button'>Add Bid</a>
 		</div>
 		<div class='db-list'>
 			<h2>Total Bids: <?=$totalrows?></h2>

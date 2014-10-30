@@ -143,6 +143,7 @@ CREATE TABLE suppliers(
 	dt DATETIME,
 	dtu DATETIME,
 	supplier VARCHAR(64),
+	contactperson VARCHAR(64),
 	address VARCHAR(256),
 	email VARCHAR(128),
 	fax VARCHAR(32),

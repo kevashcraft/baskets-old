@@ -6,10 +6,10 @@ class Suppliers
 
 	public static function engine()
 	{
-		$rawinfo = isset($_POST['what']) ? $_POST['what'] : $_GET['what'];
+		$job = isset($_POST['job']) ? $_POST['job'] : $_GET['job'];
+		$rawinfo = isset($_POST['basicinfo']) ? $_POST['basicinfo'] : $_GET['basicinfo'];
 		self::$info = json_decode($rawinfo,true);
-		print_r(self::$info);
-		switch(self::$info['job'])
+		switch($job)
 		{
 			case 'add_supplier':
 				self::add_supplier();
@@ -26,12 +26,15 @@ class Suppliers
 
 	public static function add_supplier()
 	{
-		$stm = \Baskets::$db->prepare("INSERT INTO suppliers(dt,dtu,valid,supplier,address,email,fax,phone) VALUES(NOW(),NOW(),true,?,?,?,?,?)");
-		$ins = $stm->execute(array(	self::$info['supplier'],
-												self::$info['address'],
-												self::$info['email'],
-												self::$info['fax'],
-												self::$info['phone']));
+		$stm = \Baskets::$db->prepare("INSERT INTO suppliers(dt,dtu,valid,supplier,contactperson,address,email,fax,phone) VALUES(NOW(),NOW(),true,?,?,?,?,?,?)");
+		$ins = $stm->execute(array(
+											self::$info['supplier'],
+											self::$info['contactperson'],
+											self::$info['address'],
+											self::$info['email'],
+											self::$info['fax'],
+											self::$info['phone']
+											));
 		if($ins) echo 'supplier has been added';
 		else echo 'could not add part :(';
 	}

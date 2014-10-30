@@ -17,14 +17,16 @@ class Handler
 				Bidder::bidder();
 				break;
 			default:
-				Framework::$newurl = 'bids';
+				\Baskets\Pages\Framework::$newurl = 'bids';
 				self::overview();
 				break;
 		}
 	}
 
 
-	public static function overview() { ?>
+	public static function overview() {
+		\Baskets\Pages\Framework::page_header('Bids Overview | Baskets');
+?>
 <div class='main-viewer'>
 	<div class='dash-box'>
 		<div class='db-header'>
@@ -33,9 +35,11 @@ class Handler
 	</div>
 	<div class='dash-box'>
 		<a href='<?=MY_URL?>/bids/add'>Add a bid</a>
+		<br>
 		<a href='<?=MY_URL?>/bids/list'>List of all bids</a>
 	</div>
 </div>
-	<? }
-
+<?
+		\Baskets\Pages\Framework::page_header('Bids Overview | Baskets');
+	}
 }

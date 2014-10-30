@@ -14,7 +14,7 @@ class Handler
 				Adder::adder();
 				break;
 			default:
-				Framework::$newurl = 'suppliers';
+				\Baskets\Pages\Framework::$newurl = 'suppliers';
 				self::overview();
 				break;
 		}
