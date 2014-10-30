@@ -1,5 +1,5 @@
 <?php
-namespace Baskets\Pages\Suppliers;
+namespace Baskets\Pages\Contractors;
 class Handler
 {
 
@@ -14,26 +14,25 @@ class Handler
 				Adder::adder();
 				break;
 			default:
-				\Baskets\Pages\Framework::$newurl = 'suppliers';
+				\Baskets\Pages\Framework::$newurl = 'contractors';
 				self::overview();
 				break;
 		}
 	}
 
 	public static function overview() {
-
-		\Baskets\Pages\Framework::page_header('Suppliers Overview | Baskets');
+		\Baskets\Pages\Framework::page_header('Contractors Overview | Baskets');
 ?>
 <div class='main-viewer'>
 	<div class='dash-box'>
 		<div class='db-header'>
-			<h1><i class='fa fa-leaf'></i> Suppliers Overview</h1>
+			<h1><i class='fa fa-leaf'></i> Contractors Overview</h1>
 		</div>
 	</div>
 	<div class='dash-box'>
-		<a href='<?=MY_URL?>/suppliers/list'>List of Suppliers</a>
+		<a href='<?=MY_URL?>/contractors/add'>Add a Contractor</a>
 		<br>
-		<a href='<?=MY_URL?>/suppliers/add'>Add a Supplier</a>
+		<a href='<?=MY_URL?>/contractors/list'>List of all Contractors</a>
 	</div>
 </div>
 <?

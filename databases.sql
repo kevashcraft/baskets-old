@@ -32,6 +32,7 @@ CREATE TABLE contractors(
 	dt DATETIME,
 	dtu DATETIME,
 	contractor VARCHAR(128),
+	contactperson VARCHAR(64),
 	address VARCHAR(256),
 	phone VARCHAR(32),
 	email VARCHAR(128),

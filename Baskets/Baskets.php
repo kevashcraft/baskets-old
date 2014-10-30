@@ -73,7 +73,7 @@ class Baskets
 				Baskets\Pages\Bids\Handler::display();
 				break;
 			case 'contractors':
-				Baskets\Pages\Contractors::display();
+				Baskets\Pages\Contractors\Handler::begin();
 				break;
 			case 'proposals':
 				Baskets\Pages\Proposals\Handler::begin();

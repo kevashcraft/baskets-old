@@ -4,7 +4,7 @@ class Lister
 {
 
 	public static function lister() {
-		\Baskets\Pages\Framework::page_header('Parts List | Baskets');
+		\Baskets\Pages\Framework::page_header('Bids List | Baskets');
 		$page = isset(\Baskets\Tools\Tracker::$uri[3]) ? intval(\Baskets\Tools\Tracker::$uri[3]) : '0';
 		$page = is_int($page) ? $page : '0';
 		$limit = $page * 50;

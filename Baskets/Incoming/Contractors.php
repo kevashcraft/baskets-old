@@ -6,10 +6,10 @@ class Contractors
 
 	public static function engine()
 	{
-		$rawinfo = isset($_POST['what']) ? $_POST['what'] : $_GET['what'];
+		$job = isset($_POST['job']) ? $_POST['job'] : $_GET['job'];
+		$rawinfo = isset($_POST['basicinfo']) ? $_POST['basicinfo'] : $_GET['basicinfo'];
 		self::$info = json_decode($rawinfo,true);
-		print_r(self::$info);
-		switch(self::$info['job'])
+		switch($job)
 		{
 			case 'add_contractor':
 				self::add_contractor();
@@ -26,12 +26,15 @@ class Contractors
 
 	public static function add_contractor()
 	{
-		$stm = \Baskets::$db->prepare("INSERT INTO contractors(dt,dtu,valid,contractor,address,email,fax,phone) VALUES(NOW(),NOW(),true,?,?,?,?,?)");
-		$ins = $stm->execute(array(	self::$info['contractor'],
-												self::$info['address'],
-												self::$info['email'],
-												self::$info['fax'],
-												self::$info['phone']));
+		$stm = \Baskets::$db->prepare("INSERT INTO contractors(dt,dtu,valid,contractor,contactperson,address,email,fax,phone) VALUES(NOW(),NOW(),true,?,?,?,?,?,?)");
+		$ins = $stm->execute(array(
+											self::$info['contractor'],
+											self::$info['contactperson'],
+											self::$info['address'],
+											self::$info['email'],
+											self::$info['fax'],
+											self::$info['phone']
+											));
 		if($ins) echo 'contractor has been added';
 		else echo 'could not add part :(';
 	}

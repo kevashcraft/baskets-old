@@ -182,7 +182,7 @@ var substringMatcher = function(strs) {
 			<ul>
 				<li><a href='<?php echo MY_URL?>/proposals/new'>New</a></li>
 				<li><a href='<?php echo MY_URL?>/proposals/list'>List</a></li>
-				<li><a href='<?php echo MY_URL?>/contractors/list'>Contractors</a></li>
+				<li><a href='<?php echo MY_URL?>/contractors'>Contractors</a></li>
 			</ul>
 		 </li>
 		 <li>Warehouse

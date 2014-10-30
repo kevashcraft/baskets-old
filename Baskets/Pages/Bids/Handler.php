@@ -40,6 +40,6 @@ class Handler
 	</div>
 </div>
 <?
-		\Baskets\Pages\Framework::page_header('Bids Overview | Baskets');
+		\Baskets\Pages\Framework::page_footer();
 	}
 }
