@@ -12,8 +12,11 @@ class Handler
 			case 'list':
 				Lister::lister();
 				break;
-			case 'new':
+			case 'add':
 				Adder::adder();
+				break;
+			case 'pdf':
+				PDFer::pdfer();
 				break;
 			default:
 				\Baskets\Pages\Framework::$newurl = 'proposals';
@@ -38,6 +41,5 @@ class Handler
 		</div>
 	<?
 	}
-
 
 }
