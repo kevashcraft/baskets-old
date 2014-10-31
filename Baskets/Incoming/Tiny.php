@@ -14,13 +14,17 @@ class Tiny{
 				break;
 			case 'contractors':
 				self::contractors();
+				break;
+			case 'suppliers':
+				self::suppliers();
+				break;
 			default:
 				break;
 		}	
 	}
 
 	public static function part_desc(){
-		$stm = \Baskets::$db->prepare("SELECT id,partdesc,installpoint FROM parts WHERE partid=?");
+		$stm = \Baskets::$db->prepare("SELECT id,partdesc,installpoint,parthours FROM parts WHERE partid=?");
 		$stm->execute(array($_GET['tp']));
 		$res = $stm->fetch();
 		if(!$res) {
@@ -32,6 +36,7 @@ class Tiny{
 		$ret['id'] = $res['id'];
 		$ret['desc'] = $res['partdesc'];
 		$ret['installpoint'] = $res['installpoint'];
+		$ret['parthours'] = $res['parthours'];
 		echo json_encode($ret);
 	}
 
@@ -64,6 +69,15 @@ class Tiny{
 		echo json_encode($return);
 	}
 
+	public static function suppliers() {
+		$stm = \Baskets::$db->prepare("SELECT supplier FROM suppliers WHERE valid=1");
+		$stm->execute();
+		$return = [];
+		while ($line = $stm->fetch()) {
+			$return[] = $line['supplier'];
+		}
+		echo json_encode($return);
+	}
 
 
 }

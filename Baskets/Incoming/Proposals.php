@@ -57,7 +57,7 @@ class Proposals
 		$addProp = \Baskets::$db->prepare("INSERT INTO proposals (dt,dtu,contractorid,model,validstart,validend,partMarkup,desiredMargin,contingency,taxRate,valid) VALUES(NOW(),NOW(),?,?,?,?,?,?,?,?,1)");
 
 
-		$addPart = \Baskets::$db->prepare("INSERT INTO propparts (partid,optid,room,installpoint,installhours,qty,cost,price) VALUES(?,?,?,?,?,?,?,?)");
+		$addPart = \Baskets::$db->prepare("INSERT INTO propparts (partid,optid,room,installpoint,installhours,qty,cost,price) SELECT id,?,?,?,?,?,?,? FROM parts WHERE partid=?");
 
 
 
@@ -104,14 +104,14 @@ class Proposals
 					if($part['partid'] == '') continue;
 	
 					$partinfo = array (
-												$part['partid'],
 												$optid,
 												$room['roomname'],
 												$part['installpoint'],
 												$part['parthours'],
 												$part['qty'],
 												$part['cost'],
-												$part['price']
+												$part['price'],
+												$part['partid']
 											);
 	
 					$ex = $addPart->execute($partinfo);

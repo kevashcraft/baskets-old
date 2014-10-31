@@ -5,7 +5,7 @@ class Bids
 	public static $bainfo;
 	public static $arinfo;
 
-	public static function engine()
+	public static function engine() {
 	
 		$job = isset($_POST['job']) ? $_POST['job'] : $_GET['job'];
 		$rawinfo = isset($_POST['basicinfo']) ? $_POST['basicinfo'] : $_GET['basicinfo'];
@@ -29,6 +29,7 @@ class Bids
 
 	public static function add_bid()
 	{
+		$stm = \Baskets::$db->prepare("INSERT INTO bids(
 		echo "hello! it's an auction and you've got a bid!!";
 
 		echo "your bid was read as..";

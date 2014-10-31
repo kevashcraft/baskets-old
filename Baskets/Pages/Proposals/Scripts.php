@@ -365,6 +365,8 @@ function part_name(that){
 		$(that).siblings('[name="partdesc"]').val(pdata.desc);
 		$(that).parent('[data-pn]').attr('data-entryid',pdata.id);
 		$(that).siblings('[name="installpoint"]').val(pdata.installpoint);
+		$(that).siblings('[name="parthours"]').val(pdata.parthours);
+
 	});
 
 

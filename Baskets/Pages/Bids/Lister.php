@@ -8,7 +8,7 @@ class Lister
 		$page = isset(\Baskets\Tools\Tracker::$uri[3]) ? intval(\Baskets\Tools\Tracker::$uri[3]) : '0';
 		$page = is_int($page) ? $page : '0';
 		$limit = $page * 50;
-		$stm = \Baskets::$db->prepare("SELECT bids.*,suppliers.supplier FROM bids,suppliers WHERE suppliers.id=bids.supplierid ORDER BY id ASC LIMIT $limit,50");
+		$stm = \Baskets::$db->prepare("SELECT bids.*,suppliers.supplier FROM bids,suppliers WHERE suppliers.id=bids.supplierid LIMIT $limit,50");
 		$stm->execute();
 		$totalrows = \Baskets::$db->query("SELECT COUNT(*) FROM bids")->fetchColumn();
 		$numopages = $totalrows / 50;

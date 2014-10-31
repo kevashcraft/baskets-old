@@ -16,7 +16,7 @@ class Lister
 	<div class='dash-box'>
 		<div class='dash-box-header'>
 			<h1><i class="fa fa-leaf"></i> All Contractors</h1>
-			<a href='<?=MY_URL?>/contractorss/add' class='add-button'>Add Contractor</a>
+			<a href='<?=MY_URL?>/contractors/add' class='add-button'>Add Contractor</a>
 		</div>
 		<div class='db-list'>
 			<h2>Total Contractors: <?=$totalrows?></h2>

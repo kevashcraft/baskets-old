@@ -20,5 +20,10 @@ class Defaults
 			$ins->execute(array('mark@bordeauplumbing.com',hash('sha256','fastcar'.PHASH)));
 		}
 
+		$stm->execute(array('gary@bordeauplumbing.com'));
+		$row = $stm->fetch();
+		if(!isset($row['username'])) {
+			$ins->execute(array('gary@bordeauplumbing.com',hash('sha256','spooky'.PHASH)));
+		}
 	}
 }
