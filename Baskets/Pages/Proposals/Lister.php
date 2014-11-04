@@ -17,7 +17,7 @@ class Lister
 	<div class='dash-box'>
 		<div class='dash-box-header'>
 			<h1><i class='fa fa-leaf'></i> All Proposals</h1>
-			<a href='<?=MY_URL?>/proposals/new' class='add-button'>Add Proposal</a>
+			<a href='<?=MY_URL?>/proposals/add' class='add-button'>Add Proposal</a>
 		</div>
 		<div class='page_list'>
 			<h2>Total Proposals: <?=$totalrows?></h2>
@@ -50,4 +50,4 @@ class Lister
 <?
 		\Baskets\Pages\Framework::page_footer();
 	}
-}
+
