@@ -50,4 +50,4 @@ class Lister
 <?
 		\Baskets\Pages\Framework::page_footer();
 	}
-
+}

@@ -18,6 +18,9 @@ class Handler
 			case 'pdf':
 				PDFer::pdfer();
 				break;
+			case 'proposal':
+				Proposal::proposal();
+				break;
 			default:
 				\Baskets\Pages\Framework::$newurl = 'proposals';
 				self::overview();
