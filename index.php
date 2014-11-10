@@ -6,10 +6,7 @@
 	This file sets the initial variables with define and lib/bootstrap.php
 	Then, it starts a new Baskets object
 
-	test addition	2
 */
-
-
 
 // Set the directory root
 define('MY_ROOT',dirname(__FILE__));
