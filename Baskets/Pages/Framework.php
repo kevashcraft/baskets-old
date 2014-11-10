@@ -28,6 +28,8 @@ class Framework
 		<link rel='stylesheet' type='text/css' href='<?=MY_URL?>/lib/Font-Awesome/css/font-awesome.min.css'>
 		<title><?=$title?></title>
 		<? if(isset(self::$newurl)) self::updateURL() ?>
+		<script src="bower_components/platform/platform.js"></script>
+		<link rel="import" href="<?=MY_URL?>/lib/Polymer.html">
 	</head>
 	<body>
 	<?

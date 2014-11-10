@@ -13,7 +13,7 @@ class Dashboard
 				</p>
 			</div>
 			<div class='dash-box db-construction-information'>
-				<h1><i class="fa fa-exclamation-triangle"></i> Construction Information</h1>
+				<h1><i class="fa fa-exclamation-triangle"></i> Construction Information NEW</h1>
 				<p><b>C</b>urrently working on the new proposal page<p>
 				<p><b>Goal</b>Create new job PDFs</p>
 			</div>
