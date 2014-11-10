@@ -6,7 +6,7 @@
 	This file sets the initial variables with define and lib/bootstrap.php
 	Then, it starts a new Baskets object
 
-	test addition	
+	test addition	2
 */
 
 
