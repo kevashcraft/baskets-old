@@ -9,7 +9,6 @@ class Framework
 //	Page Header
 //
 
-
 	public static function page_header($title)
 	{ ?>
 <!DOCTYPE html>
