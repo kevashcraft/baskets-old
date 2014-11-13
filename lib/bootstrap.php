@@ -17,7 +17,7 @@ function autoload($className)
 	require $fileName;
 }
 
-define('MY_URL','http://ldev');
+define('MY_URL','http://bask.its');
 define('PHASH','thisisnotagoodhashpleaseignore');
 
 function randString($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')

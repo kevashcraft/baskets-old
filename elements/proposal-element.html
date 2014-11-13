@@ -1,0 +1,131 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../elements/visi-toolbar.html">
+
+
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog-transition.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-decorator.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+
+<link rel="import" href="../bower_components/core-transition/core-transition.html">
+<link rel="import" href="../bower_components/core-label/core-label.html">
+
+
+<polymer-element name="proposal-element" attributes="propid dialog newprop">
+	<template>
+
+	<style>
+		.menu-container { max-height: 150px; }
+		paper-dialog { text-align: center; }
+		paper-dialog div { margin-top: 25px; }
+		paper-button { 
+			display: block;
+			margin-top: 25px;
+		}
+		core-label{
+			padding: 15px 0;
+			display: block;
+		}
+	</style>
+		<visi-toolbar vTitle="{{model}} by {{builder}}" menu="{{menu}}" dialog="{{dialog}}"></visi-toolbar>
+		<paper-dialog heading="Proposal Info" id="prop-info" on-core-overlay-close-completed="{{goNext}}">
+			<paper-input floatingLabel label="Model Name" value="{{model}}" autofocus on-focus="{{selectThis}}"></paper-input>
+			<div>by</div>
+			<paper-dropdown-menu label="Builder" selected="{{builder}}" valueattr="label" class="constrained-height" id='builder'>
+				<template repeat="{{builders}}">
+					<paper-item label="{{}}"></paper-item>
+				</template>
+			</paper-dropdown-menu>
+			<paper-button core-overlay-toggle>Close</paper-button>
+		</paper-dialog>
+
+		<paper-dialog heading="Financial Options" id="fin-opts" on-core-overlay-close-completed="{{goNext}}">
+			<div>
+				<core-label>Desired Profit Margin (%)
+					<core-input name="profit-margin" type="number" autofocus on-blur="{{readdLabel}}"></core-input>
+				</core-label>
+				<core-label>Contingency ($)
+					<core-input name="contingency" type="number"></core-input>
+				</core-label>
+				<core-label>Labor Rate ($/hr)
+					<core-input name="labor-rate" type="number"></core-input>
+				</core-label>
+				<core-label>Part Markup (%)
+					<core-input name="part-markup" type="number"></core-input>
+				</core-label>
+			</div>
+			<paper-button core-overlay-toggle>Close</paper-button>
+		</paper-dialog>
+
+
+		<paper-dialog heading="Other Options" id="other-opts" on-core-overlay-close-completed="{{goNext}}">
+			<paper-button core-overlay-toggle>Close</paper-button>
+		</paper-dialog>
+
+
+
+
+	</template>
+	<script>
+		Polymer('proposal-element', {
+			readdLabel: function(e,d,o){
+				console.log('firing labelVisible');
+				console.log('pn',o.parentNode);
+				o.parentNode.labelVisible = true;
+			},
+			dialogChanged: function(){
+				if(this.dialog != '')
+					this.shadowRoot.getElementById(this.dialog).opened = true;
+			},
+			created: function(){
+				this.builders = [
+					'Jason',
+					'James',
+					'Joseph',
+					'Jiles',
+					'July',
+					'Jordan',
+					'Jerry'
+				];
+				this.menu = [
+					{
+						label: 'Proposal Options',
+						target: 'prop-info',
+						action: 'dialog'
+					},
+					{
+						label: 'Financal Optoins',
+						target: 'fin-opts',
+						action: 'dialog'
+					},
+					{
+						label: 'Other Optoins',
+						target: 'other-opts',
+						action: 'dialog'
+					}
+				];
+				this.model = "A test model";
+				this.builder = "Joseph";
+			},
+			selectThis: function(e,detail,o){
+				console.log('e',e);
+				console.log('d',detail);
+				console.log('o',o);
+			},
+			goNext: function(e,d,o){
+				if ( this.newprop && o.opened == false )
+					if( o.nextElementSibling && o.nextElementSibling.tagName.toLowerCase() == 'paper-dialog' )
+						o.nextElementSibling.opened = true;
+					else this.newprop = false;
+				console.log('newprop',this.newprop);
+			},
+			newprop: false,
+
+		});
+	</script>
+</polymer-element>

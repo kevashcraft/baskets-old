@@ -1,0 +1,49 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../bower_components/core-menu-button/core-menu-button.html">
+
+
+<link rel="import" href="../bower_components/core-collapse/core-collapse.html">
+<link rel="import" href="../bower_components/core-dropdown/core-dropdown.html">
+<link rel="import" href="../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../bower_components/core-item/core-item.html">
+<link rel="import" href="../bower_components/core-menu/core-menu.html">
+
+
+<link rel="import" href="visi-item.html">
+
+<polymer-element name="visi-toolbar" attributes="vTitle menu dialog">
+	<template>
+		<core-toolbar>
+			<div flex>{{vTitle}}</div>
+			<core-menu-button icon="menu" halign="right" on-core-select="{{doMenu}}" selectedItem="{{selected}}">
+				<template repeat="{{menu as m}}">
+					<visi-item label="{{m.label}}" target="{{m.target}}" action="{{m.action}}"></visi-item>
+				</template>
+			</core-menu-button>
+		</core-toolbar>
+	</template>
+	<script>
+		Polymer('visi-toolbar', {
+			created: function(){
+				this.menu = [];
+				this.selected = {};
+			},
+			doMenu: function(e, detail){
+				if(this.selected && detail.item.label) {
+					console.log('switching', detail.item.action);
+					switch(detail.item.action){
+						case 'dialog':
+							console.log('target',detail.item.target);
+							this.dialog = detail.item.target;
+							break;
+						default:
+							console.log('default',true);
+							break;
+					}
+				}
+			},
+		});
+	</script>
+</polymer-element>
