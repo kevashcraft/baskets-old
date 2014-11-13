@@ -84,11 +84,15 @@
 			<core-label>Floors
 				<core-input type="number" value="{{floors}}" autofocus></core-input>
 			</core-label>
+
 			<core-label>Full Bathrooms
-				<core-input type="number" value="{{fullbathrooms}}"></core-input>
+				<core-input type="number" value="{{noffullbathrooms}}"></core-input>
 			</core-label>
 			<core-label>1/2 Bathrooms
-				<core-input type="number" value="{{halfbathrooms}}"></core-input>
+				<core-input type="number" value="{{nofhalfbathrooms}}"></core-input>
+			</core-label>
+			<core-label>Other Rooms
+				<core-input type="number" value="{{nofotherrooms}}"></core-input>
 			</core-label>
 			<core-label>Square Footage
 				<core-input type="number" value="{{squarefootage}}"></core-input>
@@ -102,39 +106,78 @@
 
 
 
-		<paper-tabs selected="{{floorSelected}}">
-			<template repeat="{{floornames}}">
-				<paper-tab>{{}}</paper-tab>
+		<paper-tabs selected="{{roomTypeSelected}}">
+			<template repeat="{{roomTypes as rt}}">
+				<paper-tab>{{rt.title}}</paper-tab>
 			</template>
 		</paper-tabs>
-		<core-pages selected="{{floorSelected}}">
-			<template repeat="{{floornames}}">
-				<div>{{}}</div>
+		<core-pages selected="{{roomTypeSelected}}">
+			<template repeat="{{roomTypes as rt}}">
+				<div>
+					<template bind ref="{{rt.ref}}"></template>
+				</div>
 			</template>
 		</core-pages>
 
+		<template id='full-bath'>
+			<core-list data="fullbathrooms">
+				<div>
+					<paper-input type="text" value="{{model.roomname}}"></paper-input>
+				</div>
+			</core-list>
+		</template>
+		<template id='half-bath'>
+		HALF ONLY :(
+		</template>
+		<template id='oth-room'>
+		Other??
+		</template>
+		<template id='garage'>
+		::a car::
+		</template>
 
 
 
 	</template>
 	<script>
 		Polymer('proposal-element', {
-			readdLabel: function(e,d,o){
-				console.log('firing labelVisible');
-				console.log('pn',o.parentNode);
-				o.parentNode.labelVisible = true;
+			nofotherroomsChanged: function(){
+				this.setRoomTypes();
+			},
+			noffullbathroomsChanged: function(){
+				this.setRoomTypes();
+			},
+			nofhalfbathroomsChanged: function(){
+				this.setRoomTypes();
+			},
+			setRoomTypes: function(){
+				this.roomTypes = [];
+				if(this.noffullbathrooms > 0)
+				 this.roomTypes.push({title: 'Full Bathrooms', ref: 'full-bath'});
+				if(this.nofhalfbathrooms > 0)
+					this.roomTypes.push({title: '1/2 Bathrooms', ref: 'half-bath'});
+				if(this.nofotherrooms > 0)
+					this.roomTypes.push({title: 'Other Rooms', ref: 'oth-room'});
+				if(this.garage)
+					this.roomTypes.push({title: 'Garage', ref: 'garage'});
+
 			},
 			dialogChanged: function(){
 				if(this.dialog != '')
 					this.shadowRoot.getElementById(this.dialog).opened = true;
 			},
 			garageChanged: function(){
-				this.updateFloors();
+				this.setRoomTypes();
 			},
 			floorsChanged: function(){
 				this.updateFloors();
 			},
 			created: function(){
+				this.fullbathrooms = [];
+				this.halfbathrooms = [];
+				this.otherrooms = [];
+				this.roomsAvailable = [];
+				this.rooms = [];
 				this.builders = [
 					'Jason',
 					'James',
@@ -149,15 +192,7 @@
 					'Moen',
 					'Delta',
 				];
-				this.floornames = [];
-				this.floornamesproto = [
-					'First Floor',
-					'2nd Floor',
-					'3rd Floor',
-					'4th Floor',
-					'5th Floor',
-					'6th Floor'
-				],
+				this.roomTypes = [];
 				this.menu = [
 					{
 						label: 'Proposal Info',
@@ -177,7 +212,7 @@
 				];
 			},
 			ready: function(){
-				this.updateFloors();
+				this.setRoomTypes();
 			},
 			selectThis: function(e,detail,o){
 				console.log('e',e);
@@ -194,12 +229,13 @@
 				if(this.garage) this.floornames.push('Garage');
 			},
 			goNext: function(e,d,o){
+				this.dialog = '';
 				if ( this.newprop && o.opened == false )
 					if( o.nextElementSibling && o.nextElementSibling.tagName.toLowerCase() == 'paper-dialog' )
 						o.nextElementSibling.opened = true;
 					else this.newprop = false;
-				console.log('newprop',this.newprop);
 			},
+			roomTypeSelected: 0,
 			floorSelected: 0,
 			model: '',
 			builder: '',
@@ -210,9 +246,11 @@
 			partMarkup: '30',
 			garage: true,
 			floors: 2,
-			fullbathrooms: 3,
-			halfbathrooms: 2,
+			noffullbathrooms: 3,
+			nofhalfbathrooms: 2,
+			nofotherrooms: 0,
 			squarefootage: 2000,
+
 
 
 		});

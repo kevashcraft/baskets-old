@@ -28,7 +28,6 @@
 		Polymer('visi-toolbar', {
 			created: function(){
 				this.menu = [];
-				this.selected = {};
 			},
 			doMenu: function(e, detail){
 				if(this.selected && detail.item.label) {
@@ -43,6 +42,7 @@
 							break;
 					}
 				}
+
 			},
 		});
 	</script>
