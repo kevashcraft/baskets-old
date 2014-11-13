@@ -10,11 +10,14 @@
 <link rel="import" href="../bower_components/paper-input/paper-input-decorator.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
-
+<link rel="import" href="../bower_components/paper-checkbox	/paper-checkbox.html">
 
 <link rel="import" href="../bower_components/core-transition/core-transition.html">
 <link rel="import" href="../bower_components/core-label/core-label.html">
+<link rel="import" href="../bower_components/core-pages/core-pages.html">
 
+
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 
 <polymer-element name="proposal-element" attributes="propid dialog newprop">
 	<template>
@@ -28,44 +31,87 @@
 			margin-top: 25px;
 		}
 		core-label{
-			padding: 15px 0;
+			margin-top: 15px;
 			display: block;
+			font-weight: bold;
+		}
+		core-label core-input{
+			margin-left: 35px;
+		}
+		core-input[type="number"]{
+			width: 45px;
 		}
 	</style>
 		<visi-toolbar vTitle="{{model}} by {{builder}}" menu="{{menu}}" dialog="{{dialog}}"></visi-toolbar>
+
 		<paper-dialog heading="Proposal Info" id="prop-info" on-core-overlay-close-completed="{{goNext}}">
-			<paper-input floatingLabel label="Model Name" value="{{model}}" autofocus on-focus="{{selectThis}}"></paper-input>
-			<div>by</div>
+			<paper-input floatingLabel label="Model Name" value="{{model}}" autofocus ></paper-input>
+			<br>
+			By
 			<paper-dropdown-menu label="Builder" selected="{{builder}}" valueattr="label" class="constrained-height" id='builder'>
 				<template repeat="{{builders}}">
+					<paper-item label="{{}}"></paper-item>
+				</template>
+			</paper-dropdown-menu>
+			<br>
+			Featuring
+			<paper-dropdown-menu label="Manufacturer" selected="{{manufacturer}}" valueattr="label" class="constrained-height" id='manufacturer'>
+				<template repeat="{{manufacturers}}">
 					<paper-item label="{{}}"></paper-item>
 				</template>
 			</paper-dropdown-menu>
 			<paper-button core-overlay-toggle>Close</paper-button>
 		</paper-dialog>
 
-		<paper-dialog heading="Financial Options" id="fin-opts" on-core-overlay-close-completed="{{goNext}}">
-			<div>
-				<core-label>Desired Profit Margin (%)
-					<core-input name="profit-margin" type="number" autofocus on-blur="{{readdLabel}}"></core-input>
-				</core-label>
-				<core-label>Contingency ($)
-					<core-input name="contingency" type="number"></core-input>
-				</core-label>
-				<core-label>Labor Rate ($/hr)
-					<core-input name="labor-rate" type="number"></core-input>
-				</core-label>
-				<core-label>Part Markup (%)
-					<core-input name="part-markup" type="number"></core-input>
-				</core-label>
-			</div>
+		<paper-dialog heading="Financial Settings" id="fin-opts" on-core-overlay-close-completed="{{goNext}}">
+			<core-label>Desired Profit Margin (%)
+				<core-input value="{{profitMargin}}" type="number" autofocus></core-input>
+			</core-label>
+			<core-label>Contingency ($)
+				<core-input value="{{contingency}}" type="number"></core-input>
+			</core-label>
+			<core-label>Labor Rate ($/hr)
+				<core-input value="{{laborRate}}" type="number"></core-input>
+			</core-label>
+			<core-label>Part Markup (%)
+				<core-input value="{{partMarkup}}" type="number"></core-input>
+			</core-label>
 			<paper-button core-overlay-toggle>Close</paper-button>
 		</paper-dialog>
 
 
-		<paper-dialog heading="Other Options" id="other-opts" on-core-overlay-close-completed="{{goNext}}">
+		<paper-dialog heading="Floorplan" id="floorplan-layout" on-core-overlay-close-completed="{{goNext}}">
+			<core-label>Floors
+				<core-input type="number" value="{{floors}}" autofocus></core-input>
+			</core-label>
+			<core-label>Full Bathrooms
+				<core-input type="number" value="{{fullbathrooms}}"></core-input>
+			</core-label>
+			<core-label>1/2 Bathrooms
+				<core-input type="number" value="{{halfbathrooms}}"></core-input>
+			</core-label>
+			<core-label>Square Footage
+				<core-input type="number" value="{{squarefootage}}"></core-input>
+			</core-label>
+			<core-label>Garage?
+				<paper-checkbox checked="{{garage}}"></paper-checkbox>
+			</core-label>
 			<paper-button core-overlay-toggle>Close</paper-button>
 		</paper-dialog>
+
+
+
+
+		<paper-tabs selected="{{floorSelected}}">
+			<template repeat="{{floornames}}">
+				<paper-tab>{{}}</paper-tab>
+			</template>
+		</paper-tabs>
+		<core-pages selected="{{floorSelected}}">
+			<template repeat="{{floornames}}">
+				<div>{{}}</div>
+			</template>
+		</core-pages>
 
 
 
@@ -82,6 +128,12 @@
 				if(this.dialog != '')
 					this.shadowRoot.getElementById(this.dialog).opened = true;
 			},
+			garageChanged: function(){
+				this.updateFloors();
+			},
+			floorsChanged: function(){
+				this.updateFloors();
+			},
 			created: function(){
 				this.builders = [
 					'Jason',
@@ -92,30 +144,54 @@
 					'Jordan',
 					'Jerry'
 				];
+				this.manufacturers = [
+					'Kohler',
+					'Moen',
+					'Delta',
+				];
+				this.floornames = [];
+				this.floornamesproto = [
+					'First Floor',
+					'2nd Floor',
+					'3rd Floor',
+					'4th Floor',
+					'5th Floor',
+					'6th Floor'
+				],
 				this.menu = [
 					{
-						label: 'Proposal Options',
+						label: 'Proposal Info',
 						target: 'prop-info',
 						action: 'dialog'
 					},
 					{
-						label: 'Financal Optoins',
+						label: 'Financals',
 						target: 'fin-opts',
 						action: 'dialog'
 					},
 					{
-						label: 'Other Optoins',
-						target: 'other-opts',
+						label: 'Floorplan',
+						target: 'floorplan-layout',
 						action: 'dialog'
 					}
 				];
-				this.model = "A test model";
-				this.builder = "Joseph";
+			},
+			ready: function(){
+				this.updateFloors();
 			},
 			selectThis: function(e,detail,o){
 				console.log('e',e);
 				console.log('d',detail);
 				console.log('o',o);
+				o.select();
+			},
+			updateFloors: function(){
+				this.floornames = [];
+				console.log('hello world!');
+				console.log('floors',this.floors);
+				for(var f=0; f < this.floors && f < 4; f++)
+					this.floornames.push(this.floornamesproto[f]);
+				if(this.garage) this.floornames.push('Garage');
 			},
 			goNext: function(e,d,o){
 				if ( this.newprop && o.opened == false )
@@ -124,7 +200,20 @@
 					else this.newprop = false;
 				console.log('newprop',this.newprop);
 			},
+			floorSelected: 0,
+			model: '',
+			builder: '',
 			newprop: false,
+			profitMargin: '27',
+			contingency: '300',
+			laborRate: '75',
+			partMarkup: '30',
+			garage: true,
+			floors: 2,
+			fullbathrooms: 3,
+			halfbathrooms: 2,
+			squarefootage: 2000,
+
 
 		});
 	</script>
